@@ -8,6 +8,7 @@ coverage
 # production
 build
 public/build
+prisma/migrations
 
 # cache
 .cache

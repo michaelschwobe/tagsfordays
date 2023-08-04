@@ -24,6 +24,13 @@ export function getBookmark({ id }: Pick<Bookmark, "id">) {
   });
 }
 
+export function getBookmarkByUrl({ url }: Pick<Bookmark, "url">) {
+  return prisma.bookmark.findUnique({
+    select: { id: true },
+    where: { url },
+  });
+}
+
 export function getBookmarkListItems() {
   return prisma.bookmark.findMany({
     select: {
@@ -47,9 +54,9 @@ export function getLatestBookmarkListItems({
 }
 
 export function createBookmark({
-  description,
-  title,
   url,
+  title,
+  description,
   userId,
 }: Pick<Bookmark, "url" | "title" | "description"> & {
   userId: User["id"];

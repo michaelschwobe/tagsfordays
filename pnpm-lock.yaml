@@ -5,6 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@conform-to/react':
+    specifier: ^0.7.4
+    version: 0.7.4(react@18.2.0)
+  '@conform-to/zod':
+    specifier: ^0.7.4
+    version: 0.7.4(@conform-to/dom@0.7.4)(zod@3.21.4)
   '@prisma/client':
     specifier: ^5.0.0
     version: 5.0.0(prisma@5.0.0)
@@ -1416,6 +1422,29 @@ packages:
       '@babel/helper-validator-identifier': 7.22.5
       to-fast-properties: 2.0.0
     dev: true
+
+  /@conform-to/dom@0.7.4:
+    resolution: {integrity: sha512-Cct89jWhJA+hfCth+9mphnwBVmFRx5caHtQp+0f+iK/UQKYgYMaK15JqtfNV8aHHXlrpWcSJ99x6iUgwYVQaLA==}
+    dev: false
+
+  /@conform-to/react@0.7.4(react@18.2.0):
+    resolution: {integrity: sha512-r3HNOIW3GBBjHWIvqoalKxAoTtQFiphVClYtdLBblEgxnStRjEaIkEP+JfktlEulYiVqL+935e9CV7U2v/Uxzw==}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      '@conform-to/dom': 0.7.4
+      react: 18.2.0
+    dev: false
+
+  /@conform-to/zod@0.7.4(@conform-to/dom@0.7.4)(zod@3.21.4):
+    resolution: {integrity: sha512-CFdbx/5rreymbBjSfmO9p0QBQ2toGXyTGuV3Cmam1eX/XGSSQyUU4fT0NNoutQ/CHIMeqKRVc5bzv7f46XbspQ==}
+    peerDependencies:
+      '@conform-to/dom': 0.7.4
+      zod: ^3.21.0
+    dependencies:
+      '@conform-to/dom': 0.7.4
+      zod: 3.21.4
+    dev: false
 
   /@emotion/hash@0.9.1:
     resolution: {integrity: sha512-gJB6HLm5rYwSLI6PQa+X1t5CFGrv1J1TWG+sOyMCeKz2ojaj6Fnl/rZEspogG+cvqbt4AE/2eIyD2QfLKTBNlQ==}

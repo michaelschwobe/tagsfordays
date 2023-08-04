@@ -1,15 +1,36 @@
-import { Prisma } from "@prisma/client";
+import { conform, useForm } from "@conform-to/react";
+import { parse } from "@conform-to/zod";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
-import { useEffect, useRef } from "react";
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
 import invariant from "tiny-invariant";
+import { z } from "zod";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { deleteTag, getTag, updateTag } from "~/models/tag.server";
+import {
+  deleteTag,
+  getTag,
+  getTagByName,
+  updateTag,
+} from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import { formatMetaTitle } from "~/utils/misc";
+import { TagNameSchema } from "~/utils/tag-validation";
 
-export async function loader({ request, params }: LoaderArgs) {
+const EditTagFormSchema = z.object({
+  name: TagNameSchema,
+});
+
+function parseEditTagForm({ formData }: { formData: FormData }) {
+  return parse(formData, { schema: EditTagFormSchema, stripEmptyValue: true });
+}
+
+export async function loader({ params, request }: LoaderArgs) {
   await requireUserId(request);
 
   invariant(params["tagId"], "tagId not found");
@@ -32,31 +53,27 @@ export const action = async ({ params, request }: ActionArgs) => {
 
   const formData = await request.formData();
   const action = formData.get("_action");
-  const name = formData.get("name");
 
   if (action === "DELETE") {
     await deleteTag({ id, userId });
     return redirect("/tags");
   }
 
-  if (typeof name !== "string" || name.length === 0) {
-    return json({ errors: { name: "Name is required" } }, { status: 400 });
+  const submission = parseEditTagForm({ formData });
+
+  if (!submission.value || submission.intent !== "submit") {
+    return json(submission, { status: 400 });
   }
 
-  try {
-    const tag = await updateTag({ id, name, userId });
-    return redirect(`/tags/${tag.id}`);
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
-        return json(
-          { errors: { name: "Name already exists" } },
-          { status: 400 },
-        );
-      }
-    }
-    throw error;
+  const tagNameFound = await getTagByName({ name: submission.value.name });
+
+  if (tagNameFound) {
+    const error = { ...submission.error, "": "Name already exists" };
+    return json({ ...submission, error }, { status: 400 });
   }
+
+  const tag = await updateTag({ id, name: submission.value.name, userId });
+  return redirect(`/tags/${tag.id}`);
 };
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
@@ -70,40 +87,42 @@ export default function NewTagPage() {
   const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
-  const nameRef = useRef<HTMLInputElement>(null);
+  const navigation = useNavigation();
+  const disabled = ["submitting", "loading"].includes(navigation.state);
 
-  useEffect(() => {
-    if (actionData?.errors?.name) {
-      nameRef.current?.focus();
-    }
-  }, [actionData]);
+  const [form, fieldset] = useForm({
+    id: "edit-tag",
+    defaultValue: { name: loaderData.tag.name },
+    lastSubmission: actionData!,
+    onValidate: parseEditTagForm,
+  });
 
   return (
     <main>
       <h1>Edit Tag</h1>
 
-      <Form method="post">
-        <div>
-          <label htmlFor="name-field">Name</label>
-          <input
-            ref={nameRef}
-            type="text"
-            id="name-field"
-            name="name"
-            defaultValue={loaderData.tag.name}
-            aria-invalid={actionData?.errors?.name ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.name ? "name-error" : undefined
-            }
-          />
-          {actionData?.errors?.name ? (
-            <div id="name-error">{actionData.errors.name}</div>
-          ) : null}
-        </div>
+      <Form method="post" {...form.props}>
+        <fieldset disabled={disabled}>
+          {form.error ? <div id={form.errorId}>{form.error}</div> : null}
 
-        <div>
-          <button type="submit">Update</button>
-        </div>
+          <div>
+            <label htmlFor={fieldset.name.id}>Name</label>
+            <input
+              {...conform.input(fieldset.name, {
+                type: "text",
+                ariaAttributes: true,
+              })}
+              autoComplete="false"
+            />
+            {fieldset.name.error ? (
+              <div id={fieldset.name.errorId}>{fieldset.name.error}</div>
+            ) : null}
+          </div>
+
+          <div>
+            <button type="submit">Update</button>
+          </div>
+        </fieldset>
       </Form>
 
       <Form method="post">

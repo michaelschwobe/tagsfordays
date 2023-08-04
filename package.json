@@ -17,6 +17,8 @@
     "reset": "pnpm run clean && pnpm install && pnpm dlx prisma migrate dev --name init && pnpm run setup"
   },
   "dependencies": {
+    "@conform-to/react": "^0.7.4",
+    "@conform-to/zod": "^0.7.4",
     "@prisma/client": "^5.0.0",
     "@remix-run/css-bundle": "^1.19.1",
     "@remix-run/node": "^1.19.1",

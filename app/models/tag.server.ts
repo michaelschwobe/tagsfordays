@@ -27,26 +27,8 @@ export function getTag({ id }: Pick<Tag, "id">) {
 }
 
 export function getTagByName({ name }: Pick<Tag, "name">) {
-  return prisma.tag.findFirst({
-    select: {
-      id: true,
-      name: true,
-      bookmarks: {
-        include: {
-          bookmark: {
-            select: {
-              id: true,
-              title: true,
-              url: true,
-            },
-          },
-        },
-        orderBy: [
-          { bookmark: { createdAt: "desc" } },
-          { bookmark: { title: "asc" } },
-        ],
-      },
-    },
+  return prisma.tag.findUnique({
+    select: { id: true },
     where: { name },
   });
 }

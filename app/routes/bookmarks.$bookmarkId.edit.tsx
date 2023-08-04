@@ -1,19 +1,45 @@
-import { Prisma } from "@prisma/client";
+import { conform, useForm } from "@conform-to/react";
+import { parse } from "@conform-to/zod";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
-import { useEffect, useRef } from "react";
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
 import invariant from "tiny-invariant";
+import { z } from "zod";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import {
   deleteBookmark,
   getBookmark,
+  getBookmarkByUrl,
   updateBookmark,
 } from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
+import {
+  BookmarkDescriptionSchema,
+  BookmarkTitleSchema,
+  BookmarkUrlSchema,
+} from "~/utils/bookmark-validation";
 import { formatMetaTitle } from "~/utils/misc";
 
-export async function loader({ request, params }: LoaderArgs) {
+const EditBookmarkFormSchema = z.object({
+  url: BookmarkUrlSchema,
+  title: BookmarkTitleSchema,
+  description: BookmarkDescriptionSchema,
+});
+
+function parseEditBookmarkForm({ formData }: { formData: FormData }) {
+  return parse(formData, {
+    schema: EditBookmarkFormSchema,
+    stripEmptyValue: true,
+  });
+}
+
+export async function loader({ params, request }: LoaderArgs) {
   await requireUserId(request);
 
   invariant(params["bookmarkId"], "bookmarkId not found");
@@ -36,68 +62,35 @@ export const action = async ({ params, request }: ActionArgs) => {
 
   const formData = await request.formData();
   const action = formData.get("_action");
-  const url = formData.get("url");
-  const title = formData.get("title");
-  const description = formData.get("description");
 
   if (action === "DELETE") {
     await deleteBookmark({ id, userId });
     return redirect("/bookmarks");
   }
 
-  if (typeof url !== "string" || url.length === 0) {
-    return json(
-      { errors: { description: null, title: null, url: "URL is required" } },
-      { status: 400 },
-    );
+  const submission = parseEditBookmarkForm({ formData });
+
+  if (!submission.value || submission.intent !== "submit") {
+    return json(submission, { status: 400 });
   }
 
-  if (typeof title !== "string" || title.length === 0) {
-    return json(
-      { errors: { description: null, title: "Title is required", url: null } },
-      { status: 400 },
-    );
+  const { url, title = null, description = null } = submission.value;
+
+  const bookmarkUrlFound = await getBookmarkByUrl({ url });
+
+  if (bookmarkUrlFound) {
+    const error = { ...submission.error, "": "URL already exists" };
+    return json({ ...submission, error }, { status: 400 });
   }
 
-  if (typeof description !== "string" || description.length === 0) {
-    return json(
-      {
-        errors: {
-          description: "Description is required",
-          title: null,
-          url: null,
-        },
-      },
-      { status: 400 },
-    );
-  }
-
-  try {
-    const bookmark = await updateBookmark({
-      id,
-      url,
-      title,
-      description,
-      userId,
-    });
-    return redirect(`/bookmarks/${bookmark.id}`);
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
-        return json(
-          {
-            errors: {
-              url: "URL already exists",
-              title: null,
-              description: null,
-            },
-          },
-          { status: 400 },
-        );
-      }
-    }
-    throw error;
-  }
+  const bookmark = await updateBookmark({
+    id,
+    url,
+    title,
+    description,
+    userId,
+  });
+  return redirect(`/bookmarks/${bookmark.id}`);
 };
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
@@ -111,82 +104,78 @@ export default function NewBookmarkPage() {
   const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
-  const urlRef = useRef<HTMLInputElement>(null);
-  const titleRef = useRef<HTMLInputElement>(null);
-  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const navigation = useNavigation();
+  const disabled = ["submitting", "loading"].includes(navigation.state);
 
-  useEffect(() => {
-    if (actionData?.errors?.url) {
-      urlRef.current?.focus();
-    } else if (actionData?.errors?.title) {
-      titleRef.current?.focus();
-    } else if (actionData?.errors?.description) {
-      descriptionRef.current?.focus();
-    }
-  }, [actionData]);
+  const [form, fieldset] = useForm({
+    id: "new-bookmark",
+    defaultValue: {
+      url: loaderData.bookmark.url,
+      title: loaderData.bookmark.title,
+      description: loaderData.bookmark.description,
+    },
+    lastSubmission: actionData!,
+    onValidate: parseEditBookmarkForm,
+  });
 
   return (
     <main>
       <h1>Edit Bookmark</h1>
 
-      <Form method="post">
-        <div>
-          <label htmlFor="url-field">URL</label>
-          <input
-            ref={urlRef}
-            type="url"
-            id="url-field"
-            name="url"
-            defaultValue={loaderData.bookmark.url}
-            aria-invalid={actionData?.errors?.url ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.url ? "url-error" : undefined
-            }
-          />
-          {actionData?.errors?.url ? (
-            <div id="url-error">{actionData.errors.url}</div>
-          ) : null}
-        </div>
+      <Form method="post" {...form.props}>
+        <fieldset disabled={disabled}>
+          {form.error ? <div id={form.errorId}>{form.error}</div> : null}
 
-        <div>
-          <label htmlFor="title-field">Title</label>
-          <input
-            ref={titleRef}
-            type="text"
-            id="title-field"
-            name="title"
-            defaultValue={loaderData.bookmark.title ?? undefined}
-            aria-invalid={actionData?.errors?.title ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.title ? "title-error" : undefined
-            }
-          />
-          {actionData?.errors?.title ? (
-            <div id="title-error">{actionData.errors.title}</div>
-          ) : null}
-        </div>
+          <div>
+            <label htmlFor={fieldset.url.id}>URL</label>
+            <input
+              {...conform.input(fieldset.url, {
+                type: "url",
+                ariaAttributes: true,
+              })}
+              autoComplete="false"
+            />
+            {fieldset.url.error ? (
+              <div id={fieldset.url.errorId}>{fieldset.url.error}</div>
+            ) : null}
+          </div>
 
-        <div>
-          <label htmlFor="description-field">Description</label>
-          <textarea
-            ref={descriptionRef}
-            rows={8}
-            id="description-field"
-            name="description"
-            defaultValue={loaderData.bookmark.description ?? undefined}
-            aria-invalid={actionData?.errors?.description ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.description ? "description-error" : undefined
-            }
-          />
-          {actionData?.errors?.description ? (
-            <div id="description-error">{actionData.errors.description}</div>
-          ) : null}
-        </div>
+          <div>
+            <label htmlFor={fieldset.title.id}>Title</label>
+            <input
+              {...conform.input(fieldset.title, {
+                type: "text",
+                ariaAttributes: true,
+              })}
+              autoComplete="false"
+            />
+            {fieldset.title.error ? (
+              <div id={fieldset.title.errorId}>{fieldset.title.error}</div>
+            ) : null}
+          </div>
 
-        <div>
-          <button type="submit">Update</button>
-        </div>
+          <div>
+            <label htmlFor={fieldset.description.id}>Description</label>
+            <textarea
+              {...conform.input(fieldset.description, {
+                ariaAttributes: true,
+              })}
+              autoComplete="false"
+              rows={8}
+            />
+            {fieldset.description.error ? (
+              <div id={fieldset.description.errorId}>
+                {fieldset.description.error}
+              </div>
+            ) : null}
+          </div>
+
+          {/* TODO: Tags connect or create or update */}
+
+          <div>
+            <button type="submit">Update</button>
+          </div>
+        </fieldset>
       </Form>
 
       <Form method="post">

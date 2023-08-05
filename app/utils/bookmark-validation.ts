@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { TagNameSchema } from "./tag-validation";
 
 export const BookmarkUrlSchema = z
   .string({ required_error: "URL is required" })
@@ -18,3 +19,5 @@ export const BookmarkDescriptionSchema = z
   .min(2, { message: "Description is too short" })
   .max(255, { message: "Description is too long" })
   .optional();
+
+export const BookmarkTagsSchema = z.array(TagNameSchema).optional();

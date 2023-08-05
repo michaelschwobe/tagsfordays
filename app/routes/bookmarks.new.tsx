@@ -2,13 +2,20 @@ import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData, useNavigation } from "@remix-run/react";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
 import { z } from "zod";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { createBookmark, getBookmarkByUrl } from "~/models/bookmark.server";
+import { getTagListItems } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import {
   BookmarkDescriptionSchema,
+  BookmarkTagsSchema,
   BookmarkTitleSchema,
   BookmarkUrlSchema,
 } from "~/utils/bookmark-validation";
@@ -18,6 +25,7 @@ const NewBookmarkFormSchema = z.object({
   url: BookmarkUrlSchema,
   title: BookmarkTitleSchema,
   description: BookmarkDescriptionSchema,
+  tags: BookmarkTagsSchema,
 });
 
 function parseNewBookmarkForm({ formData }: { formData: FormData }) {
@@ -29,7 +37,8 @@ function parseNewBookmarkForm({ formData }: { formData: FormData }) {
 
 export async function loader({ request }: LoaderArgs) {
   await requireUserId(request);
-  return null;
+  const tagListItems = await getTagListItems();
+  return json({ tagListItems });
 }
 
 export const action = async ({ request }: ActionArgs) => {
@@ -42,7 +51,7 @@ export const action = async ({ request }: ActionArgs) => {
     return json(submission, { status: 400 });
   }
 
-  const { url, title = null, description = null } = submission.value;
+  const { url, title = null, description = null, tags = [] } = submission.value;
 
   const bookmarkUrlFound = await getBookmarkByUrl({ url });
 
@@ -51,7 +60,13 @@ export const action = async ({ request }: ActionArgs) => {
     return json({ ...submission, error }, { status: 400 });
   }
 
-  const bookmark = await createBookmark({ url, title, description, userId });
+  const bookmark = await createBookmark({
+    url,
+    title,
+    description,
+    tags,
+    userId,
+  });
   return redirect(`/bookmarks/${bookmark.id}`);
 };
 
@@ -61,6 +76,7 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export default function NewBookmarkPage() {
+  const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
   const navigation = useNavigation();
@@ -124,7 +140,33 @@ export default function NewBookmarkPage() {
             ) : null}
           </div>
 
-          {/* TODO: Tags connect or create */}
+          {/* TODO: Refactor to use field arrays: https://conform.guide/intent-button#modifying-a-list  */}
+          <div>
+            <fieldset>
+              <legend>Tags</legend>
+
+              {fieldset.tags.error ? (
+                <div id={fieldset.tags.errorId}>{fieldset.tags.error}</div>
+              ) : null}
+
+              {loaderData.tagListItems.map((tag, idx) => (
+                <div key={tag.name}>
+                  <input
+                    {...conform.input(fieldset.tags, {
+                      type: "checkbox",
+                      ariaAttributes: true,
+                      value: tag.name,
+                    })}
+                    id={`${fieldset.tags.id}[${idx}]`}
+                    name={`${fieldset.tags.name}[${idx}]`}
+                  />
+                  <label htmlFor={`${fieldset.tags.id}[${idx}]`}>
+                    {tag.name}
+                  </label>
+                </div>
+              ))}
+            </fieldset>
+          </div>
 
           <div>
             <button type="submit">Add</button>

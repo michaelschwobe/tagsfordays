@@ -1,4 +1,4 @@
-import type { Bookmark, User } from "@prisma/client";
+import type { Bookmark, Tag, User } from "@prisma/client";
 import { prisma } from "~/utils/db.server";
 
 export function getBookmark({ id }: Pick<Bookmark, "id">) {
@@ -57,8 +57,10 @@ export function createBookmark({
   url,
   title,
   description,
+  tags,
   userId,
 }: Pick<Bookmark, "url" | "title" | "description"> & {
+  tags: Array<Tag["name"]>;
   userId: User["id"];
 }) {
   return prisma.bookmark.create({
@@ -66,6 +68,16 @@ export function createBookmark({
       url,
       title,
       description,
+      tags: {
+        create: tags.map((name) => ({
+          tag: {
+            connectOrCreate: {
+              where: { name, userId },
+              create: { name, userId },
+            },
+          },
+        })),
+      },
       user: {
         connect: { id: userId },
       },
@@ -100,5 +112,3 @@ export function deleteBookmark({
     where: { id, userId },
   });
 }
-
-// tags: { create: tagIds.map((id) => ({ tag: { connect: { id } } })) },

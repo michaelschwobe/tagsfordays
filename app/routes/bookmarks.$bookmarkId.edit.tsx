@@ -170,8 +170,6 @@ export default function NewBookmarkPage() {
             ) : null}
           </div>
 
-          {/* TODO: Tags connect or create or update */}
-
           <div>
             <button type="submit">Update</button>
           </div>

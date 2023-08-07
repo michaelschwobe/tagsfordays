@@ -41,7 +41,6 @@ export async function action({ params, request }: ActionArgs) {
   }
 
   if (action === "SHARE") {
-    // TODO: Share functionality. https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share
     console.log("🟢 SHARE", id);
     return null;
   }

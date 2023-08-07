@@ -140,7 +140,6 @@ export default function NewBookmarkPage() {
             ) : null}
           </div>
 
-          {/* TODO: Refactor to use field arrays: https://conform.guide/intent-button#modifying-a-list  */}
           <div>
             <fieldset>
               <legend>Tags</legend>

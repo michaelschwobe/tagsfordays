@@ -1,4 +1,4 @@
-import { conform, useForm } from "@conform-to/react";
+import { conform, list, useFieldList, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
@@ -48,7 +48,7 @@ export const action = async ({ request }: ActionArgs) => {
   const submission = parseNewBookmarkForm({ formData });
 
   if (!submission.value || submission.intent !== "submit") {
-    return json(submission, { status: 400 });
+    return json(submission);
   }
 
   const { url, title = null, description = null, tags = [] } = submission.value;
@@ -87,6 +87,12 @@ export default function NewBookmarkPage() {
     lastSubmission: actionData!,
     onValidate: parseNewBookmarkForm,
   });
+  const tagsList = useFieldList(form.ref, fieldset.tags);
+
+  const tagsSelected = tagsList.filter((el) => el.defaultValue != null);
+  const tagsNotSelected = loaderData.tags.filter(
+    (el) => !tagsSelected.map((el) => el.defaultValue).includes(el.name),
+  );
 
   return (
     <main>
@@ -144,26 +150,36 @@ export default function NewBookmarkPage() {
             <fieldset>
               <legend>Tags</legend>
 
-              {fieldset.tags.error ? (
-                <div id={fieldset.tags.errorId}>{fieldset.tags.error}</div>
-              ) : null}
+              <div>
+                {tagsSelected.map((tag, index) => (
+                  <span key={tag.key}>
+                    <input
+                      type="hidden"
+                      name={tag.name}
+                      value={tag.defaultValue}
+                    />{" "}
+                    <button {...list.remove(fieldset.tags.name, { index })}>
+                      <span className="sr-only">Remove</span> {tag.defaultValue}
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </span>
+                ))}
+              </div>
 
-              {loaderData.tags.map((tag, idx) => (
-                <div key={tag.name}>
-                  <input
-                    {...conform.input(fieldset.tags, {
-                      type: "checkbox",
-                      ariaAttributes: true,
-                      value: tag.name,
+              <div>
+                {tagsNotSelected.map((tag) => (
+                  <button
+                    {...list.append(fieldset.tags.name, {
+                      defaultValue: tag.name,
                     })}
-                    id={`${fieldset.tags.id}[${idx}]`}
-                    name={`${fieldset.tags.name}[${idx}]`}
-                  />
-                  <label htmlFor={`${fieldset.tags.id}[${idx}]`}>
+                    key={tag.name}
+                  >
+                    <span className="sr-only">Add</span>{" "}
+                    <span aria-hidden="true">+</span>
                     {tag.name}
-                  </label>
-                </div>
-              ))}
+                  </button>
+                ))}
+              </div>
             </fieldset>
           </div>
 

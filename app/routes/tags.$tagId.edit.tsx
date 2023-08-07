@@ -62,7 +62,7 @@ export const action = async ({ params, request }: ActionArgs) => {
   const submission = parseEditTagForm({ formData });
 
   if (!submission.value || submission.intent !== "submit") {
-    return json(submission, { status: 400 });
+    return json(submission);
   }
 
   const tagNameFound = await getTagByName({ name: submission.value.name });

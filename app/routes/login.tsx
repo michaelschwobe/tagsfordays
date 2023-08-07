@@ -44,7 +44,7 @@ export const action = async ({ request }: ActionArgs) => {
   const submission = parseLoginForm({ formData });
 
   if (!submission.value || submission.intent !== "submit") {
-    return json(submission, { status: 400 });
+    return json(submission);
   }
 
   const user = await verifyLogin(

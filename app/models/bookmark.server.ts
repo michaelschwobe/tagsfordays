@@ -88,8 +88,10 @@ export function updateBookmark({
   url,
   title,
   description,
+  tags,
   userId,
 }: Pick<Bookmark, "id" | "url" | "title" | "description"> & {
+  tags: Array<Tag["name"]>;
   userId: User["id"];
 }) {
   return prisma.bookmark.update({
@@ -97,6 +99,17 @@ export function updateBookmark({
       url,
       title,
       description,
+      tags: {
+        deleteMany: {},
+        create: tags.map((name) => ({
+          tag: {
+            connectOrCreate: {
+              where: { name, userId },
+              create: { name, userId },
+            },
+          },
+        })),
+      },
     },
     where: { id, userId },
   });

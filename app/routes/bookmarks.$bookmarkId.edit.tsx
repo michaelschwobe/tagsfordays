@@ -1,4 +1,4 @@
-import { conform, useForm } from "@conform-to/react";
+import { conform, list, useFieldList, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
@@ -18,9 +18,11 @@ import {
   getBookmarkByUrl,
   updateBookmark,
 } from "~/models/bookmark.server";
+import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import {
   BookmarkDescriptionSchema,
+  BookmarkTagsSchema,
   BookmarkTitleSchema,
   BookmarkUrlSchema,
 } from "~/utils/bookmark-validation";
@@ -30,6 +32,7 @@ const EditBookmarkFormSchema = z.object({
   url: BookmarkUrlSchema,
   title: BookmarkTitleSchema,
   description: BookmarkDescriptionSchema,
+  tags: BookmarkTagsSchema,
 });
 
 function parseEditBookmarkForm({ formData }: { formData: FormData }) {
@@ -51,7 +54,9 @@ export async function loader({ params, request }: LoaderArgs) {
     throw new Response("Not Found", { status: 404 });
   }
 
-  return json({ bookmark });
+  const tags = await getTags();
+
+  return json({ bookmark, tags });
 }
 
 export const action = async ({ params, request }: ActionArgs) => {
@@ -71,14 +76,14 @@ export const action = async ({ params, request }: ActionArgs) => {
   const submission = parseEditBookmarkForm({ formData });
 
   if (!submission.value || submission.intent !== "submit") {
-    return json(submission, { status: 400 });
+    return json(submission);
   }
 
-  const { url, title = null, description = null } = submission.value;
+  const { url, title = null, description = null, tags = [] } = submission.value;
 
-  const bookmarkUrlFound = await getBookmarkByUrl({ url });
+  const bookmarkFound = await getBookmarkByUrl({ url });
 
-  if (bookmarkUrlFound) {
+  if (bookmarkFound && bookmarkFound.id !== id) {
     const error = { ...submission.error, "": "URL already exists" };
     return json({ ...submission, error }, { status: 400 });
   }
@@ -88,6 +93,7 @@ export const action = async ({ params, request }: ActionArgs) => {
     url,
     title,
     description,
+    tags,
     userId,
   });
   return redirect(`/bookmarks/${bookmark.id}`);
@@ -106,17 +112,24 @@ export default function NewBookmarkPage() {
 
   const navigation = useNavigation();
   const disabled = ["submitting", "loading"].includes(navigation.state);
-
+  console.log("🟢 loaderData.bookmark.tags", loaderData.bookmark.tags);
   const [form, fieldset] = useForm({
     id: "new-bookmark",
     defaultValue: {
       url: loaderData.bookmark.url,
       title: loaderData.bookmark.title,
       description: loaderData.bookmark.description,
+      tags: loaderData.bookmark.tags.map((el) => el.tag.name),
     },
     lastSubmission: actionData!,
     onValidate: parseEditBookmarkForm,
   });
+  const tagsList = useFieldList(form.ref, fieldset.tags);
+
+  const tagsSelected = tagsList.filter((el) => el.defaultValue != null);
+  const tagsNotSelected = loaderData.tags.filter(
+    (el) => !tagsSelected.map((el) => el.defaultValue).includes(el.name),
+  );
 
   return (
     <main>
@@ -168,6 +181,43 @@ export default function NewBookmarkPage() {
                 {fieldset.description.error}
               </div>
             ) : null}
+          </div>
+
+          <div>
+            <fieldset>
+              <legend>Tags</legend>
+
+              <div>
+                {tagsSelected.map((tag, index) => (
+                  <span key={tag.key}>
+                    <input
+                      type="hidden"
+                      name={tag.name}
+                      value={tag.defaultValue}
+                    />{" "}
+                    <button {...list.remove(fieldset.tags.name, { index })}>
+                      <span className="sr-only">Remove</span> {tag.defaultValue}
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </span>
+                ))}
+              </div>
+
+              <div>
+                {tagsNotSelected.map((tag) => (
+                  <button
+                    {...list.append(fieldset.tags.name, {
+                      defaultValue: tag.name,
+                    })}
+                    key={tag.name}
+                  >
+                    <span className="sr-only">Add</span>{" "}
+                    <span aria-hidden="true">+</span>
+                    {tag.name}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
           </div>
 
           <div>

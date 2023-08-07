@@ -1,17 +1,17 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { getLatestBookmarkListItems } from "~/models/bookmark.server";
-import { getLatestTagListItems } from "~/models/tag.server";
+import { getLatestBookmarks } from "~/models/bookmark.server";
+import { getLatestTags } from "~/models/tag.server";
 import { APP_DESCRIPTION, APP_DESCRIPTION_SHORT, APP_NAME } from "~/utils/misc";
 // import { useOptionalUser } from "~/utils/user";
 
 export async function loader() {
-  const [latestBookmarkListItems, latestTagListItems] = await Promise.all([
-    getLatestBookmarkListItems(),
-    getLatestTagListItems(),
+  const [latestBookmarks, latestTags] = await Promise.all([
+    getLatestBookmarks(),
+    getLatestTags(),
   ]);
-  return json({ latestBookmarkListItems, latestTagListItems });
+  return json({ latestBookmarks, latestTags });
 }
 
 export const meta: V2_MetaFunction = () => {
@@ -31,10 +31,10 @@ export default function HomePage() {
 
       <div>
         <h2>Latest Bookmarks</h2>
-        {loaderData.latestBookmarkListItems.length > 0 ? (
+        {loaderData.latestBookmarks.length > 0 ? (
           <>
             <ul>
-              {loaderData.latestBookmarkListItems.map((bookmark) => (
+              {loaderData.latestBookmarks.map((bookmark) => (
                 <li key={bookmark.id}>
                   <Link to={`/bookmarks/${bookmark.id}`}>
                     <div>{bookmark.title}</div>
@@ -56,10 +56,10 @@ export default function HomePage() {
 
       <div>
         <h2>Latest Tags</h2>
-        {loaderData.latestTagListItems.length > 0 ? (
+        {loaderData.latestTags.length > 0 ? (
           <>
             <ul>
-              {loaderData.latestTagListItems.map((tag) => (
+              {loaderData.latestTags.map((tag) => (
                 <li key={tag.id}>
                   <Link to={`/tags/${tag.id}`}>{tag.name}</Link>
                 </li>

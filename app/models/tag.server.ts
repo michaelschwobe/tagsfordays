@@ -33,7 +33,7 @@ export function getTagByName({ name }: Pick<Tag, "name">) {
   });
 }
 
-export function getTagListItems() {
+export function getTags() {
   return prisma.tag.findMany({
     select: {
       id: true,
@@ -44,7 +44,7 @@ export function getTagListItems() {
   });
 }
 
-export function getLatestTagListItems({ take = 5 }: { take?: number } = {}) {
+export function getLatestTags({ take = 5 }: { take?: number } = {}) {
   return prisma.tag.findMany({
     select: { id: true, name: true },
     orderBy: { createdAt: "asc" },

@@ -31,7 +31,7 @@ export function getBookmarkByUrl({ url }: Pick<Bookmark, "url">) {
   });
 }
 
-export function getBookmarkListItems() {
+export function getBookmarks() {
   return prisma.bookmark.findMany({
     select: {
       id: true,
@@ -43,9 +43,7 @@ export function getBookmarkListItems() {
   });
 }
 
-export function getLatestBookmarkListItems({
-  take = 5,
-}: { take?: number } = {}) {
+export function getLatestBookmarks({ take = 5 }: { take?: number } = {}) {
   return prisma.bookmark.findMany({
     select: { id: true, url: true, title: true },
     orderBy: [{ createdAt: "desc" }, { title: "asc" }],

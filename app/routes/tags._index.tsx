@@ -2,7 +2,7 @@ import type { V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { getTagListItems } from "~/models/tag.server";
+import { getTags } from "~/models/tag.server";
 import {
   formatItemsFoundByCount,
   formatMetaTitle,
@@ -10,8 +10,8 @@ import {
 } from "~/utils/misc";
 
 export async function loader() {
-  const tagListItems = await getTagListItems();
-  return json({ tagListItems });
+  const tags = await getTags();
+  return json({ tags });
 }
 
 export const meta: V2_MetaFunction = () => {
@@ -27,7 +27,7 @@ export default function TagsIndexPage() {
       <h1>
         {toTitleCase(
           formatItemsFoundByCount({
-            count: loaderData.tagListItems.length,
+            count: loaderData.tags.length,
             single: "tag",
             plural: "tags",
           }),
@@ -38,9 +38,9 @@ export default function TagsIndexPage() {
         <Link to="new">+ Add Tag</Link>
       </div>
 
-      {loaderData.tagListItems.length > 0 ? (
+      {loaderData.tags.length > 0 ? (
         <ul>
-          {loaderData.tagListItems.map((tag) => (
+          {loaderData.tags.map((tag) => (
             <li key={tag.id}>
               <Link to={tag.id}>
                 {tag.name} ({tag._count.bookmarks})

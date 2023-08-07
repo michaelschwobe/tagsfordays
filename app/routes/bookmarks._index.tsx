@@ -2,7 +2,7 @@ import type { V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { getBookmarkListItems } from "~/models/bookmark.server";
+import { getBookmarks } from "~/models/bookmark.server";
 import {
   formatItemsFoundByCount,
   formatMetaTitle,
@@ -10,8 +10,8 @@ import {
 } from "~/utils/misc";
 
 export async function loader() {
-  const bookmarkListItems = await getBookmarkListItems();
-  return json({ bookmarkListItems });
+  const bookmarks = await getBookmarks();
+  return json({ bookmarks });
 }
 
 export const meta: V2_MetaFunction = () => {
@@ -27,7 +27,7 @@ export default function BookmarksIndexPage() {
       <h1>
         {toTitleCase(
           formatItemsFoundByCount({
-            count: loaderData.bookmarkListItems.length,
+            count: loaderData.bookmarks.length,
             single: "bookmark",
             plural: "bookmarks",
           }),
@@ -38,9 +38,9 @@ export default function BookmarksIndexPage() {
         <Link to="new">+ Add Bookmark</Link>
       </div>
 
-      {loaderData.bookmarkListItems.length > 0 ? (
+      {loaderData.bookmarks.length > 0 ? (
         <ul>
-          {loaderData.bookmarkListItems.map((bookmark) => (
+          {loaderData.bookmarks.map((bookmark) => (
             <li key={bookmark.id}>
               <Link to={bookmark.id}>
                 <div>{bookmark.title}</div>

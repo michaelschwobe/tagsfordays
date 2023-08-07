@@ -11,7 +11,7 @@ import {
 import { z } from "zod";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { createBookmark, getBookmarkByUrl } from "~/models/bookmark.server";
-import { getTagListItems } from "~/models/tag.server";
+import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import {
   BookmarkDescriptionSchema,
@@ -37,8 +37,8 @@ function parseNewBookmarkForm({ formData }: { formData: FormData }) {
 
 export async function loader({ request }: LoaderArgs) {
   await requireUserId(request);
-  const tagListItems = await getTagListItems();
-  return json({ tagListItems });
+  const tags = await getTags();
+  return json({ tags });
 }
 
 export const action = async ({ request }: ActionArgs) => {
@@ -149,7 +149,7 @@ export default function NewBookmarkPage() {
                 <div id={fieldset.tags.errorId}>{fieldset.tags.error}</div>
               ) : null}
 
-              {loaderData.tagListItems.map((tag, idx) => (
+              {loaderData.tags.map((tag, idx) => (
                 <div key={tag.name}>
                   <input
                     {...conform.input(fieldset.tags, {

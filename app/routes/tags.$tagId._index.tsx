@@ -1,6 +1,6 @@
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData, useLocation } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { deleteTag, getTag } from "~/models/tag.server";
@@ -63,6 +63,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 export default function TagDetailPage() {
   const loaderData = useLoaderData<typeof loader>();
   const optionalUser = useOptionalUser();
+  const location = useLocation();
 
   return (
     <main>
@@ -72,8 +73,8 @@ export default function TagDetailPage() {
         {toTitleCase(
           formatItemsFoundByCount({
             count: loaderData.tag.bookmarks.length,
-            single: "bookmark",
-            plural: "bookmarks",
+            single: "related bookmark",
+            plural: "related bookmarks",
           }),
         )}
       </h2>
@@ -101,7 +102,7 @@ export default function TagDetailPage() {
           </button>
         </Form>
       ) : (
-        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/${loaderData.tag.id}`}>
+        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
           Favorite
         </Link>
       )}
@@ -113,7 +114,7 @@ export default function TagDetailPage() {
           </button>
         </Form>
       ) : (
-        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/${loaderData.tag.id}`}>
+        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
           Share
         </Link>
       )}
@@ -127,7 +128,7 @@ export default function TagDetailPage() {
           </button>
         </Form>
       ) : (
-        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/${loaderData.tag.id}`}>
+        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
           Delete
         </Link>
       )}

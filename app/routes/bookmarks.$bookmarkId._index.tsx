@@ -1,6 +1,6 @@
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData, useLocation } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { deleteBookmark, getBookmark } from "~/models/bookmark.server";
@@ -65,6 +65,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 export default function BookmarkDetailPage() {
   const loaderData = useLoaderData<typeof loader>();
   const optionalUser = useOptionalUser();
+  const location = useLocation();
 
   return (
     <main>
@@ -76,8 +77,8 @@ export default function BookmarkDetailPage() {
         {toTitleCase(
           formatItemsFoundByCount({
             count: loaderData.bookmark.tags.length,
-            single: "tag",
-            plural: "tags",
+            single: "related tag",
+            plural: "related tags",
           }),
         )}
       </h2>
@@ -102,9 +103,7 @@ export default function BookmarkDetailPage() {
           </button>
         </Form>
       ) : (
-        <Link
-          to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/${loaderData.bookmark.id}`}
-        >
+        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
           Favorite
         </Link>
       )}
@@ -116,9 +115,7 @@ export default function BookmarkDetailPage() {
           </button>
         </Form>
       ) : (
-        <Link
-          to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/${loaderData.bookmark.id}`}
-        >
+        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
           Share
         </Link>
       )}
@@ -132,9 +129,7 @@ export default function BookmarkDetailPage() {
           </button>
         </Form>
       ) : (
-        <Link
-          to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/${loaderData.bookmark.id}`}
-        >
+        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
           Delete
         </Link>
       )}

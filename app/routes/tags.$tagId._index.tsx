@@ -1,3 +1,4 @@
+import { conform } from "@conform-to/react";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData, useLocation } from "@remix-run/react";
@@ -32,20 +33,10 @@ export async function action({ params, request }: ActionArgs) {
   invariant(params["tagId"], "tagId not found");
 
   const formData = await request.formData();
-  const action = formData.get("_action");
+  const intent = formData.get(conform.INTENT);
   const { tagId: id } = params;
 
-  if (action === "FAVORITE") {
-    console.log("🟢 FAVORITE", id);
-    return null;
-  }
-
-  if (action === "SHARE") {
-    console.log("🟢 SHARE", id);
-    return null;
-  }
-
-  if (action === "DELETE") {
+  if (intent === "DELETE") {
     await deleteTag({ id, userId });
     return redirect("/tags");
   }
@@ -95,35 +86,11 @@ export default function TagDetailPage() {
         </div>
       )}
 
-      {optionalUser ? (
-        <Form method="post">
-          <button type="submit" name="_action" value="FAVORITE">
-            Favorite
-          </button>
-        </Form>
-      ) : (
-        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
-          Favorite
-        </Link>
-      )}
-
-      {optionalUser ? (
-        <Form method="post">
-          <button type="submit" name="_action" value="SHARE">
-            Share
-          </button>
-        </Form>
-      ) : (
-        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
-          Share
-        </Link>
-      )}
-
       <Link to="edit">Edit</Link>
 
       {optionalUser ? (
         <Form method="post">
-          <button type="submit" name="_action" value="DELETE">
+          <button type="submit" name={conform.INTENT} value="DELETE">
             Delete
           </button>
         </Form>

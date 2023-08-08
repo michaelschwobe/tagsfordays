@@ -66,9 +66,9 @@ export const action = async ({ params, request }: ActionArgs) => {
   const { bookmarkId: id } = params;
 
   const formData = await request.formData();
-  const action = formData.get("_action");
+  const intent = formData.get(conform.INTENT);
 
-  if (action === "DELETE") {
+  if (intent === "delete") {
     await deleteBookmark({ id, userId });
     return redirect("/bookmarks");
   }
@@ -227,7 +227,7 @@ export default function NewBookmarkPage() {
       </Form>
 
       <Form method="post">
-        <button type="submit" name="_action" value="DELETE">
+        <button type="submit" name={conform.INTENT} value="delete">
           Delete
         </button>
       </Form>

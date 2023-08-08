@@ -52,9 +52,9 @@ export const action = async ({ params, request }: ActionArgs) => {
   const { tagId: id } = params;
 
   const formData = await request.formData();
-  const action = formData.get("_action");
+  const intent = formData.get(conform.INTENT);
 
-  if (action === "DELETE") {
+  if (intent === "delete") {
     await deleteTag({ id, userId });
     return redirect("/tags");
   }
@@ -126,7 +126,7 @@ export default function NewTagPage() {
       </Form>
 
       <Form method="post">
-        <button type="submit" name="_action" value="DELETE">
+        <button type="submit" name={conform.INTENT} value="delete">
           Delete
         </button>
       </Form>

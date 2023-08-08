@@ -1,3 +1,4 @@
+import { conform } from "@conform-to/react";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData, useLocation } from "@remix-run/react";
@@ -33,19 +34,19 @@ export async function action({ params, request }: ActionArgs) {
   const { bookmarkId: id } = params;
 
   const formData = await request.formData();
-  const action = formData.get("_action");
+  const intent = formData.get(conform.INTENT);
 
-  if (action === "FAVORITE") {
-    console.log("🟢 FAVORITE", id);
+  if (intent === "favorite") {
+    console.log("🟢 favorite", { id, userId });
     return null;
   }
 
-  if (action === "SHARE") {
-    console.log("🟢 SHARE", id);
+  if (intent === "share") {
+    console.log("🟢 share", { id, type: "bookmark" });
     return null;
   }
 
-  if (action === "DELETE") {
+  if (intent === "delete") {
     await deleteBookmark({ id, userId });
     return redirect("/bookmarks");
   }
@@ -98,7 +99,7 @@ export default function BookmarkDetailPage() {
 
       {optionalUser ? (
         <Form method="post">
-          <button type="submit" name="_action" value="FAVORITE">
+          <button type="submit" name={conform.INTENT} value="favorite">
             Favorite
           </button>
         </Form>
@@ -110,7 +111,7 @@ export default function BookmarkDetailPage() {
 
       {optionalUser ? (
         <Form method="post">
-          <button type="submit" name="_action" value="SHARE">
+          <button type="submit" name={conform.INTENT} value="share">
             Share
           </button>
         </Form>
@@ -124,7 +125,7 @@ export default function BookmarkDetailPage() {
 
       {optionalUser ? (
         <Form method="post">
-          <button type="submit" name="_action" value="DELETE">
+          <button type="submit" name={conform.INTENT} value="delete">
             Delete
           </button>
         </Form>

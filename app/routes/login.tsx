@@ -8,23 +8,11 @@ import {
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
-import { z } from "zod";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/utils/auth.server";
 import { formatMetaTitle, safeRedirect } from "~/utils/misc";
-import { PasswordSchema, UsernameSchema } from "~/utils/user-validation";
-
-const LoginFormSchema = z.object({
-  username: UsernameSchema,
-  password: PasswordSchema,
-  remember: z.preprocess((value) => value === "on", z.boolean()).optional(),
-  redirectTo: z.string().optional(),
-});
-
-function parseLoginForm({ formData }: { formData: FormData }) {
-  return parse(formData, { schema: LoginFormSchema, stripEmptyValue: true });
-}
+import { LoginUserFormSchema } from "~/utils/user-validation";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url);
@@ -41,7 +29,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
-  const submission = parseLoginForm({ formData });
+  const submission = parse(formData, { schema: LoginUserFormSchema });
 
   if (!submission.value || submission.intent !== "submit") {
     return json(submission);
@@ -80,10 +68,12 @@ export default function LoginPage() {
   const disabled = ["submitting", "loading"].includes(navigation.state);
 
   const [form, fieldset] = useForm({
-    id: "login",
+    id: "login-user",
     defaultValue: { redirectTo: loaderData.redirectTo },
-    lastSubmission: actionData!,
-    onValidate: parseLoginForm,
+    lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
+    onValidate({ formData }) {
+      return parse(formData, { schema: LoginUserFormSchema });
+    },
   });
 
   return (

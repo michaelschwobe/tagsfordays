@@ -1,4 +1,7 @@
 import * as z from "zod";
+import { IdSchema } from "./misc-validation";
+
+export const TagIdSchema = IdSchema;
 
 export const TagNameSchema = z
   .string({ required_error: "Name is required" })
@@ -8,3 +11,12 @@ export const TagNameSchema = z
     message: "Name can only include letters, numbers, and hyphens",
   })
   .transform((value) => value.toLowerCase());
+
+export const CreateTagFormSchema = z.object({
+  name: TagNameSchema,
+});
+
+export const UpdateTagFormSchema = z.object({
+  id: TagIdSchema,
+  name: TagNameSchema,
+});

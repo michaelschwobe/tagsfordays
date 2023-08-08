@@ -10,7 +10,6 @@ import {
   useNavigation,
 } from "@remix-run/react";
 import invariant from "tiny-invariant";
-import { z } from "zod";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import {
   deleteBookmark,
@@ -20,27 +19,8 @@ import {
 } from "~/models/bookmark.server";
 import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import {
-  BookmarkDescriptionSchema,
-  BookmarkTagsSchema,
-  BookmarkTitleSchema,
-  BookmarkUrlSchema,
-} from "~/utils/bookmark-validation";
+import { UpdateBookmarkFormSchema } from "~/utils/bookmark-validation";
 import { formatMetaTitle } from "~/utils/misc";
-
-const EditBookmarkFormSchema = z.object({
-  url: BookmarkUrlSchema,
-  title: BookmarkTitleSchema,
-  description: BookmarkDescriptionSchema,
-  tags: BookmarkTagsSchema,
-});
-
-function parseEditBookmarkForm({ formData }: { formData: FormData }) {
-  return parse(formData, {
-    schema: EditBookmarkFormSchema,
-    stripEmptyValue: true,
-  });
-}
 
 export async function loader({ params, request }: LoaderArgs) {
   await requireUserId(request);
@@ -73,7 +53,7 @@ export const action = async ({ params, request }: ActionArgs) => {
     return redirect("/bookmarks");
   }
 
-  const submission = parseEditBookmarkForm({ formData });
+  const submission = parse(formData, { schema: UpdateBookmarkFormSchema });
 
   if (!submission.value || submission.intent !== "submit") {
     return json(submission);
@@ -81,9 +61,10 @@ export const action = async ({ params, request }: ActionArgs) => {
 
   const { url, title = null, description = null, tags = [] } = submission.value;
 
-  const bookmarkFound = await getBookmarkByUrl({ url });
+  const bookmarkWithSameUrl = await getBookmarkByUrl({ url });
+  const isNotUniqueUrl = Boolean(bookmarkWithSameUrl?.id !== id);
 
-  if (bookmarkFound && bookmarkFound.id !== id) {
+  if (isNotUniqueUrl) {
     const error = { ...submission.error, "": "URL already exists" };
     return json({ ...submission, error }, { status: 400 });
   }
@@ -114,15 +95,18 @@ export default function NewBookmarkPage() {
   const disabled = ["submitting", "loading"].includes(navigation.state);
   console.log("🟢 loaderData.bookmark.tags", loaderData.bookmark.tags);
   const [form, fieldset] = useForm({
-    id: "new-bookmark",
+    id: "update-bookmark",
     defaultValue: {
+      id: loaderData.bookmark.id,
       url: loaderData.bookmark.url,
       title: loaderData.bookmark.title,
       description: loaderData.bookmark.description,
       tags: loaderData.bookmark.tags.map((el) => el.tag.name),
     },
-    lastSubmission: actionData!,
-    onValidate: parseEditBookmarkForm,
+    lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
+    onValidate({ formData }) {
+      return parse(formData, { schema: UpdateBookmarkFormSchema });
+    },
   });
   const tagsList = useFieldList(form.ref, fieldset.tags);
 
@@ -138,6 +122,12 @@ export default function NewBookmarkPage() {
       <Form method="post" {...form.props}>
         <fieldset disabled={disabled}>
           {form.error ? <div id={form.errorId}>{form.error}</div> : null}
+
+          <input
+            type="hidden"
+            name={fieldset.id.name}
+            value={fieldset.id.defaultValue}
+          />
 
           <div>
             <label htmlFor={fieldset.url.id}>URL</label>

@@ -8,32 +8,12 @@ import {
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
-import { z } from "zod";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { createBookmark, getBookmarkByUrl } from "~/models/bookmark.server";
 import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import {
-  BookmarkDescriptionSchema,
-  BookmarkTagsSchema,
-  BookmarkTitleSchema,
-  BookmarkUrlSchema,
-} from "~/utils/bookmark-validation";
+import { CreateBookmarkFormSchema } from "~/utils/bookmark-validation";
 import { formatMetaTitle } from "~/utils/misc";
-
-const NewBookmarkFormSchema = z.object({
-  url: BookmarkUrlSchema,
-  title: BookmarkTitleSchema,
-  description: BookmarkDescriptionSchema,
-  tags: BookmarkTagsSchema,
-});
-
-function parseNewBookmarkForm({ formData }: { formData: FormData }) {
-  return parse(formData, {
-    schema: NewBookmarkFormSchema,
-    stripEmptyValue: true,
-  });
-}
 
 export async function loader({ request }: LoaderArgs) {
   await requireUserId(request);
@@ -45,7 +25,7 @@ export const action = async ({ request }: ActionArgs) => {
   const userId = await requireUserId(request);
 
   const formData = await request.formData();
-  const submission = parseNewBookmarkForm({ formData });
+  const submission = parse(formData, { schema: CreateBookmarkFormSchema });
 
   if (!submission.value || submission.intent !== "submit") {
     return json(submission);
@@ -78,17 +58,18 @@ export const meta: V2_MetaFunction = () => {
 export default function NewBookmarkPage() {
   const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-
   const navigation = useNavigation();
-  const disabled = ["submitting", "loading"].includes(navigation.state);
 
   const [form, fieldset] = useForm({
-    id: "new-bookmark",
-    lastSubmission: actionData!,
-    onValidate: parseNewBookmarkForm,
+    id: "create-bookmark",
+    lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
+    onValidate({ formData }) {
+      return parse(formData, { schema: CreateBookmarkFormSchema });
+    },
   });
   const tagsList = useFieldList(form.ref, fieldset.tags);
 
+  const disabled = ["submitting", "loading"].includes(navigation.state);
   const tagsSelected = tagsList.filter((el) => el.defaultValue != null);
   const tagsNotSelected = loaderData.tags.filter(
     (el) => !tagsSelected.map((el) => el.defaultValue).includes(el.name),

@@ -10,7 +10,6 @@ import {
   useNavigation,
 } from "@remix-run/react";
 import invariant from "tiny-invariant";
-import { z } from "zod";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import {
   deleteTag,
@@ -20,15 +19,7 @@ import {
 } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import { formatMetaTitle } from "~/utils/misc";
-import { TagNameSchema } from "~/utils/tag-validation";
-
-const EditTagFormSchema = z.object({
-  name: TagNameSchema,
-});
-
-function parseEditTagForm({ formData }: { formData: FormData }) {
-  return parse(formData, { schema: EditTagFormSchema, stripEmptyValue: true });
-}
+import { UpdateTagFormSchema } from "~/utils/tag-validation";
 
 export async function loader({ params, request }: LoaderArgs) {
   await requireUserId(request);
@@ -59,7 +50,7 @@ export const action = async ({ params, request }: ActionArgs) => {
     return redirect("/tags");
   }
 
-  const submission = parseEditTagForm({ formData });
+  const submission = parse(formData, { schema: UpdateTagFormSchema });
 
   if (!submission.value || submission.intent !== "submit") {
     return json(submission);
@@ -91,10 +82,15 @@ export default function NewTagPage() {
   const disabled = ["submitting", "loading"].includes(navigation.state);
 
   const [form, fieldset] = useForm({
-    id: "edit-tag",
-    defaultValue: { name: loaderData.tag.name },
-    lastSubmission: actionData!,
-    onValidate: parseEditTagForm,
+    id: "update-tag",
+    defaultValue: {
+      id: loaderData.tag.id,
+      name: loaderData.tag.name,
+    },
+    lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
+    onValidate({ formData }) {
+      return parse(formData, { schema: UpdateTagFormSchema });
+    },
   });
 
   return (
@@ -104,6 +100,12 @@ export default function NewTagPage() {
       <Form method="post" {...form.props}>
         <fieldset disabled={disabled}>
           {form.error ? <div id={form.errorId}>{form.error}</div> : null}
+
+          <input
+            type="hidden"
+            name={fieldset.id.name}
+            value={fieldset.id.defaultValue}
+          />
 
           <div>
             <label htmlFor={fieldset.name.id}>Name</label>

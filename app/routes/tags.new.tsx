@@ -3,20 +3,11 @@ import { parse } from "@conform-to/zod";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useNavigation } from "@remix-run/react";
-import { z } from "zod";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { createTag, getTagByName } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import { formatMetaTitle } from "~/utils/misc";
-import { TagNameSchema } from "~/utils/tag-validation";
-
-const NewTagFormSchema = z.object({
-  name: TagNameSchema,
-});
-
-function parseNewTagForm({ formData }: { formData: FormData }) {
-  return parse(formData, { schema: NewTagFormSchema, stripEmptyValue: true });
-}
+import { CreateTagFormSchema } from "~/utils/tag-validation";
 
 export async function loader({ request }: LoaderArgs) {
   await requireUserId(request);
@@ -27,7 +18,7 @@ export const action = async ({ request }: ActionArgs) => {
   const userId = await requireUserId(request);
 
   const formData = await request.formData();
-  const submission = parseNewTagForm({ formData });
+  const submission = parse(formData, { schema: CreateTagFormSchema });
 
   if (!submission.value || submission.intent !== "submit") {
     return json(submission);
@@ -56,9 +47,11 @@ export default function NewTagPage() {
   const disabled = ["submitting", "loading"].includes(navigation.state);
 
   const [form, fieldset] = useForm({
-    id: "new-tag",
-    lastSubmission: actionData!,
-    onValidate: parseNewTagForm,
+    id: "create-tag",
+    lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
+    onValidate({ formData }) {
+      return parse(formData, { schema: CreateTagFormSchema });
+    },
   });
 
   return (

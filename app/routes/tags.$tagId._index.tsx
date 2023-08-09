@@ -34,9 +34,9 @@ export async function action({ params, request }: ActionArgs) {
 
   const formData = await request.formData();
   const intent = formData.get(conform.INTENT);
-  const { tagId: id } = params;
 
-  if (intent === "DELETE") {
+  if (intent === "delete") {
+    const { tagId: id } = params;
     await deleteTag({ id, userId });
     return redirect("/tags");
   }
@@ -48,7 +48,9 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   const title = formatMetaTitle(
     data?.tag.name ? `Tag: ${data.tag.name}` : "404: Tag Not Found",
   );
-  return [{ title }];
+  const description = "Tag"; // TODO: Add description
+
+  return [{ title }, { name: "description", content: description }];
 };
 
 export default function TagDetailPage() {
@@ -90,7 +92,7 @@ export default function TagDetailPage() {
 
       {optionalUser ? (
         <Form method="post">
-          <button type="submit" name={conform.INTENT} value="DELETE">
+          <button type="submit" name={conform.INTENT} value="delete">
             Delete
           </button>
         </Form>

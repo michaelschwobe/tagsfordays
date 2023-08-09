@@ -60,7 +60,9 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
       ? `Bookmark: ${data.bookmark.title}`
       : "404: Bookmark Not Found",
   );
-  return [{ title }];
+  const description = "Bookmark"; // TODO: Add description
+
+  return [{ title }, { name: "description", content: description }];
 };
 
 export default function BookmarkDetailPage() {

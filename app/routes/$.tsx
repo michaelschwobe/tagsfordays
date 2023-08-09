@@ -9,6 +9,7 @@ export async function loader() {
 
 export const meta: V2_MetaFunction = () => {
   const title = formatMetaTitle("Error");
+
   return [{ title }];
 };
 

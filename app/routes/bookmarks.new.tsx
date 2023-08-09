@@ -17,7 +17,9 @@ import { formatMetaTitle } from "~/utils/misc";
 
 export async function loader({ request }: LoaderArgs) {
   await requireUserId(request);
+
   const tags = await getTags();
+
   return json({ tags });
 }
 
@@ -25,6 +27,7 @@ export const action = async ({ request }: ActionArgs) => {
   const userId = await requireUserId(request);
 
   const formData = await request.formData();
+
   const submission = parse(formData, { schema: CreateBookmarkFormSchema });
 
   if (!submission.value || submission.intent !== "submit") {
@@ -33,9 +36,9 @@ export const action = async ({ request }: ActionArgs) => {
 
   const { url, title = null, description = null, tags = [] } = submission.value;
 
-  const bookmarkUrlFound = await getBookmarkByUrl({ url });
+  const bookmarkWithSameUrl = await getBookmarkByUrl({ url });
 
-  if (bookmarkUrlFound) {
+  if (bookmarkWithSameUrl) {
     const error = { ...submission.error, "": "URL already exists" };
     return json({ ...submission, error }, { status: 400 });
   }
@@ -47,12 +50,15 @@ export const action = async ({ request }: ActionArgs) => {
     tags,
     userId,
   });
+
   return redirect(`/bookmarks/${bookmark.id}`);
 };
 
 export const meta: V2_MetaFunction = () => {
   const title = formatMetaTitle("New Bookmark");
-  return [{ title }];
+  const description = "Bookmark"; // TODO: Add description
+
+  return [{ title }, { name: "description", content: description }];
 };
 
 export default function NewBookmarkPage() {

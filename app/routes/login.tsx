@@ -29,6 +29,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
+
   const submission = parse(formData, { schema: LoginUserFormSchema });
 
   if (!submission.value || submission.intent !== "submit") {
@@ -57,7 +58,9 @@ export const action = async ({ request }: ActionArgs) => {
 
 export const meta: V2_MetaFunction = () => {
   const title = formatMetaTitle("Login");
-  return [{ title }];
+  const description = "Login"; // TODO: Add description
+
+  return [{ title }, { name: "description", content: description }];
 };
 
 export default function LoginPage() {

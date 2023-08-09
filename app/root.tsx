@@ -20,7 +20,9 @@ import { GeneralErrorBoundary } from "./components/error-boundary";
 
 export async function loader({ request }: LoaderArgs) {
   const ENV = getEnv();
+
   const user = await getUser(request);
+
   return json({ ENV, user });
 }
 

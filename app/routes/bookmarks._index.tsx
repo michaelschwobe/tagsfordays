@@ -11,12 +11,15 @@ import {
 
 export async function loader() {
   const bookmarks = await getBookmarks();
+
   return json({ bookmarks });
 }
 
 export const meta: V2_MetaFunction = () => {
   const title = formatMetaTitle("Bookmarks");
-  return [{ title }];
+  const description = "Bookmarks"; // TODO: Add description
+
+  return [{ title }, { name: "description", content: description }];
 };
 
 export default function BookmarksIndexPage() {

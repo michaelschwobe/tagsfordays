@@ -11,14 +11,15 @@ export async function loader() {
     getLatestBookmarks(),
     getLatestTags(),
   ]);
+
   return json({ latestBookmarks, latestTags });
 }
 
 export const meta: V2_MetaFunction = () => {
-  return [
-    { title: `${APP_NAME} - ${APP_DESCRIPTION_SHORT}` },
-    { name: "description", content: APP_DESCRIPTION },
-  ];
+  const title = `${APP_NAME} - ${APP_DESCRIPTION_SHORT}`;
+  const description = APP_DESCRIPTION;
+
+  return [{ title }, { name: "description", content: description }];
 };
 
 export default function HomePage() {

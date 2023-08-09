@@ -62,9 +62,8 @@ export const action = async ({ params, request }: ActionArgs) => {
   const { url, title = null, description = null, tags = [] } = submission.value;
 
   const bookmarkWithSameUrl = await getBookmarkByUrl({ url });
-  const isNotUniqueUrl = Boolean(bookmarkWithSameUrl?.id !== id);
 
-  if (isNotUniqueUrl) {
+  if (bookmarkWithSameUrl && bookmarkWithSameUrl.id !== id) {
     const error = { ...submission.error, "": "URL already exists" };
     return json({ ...submission, error }, { status: 400 });
   }
@@ -77,6 +76,7 @@ export const action = async ({ params, request }: ActionArgs) => {
     tags,
     userId,
   });
+
   return redirect(`/bookmarks/${bookmark.id}`);
 };
 
@@ -84,16 +84,16 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   const title = formatMetaTitle(
     data?.bookmark.title ? "Editing Bookmark…" : "404: Bookmark Not Found",
   );
-  return [{ title }];
+  const description = "Bookmark"; // TODO: Add description
+
+  return [{ title }, { name: "description", content: description }];
 };
 
 export default function NewBookmarkPage() {
   const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-
   const navigation = useNavigation();
-  const disabled = ["submitting", "loading"].includes(navigation.state);
-  console.log("🟢 loaderData.bookmark.tags", loaderData.bookmark.tags);
+
   const [form, fieldset] = useForm({
     id: "update-bookmark",
     defaultValue: {
@@ -110,6 +110,7 @@ export default function NewBookmarkPage() {
   });
   const tagsList = useFieldList(form.ref, fieldset.tags);
 
+  const disabled = ["submitting", "loading"].includes(navigation.state);
   const tagsSelected = tagsList.filter((el) => el.defaultValue != null);
   const tagsNotSelected = loaderData.tags.filter(
     (el) => !tagsSelected.map((el) => el.defaultValue).includes(el.name),

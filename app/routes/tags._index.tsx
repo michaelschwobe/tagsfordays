@@ -11,12 +11,15 @@ import {
 
 export async function loader() {
   const tags = await getTags();
+
   return json({ tags });
 }
 
 export const meta: V2_MetaFunction = () => {
   const title = formatMetaTitle("Tags");
-  return [{ title }];
+  const description = "Tags"; // TODO: Add description
+
+  return [{ title }, { name: "description", content: description }];
 };
 
 export default function TagsIndexPage() {

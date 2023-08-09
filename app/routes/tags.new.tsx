@@ -11,6 +11,7 @@ import { CreateTagFormSchema } from "~/utils/tag-validation";
 
 export async function loader({ request }: LoaderArgs) {
   await requireUserId(request);
+
   return null;
 }
 
@@ -18,33 +19,35 @@ export const action = async ({ request }: ActionArgs) => {
   const userId = await requireUserId(request);
 
   const formData = await request.formData();
+
   const submission = parse(formData, { schema: CreateTagFormSchema });
 
   if (!submission.value || submission.intent !== "submit") {
     return json(submission);
   }
 
-  const tagNameFound = await getTagByName({ name: submission.value.name });
+  const tagWithSameName = await getTagByName({ name: submission.value.name });
 
-  if (tagNameFound) {
+  if (tagWithSameName) {
     const error = { ...submission.error, "": "Name already exists" };
     return json({ ...submission, error }, { status: 400 });
   }
 
   const tag = await createTag({ name: submission.value.name, userId });
+
   return redirect(`/tags/${tag.id}`);
 };
 
 export const meta: V2_MetaFunction = () => {
   const title = formatMetaTitle("New Tag");
-  return [{ title }];
+  const description = "Tag"; // TODO: Add description
+
+  return [{ title }, { name: "description", content: description }];
 };
 
 export default function NewTagPage() {
   const actionData = useActionData<typeof action>();
-
   const navigation = useNavigation();
-  const disabled = ["submitting", "loading"].includes(navigation.state);
 
   const [form, fieldset] = useForm({
     id: "create-tag",
@@ -53,6 +56,8 @@ export default function NewTagPage() {
       return parse(formData, { schema: CreateTagFormSchema });
     },
   });
+
+  const disabled = ["submitting", "loading"].includes(navigation.state);
 
   return (
     <main>

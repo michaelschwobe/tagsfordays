@@ -39,7 +39,7 @@ export function getBookmarks() {
       title: true,
       _count: { select: { tags: true } },
     },
-    orderBy: { updatedAt: "desc" },
+    orderBy: { createdAt: "desc" },
   });
 }
 

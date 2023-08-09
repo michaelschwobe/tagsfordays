@@ -56,14 +56,15 @@ export const action = async ({ params, request }: ActionArgs) => {
     return json(submission);
   }
 
-  const tagNameFound = await getTagByName({ name: submission.value.name });
+  const tagWithSameName = await getTagByName({ name: submission.value.name });
 
-  if (tagNameFound) {
+  if (tagWithSameName && tagWithSameName.id !== id) {
     const error = { ...submission.error, "": "Name already exists" };
     return json({ ...submission, error }, { status: 400 });
   }
 
   const tag = await updateTag({ id, name: submission.value.name, userId });
+
   return redirect(`/tags/${tag.id}`);
 };
 
@@ -71,15 +72,15 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   const title = formatMetaTitle(
     data?.tag.name ? "Editing Tag…" : "404: Tag Not Found",
   );
-  return [{ title }];
+  const description = "Tag"; // TODO: Add description
+
+  return [{ title }, { name: "description", content: description }];
 };
 
 export default function NewTagPage() {
   const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-
   const navigation = useNavigation();
-  const disabled = ["submitting", "loading"].includes(navigation.state);
 
   const [form, fieldset] = useForm({
     id: "update-tag",
@@ -92,6 +93,8 @@ export default function NewTagPage() {
       return parse(formData, { schema: UpdateTagFormSchema });
     },
   });
+
+  const disabled = ["submitting", "loading"].includes(navigation.state);
 
   return (
     <main>

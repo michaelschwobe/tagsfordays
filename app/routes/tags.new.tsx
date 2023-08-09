@@ -40,9 +40,8 @@ export const action = async ({ request }: ActionArgs) => {
 
 export const meta: V2_MetaFunction = () => {
   const title = formatMetaTitle("New Tag");
-  const description = "Tag"; // TODO: Add description
 
-  return [{ title }, { name: "description", content: description }];
+  return [{ title }];
 };
 
 export default function NewTagPage() {

@@ -1,15 +1,12 @@
 import * as z from "zod";
-import { CheckboxSchema, IdSchema } from "./misc-validation";
+import { CheckboxSchema, IdSchema, UrlSchema } from "./misc-validation";
 import { TagNameSchema } from "./tag-validation";
 
 export const BookmarkIdSchema = IdSchema;
 
-export const BookmarkUrlSchema = z
-  .string({ required_error: "URL is required" })
-  .url({ message: "URL is invalid" })
-  .startsWith("https://", { message: "URL is insecure, use https" })
-  .min(12, { message: "URL is too short" })
-  .max(2000, { message: "URL is too long" });
+export const BookmarkUrlSchema = UrlSchema.min(12, {
+  message: "URL is too short",
+}).max(2000, { message: "URL is too long" });
 
 export const BookmarkTitleSchema = z
   .string()

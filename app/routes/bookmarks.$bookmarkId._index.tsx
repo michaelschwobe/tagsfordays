@@ -64,12 +64,12 @@ export async function action({ params, request }: ActionArgs) {
 }
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
-  const title = formatMetaTitle(
-    data?.bookmark.title
-      ? `Bookmark: ${data.bookmark.title}`
-      : "404: Bookmark Not Found",
-  );
-  const description = "Bookmark"; // TODO: Add description
+  const title = data?.bookmark.title
+    ? formatMetaTitle(data.bookmark.title)
+    : "404: Bookmark Not Found";
+  const description = data?.bookmark.description
+    ? data.bookmark.description
+    : "Bookmark"; // TODO: Add description
 
   return [{ title }, { name: "description", content: description }];
 };

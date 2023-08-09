@@ -88,12 +88,11 @@ export const action = async ({ params, request }: ActionArgs) => {
 };
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
-  const title = formatMetaTitle(
-    data?.bookmark.title ? "Editing Bookmark…" : "404: Bookmark Not Found",
-  );
-  const description = "Bookmark"; // TODO: Add description
+  const title = data?.bookmark
+    ? formatMetaTitle("Editing Bookmark…")
+    : "404: Bookmark Not Found";
 
-  return [{ title }, { name: "description", content: description }];
+  return [{ title }];
 };
 
 export default function NewBookmarkPage() {

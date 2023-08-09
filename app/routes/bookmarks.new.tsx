@@ -63,9 +63,8 @@ export const action = async ({ request }: ActionArgs) => {
 
 export const meta: V2_MetaFunction = () => {
   const title = formatMetaTitle("New Bookmark");
-  const description = "Bookmark"; // TODO: Add description
 
-  return [{ title }, { name: "description", content: description }];
+  return [{ title }];
 };
 
 export default function NewBookmarkPage() {

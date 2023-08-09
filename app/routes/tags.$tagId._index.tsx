@@ -45,12 +45,11 @@ export async function action({ params, request }: ActionArgs) {
 }
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
-  const title = formatMetaTitle(
-    data?.tag.name ? `Tag: ${data.tag.name}` : "404: Tag Not Found",
-  );
-  const description = "Tag"; // TODO: Add description
+  const title = data?.tag.name
+    ? formatMetaTitle(data.tag.name)
+    : "404: Tag Not Found";
 
-  return [{ title }, { name: "description", content: description }];
+  return [{ title }];
 };
 
 export default function TagDetailPage() {

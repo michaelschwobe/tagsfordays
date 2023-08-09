@@ -5,6 +5,22 @@ export const HOME_ROUTE = "/";
 export const USER_LOGIN_ROUTE = "/login";
 export const USER_LOGOUT_ROUTE = "/logout";
 
+export async function asyncShare() {
+  try {
+    if (typeof document === "undefined" || !navigator.share) {
+      throw new Error("Sharing unsupported");
+    }
+    const metaDescription = document.querySelector('meta[name="description"]');
+    await navigator.share({
+      url: document.location.href,
+      title: document.title,
+      text: metaDescription?.getAttribute("content") ?? document.location.href,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 export function getErrorMessage(error: unknown) {
   if (typeof error === "string") return error;
   if (

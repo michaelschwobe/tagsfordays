@@ -13,6 +13,7 @@ import { requireUserId } from "~/utils/auth.server";
 import { FavoriteBookmarkFormSchema } from "~/utils/bookmark-validation";
 import {
   USER_LOGIN_ROUTE,
+  asyncShare,
   formatItemsFoundByCount,
   formatMetaTitle,
   toTitleCase,
@@ -48,11 +49,6 @@ export async function action({ params, request }: ActionArgs) {
       const { id, favorite = null } = submission.data;
       await favoriteBookmark({ id, favorite, userId });
     }
-  }
-
-  if (intent === "share") {
-    console.log("🟢 share", { id, type: "bookmark" });
-    return null;
   }
 
   if (intent === "delete") {
@@ -132,17 +128,9 @@ export default function BookmarkDetailPage() {
         </Link>
       )}
 
-      {optionalUser ? (
-        <Form method="post">
-          <button type="submit" name={conform.INTENT} value="share">
-            Share
-          </button>
-        </Form>
-      ) : (
-        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
-          Share
-        </Link>
-      )}
+      <button type="button" onClick={async () => await asyncShare()}>
+        Share
+      </button>
 
       <Link to="edit">Edit</Link>
 

@@ -19,6 +19,7 @@ export default function NotFoundPage() {
 
 export function ErrorBoundary() {
   const location = useLocation();
+
   return (
     <GeneralErrorBoundary
       statusHandlers={{

@@ -24,7 +24,6 @@ export const meta: V2_MetaFunction = () => {
 
 export default function HomePage() {
   const loaderData = useLoaderData<typeof loader>();
-  // const optionalUser = useOptionalUser();
 
   return (
     <main>

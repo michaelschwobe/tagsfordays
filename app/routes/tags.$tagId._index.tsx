@@ -54,8 +54,8 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 
 export default function TagDetailPage() {
   const loaderData = useLoaderData<typeof loader>();
-  const optionalUser = useOptionalUser();
   const location = useLocation();
+  const optionalUser = useOptionalUser();
 
   return (
     <main>

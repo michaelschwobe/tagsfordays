@@ -77,8 +77,8 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function NewTagPage() {
-  const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const loaderData = useLoaderData<typeof loader>();
   const navigation = useNavigation();
 
   const [form, fieldset] = useForm({

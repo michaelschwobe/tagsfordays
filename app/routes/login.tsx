@@ -64,11 +64,9 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export default function LoginPage() {
-  const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-
+  const loaderData = useLoaderData<typeof loader>();
   const navigation = useNavigation();
-  const disabled = ["submitting", "loading"].includes(navigation.state);
 
   const [form, fieldset] = useForm({
     id: "login-user",
@@ -78,6 +76,8 @@ export default function LoginPage() {
       return parse(formData, { schema: LoginUserFormSchema });
     },
   });
+
+  const disabled = ["submitting", "loading"].includes(navigation.state);
 
   return (
     <main>

@@ -47,8 +47,8 @@ export const meta: V2_MetaFunction = () => {
 
 export default function BookmarksIndexPage() {
   const loaderData = useLoaderData<typeof loader>();
-  const optionalUser = useOptionalUser();
   const location = useLocation();
+  const optionalUser = useOptionalUser();
 
   return (
     <main>

@@ -8,6 +8,7 @@ export function getBookmark({ id }: Pick<Bookmark, "id">) {
       url: true,
       title: true,
       description: true,
+      favorite: true,
       tags: {
         include: {
           tag: {
@@ -37,6 +38,7 @@ export function getBookmarks() {
       id: true,
       url: true,
       title: true,
+      favorite: true,
       _count: { select: { tags: true } },
     },
     orderBy: { createdAt: "desc" },
@@ -55,9 +57,10 @@ export function createBookmark({
   url,
   title,
   description,
+  favorite,
   tags,
   userId,
-}: Pick<Bookmark, "url" | "title" | "description"> & {
+}: Pick<Bookmark, "url" | "title" | "description" | "favorite"> & {
   tags: Array<Tag["name"]>;
   userId: User["id"];
 }) {
@@ -66,6 +69,7 @@ export function createBookmark({
       url,
       title,
       description,
+      favorite,
       tags: {
         create: tags.map((name) => ({
           tag: {
@@ -88,9 +92,10 @@ export function updateBookmark({
   url,
   title,
   description,
+  favorite,
   tags,
   userId,
-}: Pick<Bookmark, "id" | "url" | "title" | "description"> & {
+}: Pick<Bookmark, "id" | "url" | "title" | "description" | "favorite"> & {
   tags: Array<Tag["name"]>;
   userId: User["id"];
 }) {
@@ -99,6 +104,7 @@ export function updateBookmark({
       url,
       title,
       description,
+      favorite,
       tags: {
         deleteMany: {},
         create: tags.map((name) => ({
@@ -111,6 +117,19 @@ export function updateBookmark({
         })),
       },
     },
+    where: { id, userId },
+  });
+}
+
+export function favoriteBookmark({
+  id,
+  favorite,
+  userId,
+}: Pick<Bookmark, "id" | "favorite"> & {
+  userId: User["id"];
+}) {
+  return prisma.bookmark.update({
+    data: { favorite },
     where: { id, userId },
   });
 }

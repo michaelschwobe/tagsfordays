@@ -83,6 +83,7 @@ async function seed() {
             url: bookmark.url,
             title: bookmark.title,
             description: bookmark.description,
+            favorite: bookmarkIdx % 2 === 0,
             tags: {
               create: tags
                 .slice(0, bookmarkIdx + 1)

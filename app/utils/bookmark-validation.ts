@@ -29,6 +29,7 @@ export const CreateBookmarkFormSchema = z.object({
   url: BookmarkUrlSchema,
   title: BookmarkTitleSchema.optional(),
   description: BookmarkDescriptionSchema.optional(),
+  favorite: BookmarkFavoriteSchema.optional(),
   tags: BookmarkTagsSchema.optional(),
 });
 
@@ -37,6 +38,11 @@ export const UpdateBookmarkFormSchema = z.object({
   url: BookmarkUrlSchema,
   title: BookmarkTitleSchema.optional(),
   description: BookmarkDescriptionSchema.optional(),
+  favorite: BookmarkFavoriteSchema.optional(),
   tags: BookmarkTagsSchema.optional(),
 });
 
+export const FavoriteBookmarkFormSchema = z.object({
+  id: BookmarkIdSchema,
+  favorite: BookmarkFavoriteSchema.optional(),
+});

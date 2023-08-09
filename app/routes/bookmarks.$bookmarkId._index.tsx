@@ -4,8 +4,13 @@ import { json, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData, useLocation } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { deleteBookmark, getBookmark } from "~/models/bookmark.server";
+import {
+  deleteBookmark,
+  favoriteBookmark,
+  getBookmark,
+} from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
+import { FavoriteBookmarkFormSchema } from "~/utils/bookmark-validation";
 import {
   USER_LOGIN_ROUTE,
   formatItemsFoundByCount,
@@ -37,8 +42,12 @@ export async function action({ params, request }: ActionArgs) {
   const intent = formData.get(conform.INTENT);
 
   if (intent === "favorite") {
-    console.log("🟢 favorite", { id, userId });
-    return null;
+    const formFields = Object.fromEntries(formData.entries());
+    const submission = FavoriteBookmarkFormSchema.safeParse(formFields);
+    if (submission.success) {
+      const { id, favorite = null } = submission.data;
+      await favoriteBookmark({ id, favorite, userId });
+    }
   }
 
   if (intent === "share") {
@@ -100,14 +109,26 @@ export default function BookmarkDetailPage() {
       )}
 
       {optionalUser ? (
-        <Form method="post">
-          <button type="submit" name={conform.INTENT} value="favorite">
-            Favorite
+        <Form method="POST">
+          <input type="hidden" name={conform.INTENT} value="favorite" />
+          <input
+            type="hidden"
+            id="id"
+            name="id"
+            value={loaderData.bookmark.id}
+          />
+          <input
+            type="hidden"
+            name="favorite"
+            value={loaderData.bookmark.favorite === true ? "false" : "true"}
+          />
+          <button type="submit">
+            {loaderData.bookmark.favorite ? "💚" : "🤍"} Favorite
           </button>
         </Form>
       ) : (
         <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
-          Favorite
+          {loaderData.bookmark.favorite ? "💚" : "🤍"} Favorite
         </Link>
       )}
 

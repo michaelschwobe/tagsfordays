@@ -67,6 +67,7 @@ model Bookmark {
   url         String          @unique
   title       String?
   description String?
+  favorite    Boolean?        @default(false)
   //
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt

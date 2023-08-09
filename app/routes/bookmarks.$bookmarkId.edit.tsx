@@ -59,7 +59,13 @@ export const action = async ({ params, request }: ActionArgs) => {
     return json(submission);
   }
 
-  const { url, title = null, description = null, tags = [] } = submission.value;
+  const {
+    url,
+    title = null,
+    description = null,
+    favorite = null,
+    tags = [],
+  } = submission.value;
 
   const bookmarkWithSameUrl = await getBookmarkByUrl({ url });
 
@@ -73,6 +79,7 @@ export const action = async ({ params, request }: ActionArgs) => {
     url,
     title,
     description,
+    favorite,
     tags,
     userId,
   });
@@ -101,6 +108,7 @@ export default function NewBookmarkPage() {
       url: loaderData.bookmark.url,
       title: loaderData.bookmark.title,
       description: loaderData.bookmark.description,
+      favorite: loaderData.bookmark.favorite === true ? "on" : undefined,
       tags: loaderData.bookmark.tags.map((el) => el.tag.name),
     },
     lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
@@ -170,6 +178,23 @@ export default function NewBookmarkPage() {
             {fieldset.description.error ? (
               <div id={fieldset.description.errorId}>
                 {fieldset.description.error}
+              </div>
+            ) : null}
+          </div>
+
+          <div>
+            <div>
+              <input
+                {...conform.input(fieldset.favorite, {
+                  type: "checkbox",
+                  ariaAttributes: true,
+                })}
+              />
+              <label htmlFor={fieldset.favorite.id}>Favorite</label>
+            </div>
+            {fieldset.favorite.error ? (
+              <div id={fieldset.favorite.errorId}>
+                {fieldset.favorite.error}
               </div>
             ) : null}
           </div>

@@ -145,7 +145,7 @@ export default function BookmarkDetailPage() {
       <Link to="edit">Edit</Link>
 
       {optionalUser ? (
-        <Form method="post">
+        <Form method="POST">
           <input type="hidden" name={conform.INTENT} value="delete" />
           <button {...doubleCheck.getButtonProps({ type: "submit" })}>
             {navigation.state === "idle"

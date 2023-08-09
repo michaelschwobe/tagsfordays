@@ -83,7 +83,7 @@ export default function LoginPage() {
     <main>
       <h1>Login</h1>
 
-      <Form method="post" {...form.props}>
+      <Form method="POST" {...form.props}>
         <fieldset disabled={disabled}>
           {form.error ? <div id={form.errorId}>{form.error}</div> : null}
 

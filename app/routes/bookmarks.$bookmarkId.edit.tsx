@@ -129,7 +129,7 @@ export default function NewBookmarkPage() {
     <main>
       <h1>Edit Bookmark</h1>
 
-      <Form method="post" {...form.props}>
+      <Form method="POST" {...form.props}>
         <fieldset disabled={disabled}>
           {form.error ? <div id={form.errorId}>{form.error}</div> : null}
 
@@ -243,7 +243,7 @@ export default function NewBookmarkPage() {
         </fieldset>
       </Form>
 
-      <Form method="post">
+      <Form method="POST">
         <input type="hidden" name={conform.INTENT} value="delete" />
         <button {...doubleCheck.getButtonProps({ type: "submit" })}>
           {navigation.state === "idle"

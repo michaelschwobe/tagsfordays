@@ -62,7 +62,7 @@ export default function NewTagPage() {
     <main>
       <h1>New Tag</h1>
 
-      <Form method="post" {...form.props}>
+      <Form method="POST" {...form.props}>
         <fieldset disabled={disabled}>
           {form.error ? <div id={form.errorId}>{form.error}</div> : null}
 

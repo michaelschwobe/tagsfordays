@@ -1,18 +1,24 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { getTags } from "~/models/tag.server";
+import { getTags, getTagsOrderedByRelations } from "~/models/tag.server";
 import {
   formatItemsFoundByCount,
   formatMetaTitle,
   toTitleCase,
 } from "~/utils/misc";
 
-export async function loader() {
-  const tags = await getTags();
+export async function loader({ request }: LoaderArgs) {
+  const url = new URL(request.url);
+  const orderBy = url.searchParams.get("orderBy");
 
-  return json({ tags });
+  const tags =
+    orderBy === "relations"
+      ? await getTagsOrderedByRelations()
+      : await getTags();
+
+  return json({ orderBy, tags });
 }
 
 export const meta: V2_MetaFunction = () => {
@@ -40,6 +46,28 @@ export default function TagsIndexPage() {
       <div>
         <Link to="new">+ Add Tag</Link>
       </div>
+
+      {loaderData.tags.length > 0 ? (
+        <Form method="GET">
+          <span>Order By:</span>{" "}
+          <button
+            type={loaderData.orderBy === "name" ? "button" : "submit"}
+            name="orderBy"
+            value="name"
+            aria-pressed={loaderData.orderBy === "name"}
+          >
+            Name
+          </button>{" "}
+          <button
+            type={loaderData.orderBy === "relations" ? "button" : "submit"}
+            name="orderBy"
+            value="relations"
+            aria-pressed={loaderData.orderBy === "relations"}
+          >
+            Relations
+          </button>
+        </Form>
+      ) : null}
 
       {loaderData.tags.length > 0 ? (
         <ul>

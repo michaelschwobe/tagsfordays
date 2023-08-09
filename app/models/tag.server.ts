@@ -44,6 +44,17 @@ export function getTags() {
   });
 }
 
+export function getTagsOrderedByRelations() {
+  return prisma.tag.findMany({
+    select: {
+      id: true,
+      name: true,
+      _count: { select: { bookmarks: true } },
+    },
+    orderBy: [{ bookmarks: { _count: "desc" } }, { name: "asc" }],
+  });
+}
+
 export function getLatestTags({ take = 5 }: { take?: number } = {}) {
   return prisma.tag.findMany({
     select: { id: true, name: true },

@@ -1,7 +1,13 @@
 import { conform } from "@conform-to/react";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useLoaderData, useLocation } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useLoaderData,
+  useLocation,
+  useNavigation,
+} from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { deleteTag, getTag } from "~/models/tag.server";
@@ -11,6 +17,7 @@ import {
   formatItemsFoundByCount,
   formatMetaTitle,
   toTitleCase,
+  useDoubleCheck,
 } from "~/utils/misc";
 import { useOptionalUser } from "~/utils/user";
 
@@ -55,7 +62,10 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 export default function TagDetailPage() {
   const loaderData = useLoaderData<typeof loader>();
   const location = useLocation();
+  const navigation = useNavigation();
   const optionalUser = useOptionalUser();
+
+  const doubleCheck = useDoubleCheck();
 
   return (
     <main>
@@ -91,8 +101,13 @@ export default function TagDetailPage() {
 
       {optionalUser ? (
         <Form method="post">
-          <button type="submit" name={conform.INTENT} value="delete">
-            Delete
+          <input type="hidden" name={conform.INTENT} value="delete" />
+          <button {...doubleCheck.getButtonProps({ type: "submit" })}>
+            {navigation.state === "idle"
+              ? doubleCheck.isPending
+                ? "Confirm Delete"
+                : "Delete"
+              : "Deleting..."}
           </button>
         </Form>
       ) : (

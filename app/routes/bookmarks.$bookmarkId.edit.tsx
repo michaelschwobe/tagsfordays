@@ -20,7 +20,7 @@ import {
 import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import { UpdateBookmarkFormSchema } from "~/utils/bookmark-validation";
-import { formatMetaTitle } from "~/utils/misc";
+import { formatMetaTitle, useDoubleCheck } from "~/utils/misc";
 
 export async function loader({ params, request }: LoaderArgs) {
   await requireUserId(request);
@@ -99,6 +99,8 @@ export default function NewBookmarkPage() {
   const actionData = useActionData<typeof action>();
   const loaderData = useLoaderData<typeof loader>();
   const navigation = useNavigation();
+
+  const doubleCheck = useDoubleCheck();
 
   const [form, fieldset] = useForm({
     id: "update-bookmark",
@@ -242,8 +244,13 @@ export default function NewBookmarkPage() {
       </Form>
 
       <Form method="post">
-        <button type="submit" name={conform.INTENT} value="delete">
-          Delete
+        <input type="hidden" name={conform.INTENT} value="delete" />
+        <button {...doubleCheck.getButtonProps({ type: "submit" })}>
+          {navigation.state === "idle"
+            ? doubleCheck.isPending
+              ? "Confirm Delete"
+              : "Delete"
+            : "Deleting..."}
         </button>
       </Form>
     </main>

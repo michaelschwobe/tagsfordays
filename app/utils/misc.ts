@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export const APP_NAME = "TagsForDays";
 export const APP_DESCRIPTION_SHORT = "Relational bookmarking";
 export const APP_DESCRIPTION = "Relational bookmarking for the modern web";
@@ -19,6 +21,12 @@ export async function asyncShare() {
   } catch (err) {
     console.error(err);
   }
+}
+
+function callAll<Args extends Array<unknown>>(
+  ...fns: Array<((...args: Args) => unknown) | undefined>
+) {
+  return (...args: Args) => fns.forEach((fn) => fn?.(...args));
 }
 
 export function getErrorMessage(error: unknown) {
@@ -77,4 +85,29 @@ export function toTitleCase(value: string) {
     /\w\S*/g,
     (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(),
   );
+}
+
+export function useDoubleCheck() {
+  const [isPending, setIsPending] = useState(false);
+
+  type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+  function getButtonProps(props?: ButtonProps) {
+    const onBlur: ButtonProps["onBlur"] = () => setIsPending(false);
+
+    const onClick: ButtonProps["onClick"] = isPending
+      ? undefined
+      : (event) => {
+          event.preventDefault();
+          setIsPending(true);
+        };
+
+    return {
+      ...props,
+      onBlur: callAll(onBlur, props?.onBlur),
+      onClick: callAll(onClick, props?.onClick),
+    };
+  }
+
+  return { getButtonProps, isPending };
 }

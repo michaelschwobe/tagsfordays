@@ -18,7 +18,7 @@ import {
   updateTag,
 } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import { formatMetaTitle } from "~/utils/misc";
+import { formatMetaTitle, useDoubleCheck } from "~/utils/misc";
 import { UpdateTagFormSchema } from "~/utils/tag-validation";
 
 export async function loader({ params, request }: LoaderArgs) {
@@ -81,6 +81,8 @@ export default function NewTagPage() {
   const loaderData = useLoaderData<typeof loader>();
   const navigation = useNavigation();
 
+  const doubleCheck = useDoubleCheck();
+
   const [form, fieldset] = useForm({
     id: "update-tag",
     defaultValue: {
@@ -130,8 +132,13 @@ export default function NewTagPage() {
       </Form>
 
       <Form method="post">
-        <button type="submit" name={conform.INTENT} value="delete">
-          Delete
+        <input type="hidden" name={conform.INTENT} value="delete" />
+        <button {...doubleCheck.getButtonProps({ type: "submit" })}>
+          {navigation.state === "idle"
+            ? doubleCheck.isPending
+              ? "Confirm Delete"
+              : "Delete"
+            : "Deleting..."}
         </button>
       </Form>
     </main>

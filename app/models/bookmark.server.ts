@@ -1,4 +1,5 @@
 import type { Bookmark, Tag, User } from "@prisma/client";
+import type { SearchKey } from "~/utils/bookmark";
 import { prisma } from "~/utils/db.server";
 
 export function getBookmark({ id }: Pick<Bookmark, "id">) {
@@ -32,7 +33,41 @@ export function getBookmarkByUrl({ url }: Pick<Bookmark, "url">) {
   });
 }
 
-export function getBookmarks() {
+export function getBookmarks({
+  searchKey,
+  searchValue,
+}: {
+  searchKey: SearchKey;
+  searchValue?: string | null;
+}) {
+  if (searchValue && searchKey === "tags") {
+    return prisma.bookmark.findMany({
+      select: {
+        id: true,
+        url: true,
+        title: true,
+        favorite: true,
+        _count: { select: { tags: true } },
+      },
+      where: {
+        tags: { some: { tag: { name: { contains: searchValue } } } },
+      },
+      orderBy: [
+        { tags: { _count: "asc" } },
+        { createdAt: "desc" },
+        { title: "asc" },
+      ],
+    });
+  }
+
+  if (searchValue) {
+    return prisma.bookmark.findMany({
+      select: { id: true, url: true, title: true, favorite: true },
+      where: { [searchKey]: { contains: searchValue } },
+      orderBy: [{ [searchKey]: "asc" }, { createdAt: "desc" }],
+    });
+  }
+
   return prisma.bookmark.findMany({
     select: {
       id: true,
@@ -41,7 +76,7 @@ export function getBookmarks() {
       favorite: true,
       _count: { select: { tags: true } },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ createdAt: "desc" }, { title: "asc" }],
   });
 }
 

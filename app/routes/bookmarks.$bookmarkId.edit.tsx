@@ -70,7 +70,7 @@ export const action = async ({ params, request }: ActionArgs) => {
   const bookmarkWithSameUrl = await getBookmarkByUrl({ url });
 
   if (bookmarkWithSameUrl && bookmarkWithSameUrl.id !== id) {
-    const error = { ...submission.error, "": "URL already exists" };
+    const error = { ...submission.error, "": ["URL already exists"] };
     return json({ ...submission, error }, { status: 400 });
   }
 
@@ -142,10 +142,7 @@ export default function NewBookmarkPage() {
           <div>
             <label htmlFor={fieldset.url.id}>URL</label>
             <input
-              {...conform.input(fieldset.url, {
-                type: "url",
-                ariaAttributes: true,
-              })}
+              {...conform.input(fieldset.url, { type: "url" })}
               autoComplete="false"
             />
             {fieldset.url.error ? (
@@ -156,10 +153,7 @@ export default function NewBookmarkPage() {
           <div>
             <label htmlFor={fieldset.title.id}>Title</label>
             <input
-              {...conform.input(fieldset.title, {
-                type: "text",
-                ariaAttributes: true,
-              })}
+              {...conform.input(fieldset.title, { type: "text" })}
               autoComplete="false"
             />
             {fieldset.title.error ? (
@@ -170,9 +164,7 @@ export default function NewBookmarkPage() {
           <div>
             <label htmlFor={fieldset.description.id}>Description</label>
             <textarea
-              {...conform.input(fieldset.description, {
-                ariaAttributes: true,
-              })}
+              {...conform.input(fieldset.description)}
               autoComplete="false"
               rows={8}
             />
@@ -186,10 +178,7 @@ export default function NewBookmarkPage() {
           <div>
             <div>
               <input
-                {...conform.input(fieldset.favorite, {
-                  type: "checkbox",
-                  ariaAttributes: true,
-                })}
+                {...conform.input(fieldset.favorite, { type: "checkbox" })}
               />
               <label htmlFor={fieldset.favorite.id}>Favorite</label>
             </div>

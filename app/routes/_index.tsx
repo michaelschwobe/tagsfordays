@@ -4,7 +4,6 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { getLatestBookmarks } from "~/models/bookmark.server";
 import { getLatestTags } from "~/models/tag.server";
 import { APP_DESCRIPTION, APP_DESCRIPTION_SHORT, APP_NAME } from "~/utils/misc";
-// import { useOptionalUser } from "~/utils/user";
 
 export async function loader() {
   const [latestBookmarks, latestTags] = await Promise.all([

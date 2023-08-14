@@ -29,7 +29,7 @@ export const action = async ({ request }: ActionArgs) => {
   const tagWithSameName = await getTagByName({ name: submission.value.name });
 
   if (tagWithSameName) {
-    const error = { ...submission.error, "": "Name already exists" };
+    const error = { ...submission.error, "": ["Name already exists"] };
     return json({ ...submission, error }, { status: 400 });
   }
 
@@ -69,10 +69,7 @@ export default function NewTagPage() {
           <div>
             <label htmlFor={fieldset.name.id}>Name</label>
             <input
-              {...conform.input(fieldset.name, {
-                type: "text",
-                ariaAttributes: true,
-              })}
+              {...conform.input(fieldset.name, { type: "text" })}
               autoComplete="false"
             />
             {fieldset.name.error ? (

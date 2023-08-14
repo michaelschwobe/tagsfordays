@@ -42,7 +42,7 @@ export const action = async ({ request }: ActionArgs) => {
   );
 
   if (!user) {
-    const error = { "": "Invalid username or fieldset.password." };
+    const error = { "": ["Invalid username or password"] };
     const { password: _payloadPassword, ...payload } = submission.payload;
     const { password: _valuePassword, ...value } = submission.value;
     return json({ ...submission, error, payload, value }, { status: 400 });
@@ -90,10 +90,7 @@ export default function LoginPage() {
           <div>
             <label htmlFor={fieldset.username.id}>Username</label>
             <input
-              {...conform.input(fieldset.username, {
-                type: "text",
-                ariaAttributes: true,
-              })}
+              {...conform.input(fieldset.username, { type: "text" })}
               autoComplete="username"
             />
             {fieldset.username.error ? (
@@ -106,10 +103,7 @@ export default function LoginPage() {
           <div>
             <label htmlFor={fieldset.password.id}>Password</label>
             <input
-              {...conform.input(fieldset.password, {
-                type: "password",
-                ariaAttributes: true,
-              })}
+              {...conform.input(fieldset.password, { type: "password" })}
               autoComplete="current-password"
             />
             {fieldset.password.error ? (
@@ -122,10 +116,7 @@ export default function LoginPage() {
           <div>
             <div>
               <input
-                {...conform.input(fieldset.remember, {
-                  type: "checkbox",
-                  ariaAttributes: true,
-                })}
+                {...conform.input(fieldset.remember, { type: "checkbox" })}
               />
               <label htmlFor={fieldset.remember.id}>Remember me</label>
             </div>

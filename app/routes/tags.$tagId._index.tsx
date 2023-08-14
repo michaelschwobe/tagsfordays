@@ -116,6 +116,10 @@ export default function TagDetailPage() {
         </Link>
       )}
 
+      <Link to={`/bookmarks?searchValue=${loaderData.tag.name}&searchKey=tags`}>
+        Search
+      </Link>
+
       <Link to="/tags">View all Tags</Link>
     </main>
   );

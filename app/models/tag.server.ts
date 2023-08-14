@@ -20,6 +20,7 @@ export function getTag({ id }: Pick<Tag, "id">) {
           { bookmark: { createdAt: "desc" } },
           { bookmark: { title: "asc" } },
         ],
+        take: 5,
       },
     },
     where: { id },

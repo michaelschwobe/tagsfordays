@@ -18,6 +18,7 @@ import { getUser } from "~/utils/auth.server";
 import { getEnv } from "~/utils/env.server";
 import { USER_LOGIN_ROUTE, USER_LOGOUT_ROUTE } from "~/utils/misc";
 import { useOptionalUser } from "~/utils/user";
+import { Landmark } from "./components/landmark";
 
 export async function loader({ request }: LoaderArgs) {
   const ENV = getEnv();
@@ -77,6 +78,8 @@ export default function App() {
 
   return (
     <Document env={loaderData.ENV}>
+      <Landmark type="trigger" slug="main" label="main content" />
+
       <header>
         <nav>
           <div>
@@ -110,6 +113,7 @@ export default function App() {
         </nav>
       </header>
 
+      <Landmark type="target" slug="main" label="main content" />
       <Outlet />
     </Document>
   );

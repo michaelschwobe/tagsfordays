@@ -2,6 +2,7 @@ import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Icon } from "~/components/icon";
 import { getTags, getTagsOrderedByRelations } from "~/models/tag.server";
 import {
   formatItemsFoundByCount,
@@ -44,7 +45,10 @@ export default function TagsIndexPage() {
       </h1>
 
       <div>
-        <Link to="new">+ Add Tag</Link>
+        <Link to="new">
+          <Icon type="plus" />
+          <span>Add Tag</span>
+        </Link>
       </div>
 
       {loaderData.tags.length > 0 ? (
@@ -74,7 +78,8 @@ export default function TagsIndexPage() {
           {loaderData.tags.map((tag) => (
             <li key={tag.id}>
               <Link to={tag.id}>
-                {tag.name} ({tag._count.bookmarks})
+                <Icon type="tag" />
+                <span>{tag.name}</span> <span>({tag._count.bookmarks})</span>
               </Link>
             </li>
           ))}

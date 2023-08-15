@@ -10,6 +10,7 @@ import {
 } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Icon } from "~/components/icon";
 import { deleteTag, getTag } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import {
@@ -85,6 +86,7 @@ export default function TagDetailPage() {
           {loaderData.tag.bookmarks.map(({ bookmark }) => (
             <li key={bookmark.id}>
               <Link to={`/bookmarks/${bookmark.id}`}>
+                <Icon type="bookmark" />
                 <div>{bookmark.title}</div>
                 <div>{bookmark.url}</div>
               </Link>
@@ -93,34 +95,58 @@ export default function TagDetailPage() {
         </ul>
       ) : (
         <div>
-          <Link to="/bookmarks">View all Bookmarks</Link>
+          <Link to="/bookmarks">
+            <Icon type="bookmarks" />
+            <span>View all Bookmarks</span>
+          </Link>
         </div>
       )}
 
-      <Link to="edit">Edit</Link>
+      <Link to="edit">
+        <Icon type="pencil" />
+        <span>Edit</span>
+      </Link>
 
       {optionalUser ? (
         <Form method="POST">
           <input type="hidden" name={conform.INTENT} value="delete" />
           <button {...doubleCheck.getButtonProps({ type: "submit" })}>
-            {navigation.state === "idle"
-              ? doubleCheck.isPending
-                ? "Confirm Delete"
-                : "Delete"
-              : "Deleting..."}
+            {navigation.state === "idle" ? (
+              doubleCheck.isPending ? (
+                <>
+                  <Icon type="alert-triangle" />
+                  <span>Confirm Delete</span>
+                </>
+              ) : (
+                <>
+                  <Icon type="trash-2" />
+                  <span>Delete</span>
+                </>
+              )
+            ) : (
+              <>
+                <Icon type="loader" />
+                <span>Deleting...</span>
+              </>
+            )}
           </button>
         </Form>
       ) : (
         <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
-          Delete
+          <Icon type="trash-2" />
+          <span>Delete</span>
         </Link>
       )}
 
       <Link to={`/bookmarks?searchValue=${loaderData.tag.name}&searchKey=tags`}>
-        Search
+        <Icon type="search" />
+        <span>Search</span>
       </Link>
 
-      <Link to="/tags">View all Tags</Link>
+      <Link to="/tags">
+        <Icon type="tags" />
+        <span>View all Tags</span>
+      </Link>
     </main>
   );
 }
@@ -131,9 +157,16 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <main>
-            <h1>Error</h1>
+            <h1>
+              <Icon type="alert-triangle" />
+              <span>Error</span>
+            </h1>
             <p>
-              Tag not found. <Link to="/tags">View all Tags</Link>
+              Tag not found.{" "}
+              <Link to="/tags">
+                <Icon type="tags" />
+                <span>View all Tags</span>
+              </Link>
             </p>
           </main>
         ),

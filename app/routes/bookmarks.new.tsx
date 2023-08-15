@@ -4,11 +4,13 @@ import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
+  Link,
   useActionData,
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Icon } from "~/components/icon";
 import { createBookmark, getBookmarkByUrl } from "~/models/bookmark.server";
 import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
@@ -93,7 +95,12 @@ export default function NewBookmarkPage() {
 
       <Form method="POST" {...form.props}>
         <fieldset disabled={disabled}>
-          {form.error ? <div id={form.errorId}>{form.error}</div> : null}
+          {form.error ? (
+            <div id={form.errorId}>
+              <Icon type="alert-triangle" />
+              <span>{form.error}</span>
+            </div>
+          ) : null}
 
           <div>
             <label htmlFor={fieldset.url.id}>URL</label>
@@ -102,7 +109,10 @@ export default function NewBookmarkPage() {
               autoComplete="false"
             />
             {fieldset.url.error ? (
-              <div id={fieldset.url.errorId}>{fieldset.url.error}</div>
+              <div id={fieldset.url.errorId}>
+                <Icon type="alert-triangle" />
+                <span>{fieldset.url.error}</span>
+              </div>
             ) : null}
           </div>
 
@@ -113,7 +123,10 @@ export default function NewBookmarkPage() {
               autoComplete="false"
             />
             {fieldset.title.error ? (
-              <div id={fieldset.title.errorId}>{fieldset.title.error}</div>
+              <div id={fieldset.title.errorId}>
+                <Icon type="alert-triangle" />
+                <span>{fieldset.title.error}</span>
+              </div>
             ) : null}
           </div>
 
@@ -126,7 +139,8 @@ export default function NewBookmarkPage() {
             />
             {fieldset.description.error ? (
               <div id={fieldset.description.errorId}>
-                {fieldset.description.error}
+                <Icon type="alert-triangle" />
+                <span>{fieldset.description.error}</span>
               </div>
             ) : null}
           </div>
@@ -140,14 +154,18 @@ export default function NewBookmarkPage() {
             </div>
             {fieldset.favorite.error ? (
               <div id={fieldset.favorite.errorId}>
-                {fieldset.favorite.error}
+                <Icon type="alert-triangle" />
+                <span>{fieldset.favorite.error}</span>
               </div>
             ) : null}
           </div>
 
           <div>
             <fieldset>
-              <legend>Tags</legend>
+              <legend>
+                <Icon type="tags" />
+                <span>Tags</span>
+              </legend>
 
               <div>
                 {tagsSelected.map((tag, index) => (
@@ -158,8 +176,9 @@ export default function NewBookmarkPage() {
                       value={tag.defaultValue}
                     />{" "}
                     <button {...list.remove(fieldset.tags.name, { index })}>
-                      <span className="sr-only">Remove</span> {tag.defaultValue}
-                      <span aria-hidden="true">&times;</span>
+                      <span className="sr-only">Remove</span>{" "}
+                      <span>{tag.defaultValue}</span>
+                      <Icon type="x" />
                     </button>
                   </span>
                 ))}
@@ -173,9 +192,8 @@ export default function NewBookmarkPage() {
                     })}
                     key={tag.name}
                   >
-                    <span className="sr-only">Add</span>{" "}
-                    <span aria-hidden="true">+</span>
-                    {tag.name}
+                    <Icon type="plus" />
+                    <span className="sr-only">Add</span> <span>{tag.name}</span>
                   </button>
                 ))}
               </div>
@@ -183,7 +201,14 @@ export default function NewBookmarkPage() {
           </div>
 
           <div>
-            <button type="submit">Add</button>
+            <button type="submit">
+              <Icon type="check" />
+              <span>Add</span>
+            </button>{" "}
+            <Link to=".." relative="path">
+              <Icon type="x" />
+              <span>Cancel</span>
+            </Link>
           </div>
         </fieldset>
       </Form>

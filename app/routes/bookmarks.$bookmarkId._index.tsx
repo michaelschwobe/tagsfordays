@@ -10,6 +10,7 @@ import {
 } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Icon } from "~/components/icon";
 import {
   deleteBookmark,
   favoriteBookmark,
@@ -88,29 +89,40 @@ export default function BookmarkDetailPage() {
   return (
     <main>
       <h1>{loaderData.bookmark.title}</h1>
-      <div>{loaderData.bookmark.url}</div>
+      <div>
+        <span>{loaderData.bookmark.url}</span> <Icon type="external-link" />
+      </div>
       <p>{loaderData.bookmark.description}</p>
 
       <h2>
-        {toTitleCase(
-          formatItemsFoundByCount({
-            count: loaderData.bookmark.tags.length,
-            single: "related tag",
-            plural: "related tags",
-          }),
-        )}
+        <Icon type="tags" />
+        <span>
+          {toTitleCase(
+            formatItemsFoundByCount({
+              count: loaderData.bookmark.tags.length,
+              single: "related tag",
+              plural: "related tags",
+            }),
+          )}
+        </span>
       </h2>
       {loaderData.bookmark.tags.length > 0 ? (
         <ul>
           {loaderData.bookmark.tags.map(({ tag }) => (
             <li key={tag.id}>
-              <Link to={`/tags/${tag.id}`}>{tag.name}</Link>
+              <Link to={`/tags/${tag.id}`}>
+                <Icon type="tag" />
+                <span>{tag.name}</span>
+              </Link>
             </li>
           ))}
         </ul>
       ) : (
         <div>
-          <Link to="/tags">View all Tags</Link>
+          <Link to="/tags">
+            <Icon type="tags" />
+            <span>View all Tags</span>
+          </Link>
         </div>
       )}
 
@@ -129,39 +141,70 @@ export default function BookmarkDetailPage() {
             value={loaderData.bookmark.favorite === true ? "false" : "true"}
           />
           <button type="submit">
-            {loaderData.bookmark.favorite ? "💚" : "🤍"} Favorite
+            {loaderData.bookmark.favorite ? (
+              <Icon type="heart" className="text-red-500" />
+            ) : (
+              <Icon type="heart" />
+            )}{" "}
+            <span>Favorite</span>
           </button>
         </Form>
       ) : (
         <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
-          {loaderData.bookmark.favorite ? "💚" : "🤍"} Favorite
+          {loaderData.bookmark.favorite ? (
+            <Icon type="heart" className="text-red-500" />
+          ) : (
+            <Icon type="heart" />
+          )}{" "}
+          <span>Favorite</span>
         </Link>
       )}
 
       <button type="button" onClick={async () => await asyncShare()}>
-        Share
+        <Icon type="share" />
+        <span>Share</span>
       </button>
 
-      <Link to="edit">Edit</Link>
+      <Link to="edit">
+        <Icon type="pencil" />
+        <span>Edit</span>
+      </Link>
 
       {optionalUser ? (
         <Form method="POST">
           <input type="hidden" name={conform.INTENT} value="delete" />
           <button {...doubleCheck.getButtonProps({ type: "submit" })}>
-            {navigation.state === "idle"
-              ? doubleCheck.isPending
-                ? "Confirm Delete"
-                : "Delete"
-              : "Deleting..."}
+            {navigation.state === "idle" ? (
+              doubleCheck.isPending ? (
+                <>
+                  <Icon type="alert-triangle" />
+                  <span>Confirm Delete</span>
+                </>
+              ) : (
+                <>
+                  <Icon type="trash-2" />
+                  <span>Delete</span>
+                </>
+              )
+            ) : (
+              <>
+                <Icon type="loader" />
+                <span>Deleting...</span>
+              </>
+            )}
           </button>
         </Form>
       ) : (
         <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
-          Delete
+          <Icon type="trash-2" />
+          <span>Delete</span>
         </Link>
       )}
 
-      <Link to="/bookmarks">View all Bookmarks</Link>
+      <Link to="/bookmarks">
+        <Icon type="bookmarks" />
+        <span>View all Bookmarks</span>
+      </Link>
     </main>
   );
 }
@@ -172,10 +215,16 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <main>
-            <h1>Error</h1>
+            <h1>
+              <Icon type="alert-triangle" />
+              <span>Error</span>
+            </h1>
             <p>
               Bookmark not found.{" "}
-              <Link to="/bookmarks">View all Bookmarks</Link>
+              <Link to="/bookmarks">
+                <Icon type="bookmarks" />
+                <span>View all Bookmarks</span>
+              </Link>
             </p>
           </main>
         ),

@@ -11,12 +11,13 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
+import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Icon } from "~/components/icon";
 import tailwindStylesheetUrl from "~/tailwind.css";
 import { getUser } from "~/utils/auth.server";
 import { getEnv } from "~/utils/env.server";
 import { USER_LOGIN_ROUTE, USER_LOGOUT_ROUTE } from "~/utils/misc";
 import { useOptionalUser } from "~/utils/user";
-import { GeneralErrorBoundary } from "./components/error-boundary";
 
 export async function loader({ request }: LoaderArgs) {
   const ENV = getEnv();
@@ -32,6 +33,8 @@ export const links: LinksFunction = () => {
     ...(cssBundleHref
       ? [{ rel: "preload", href: cssBundleHref, as: "style" }]
       : []),
+
+    { rel: "preload", href: "/icons.svg", as: "image", type: "image/svg+xml" },
 
     { rel: "stylesheet", href: tailwindStylesheetUrl },
     ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -77,20 +80,31 @@ export default function App() {
       <header>
         <nav>
           <div>
-            <Link to="/">Home</Link>
-            <Link to="/bookmarks">Bookmarks</Link>
-            <Link to="/tags">Tags</Link>
+            <Link to="/">
+              <Icon type="home" /> <span>Home</span>
+            </Link>
+            <Link to="/bookmarks">
+              <Icon type="bookmarks" /> <span>Bookmarks</span>
+            </Link>
+            <Link to="/tags">
+              <Icon type="tags" /> <span>Tags</span>
+            </Link>
           </div>
           <div>
             {optionalUser ? (
-              <div>
-                {optionalUser.username}
-                <Form method="POST" action={USER_LOGOUT_ROUTE}>
-                  <button type="submit">Log Out</button>
-                </Form>
-              </div>
+              <Form method="POST" action={USER_LOGOUT_ROUTE}>
+                <button type="submit">
+                  <Icon type="log-out" />
+                  <span className="sr-only">
+                    Log Out {optionalUser.username}
+                  </span>
+                </button>
+              </Form>
             ) : (
-              <Link to={USER_LOGIN_ROUTE}>Log In</Link>
+              <Link to={USER_LOGIN_ROUTE}>
+                <Icon type="log-in" />
+                <span className="sr-only">Log In</span>
+              </Link>
             )}
           </div>
         </nav>

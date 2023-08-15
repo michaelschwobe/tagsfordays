@@ -11,6 +11,7 @@ import {
 } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Icon } from "~/components/icon";
 import {
   deleteTag,
   getTag,
@@ -103,7 +104,12 @@ export default function NewTagPage() {
 
       <Form method="POST" {...form.props}>
         <fieldset disabled={disabled}>
-          {form.error ? <div id={form.errorId}>{form.error}</div> : null}
+          {form.error ? (
+            <div id={form.errorId}>
+              <Icon type="alert-triangle" />
+              <span>{form.error}</span>
+            </div>
+          ) : null}
 
           <input
             type="hidden"
@@ -118,12 +124,22 @@ export default function NewTagPage() {
               autoComplete="false"
             />
             {fieldset.name.error ? (
-              <div id={fieldset.name.errorId}>{fieldset.name.error}</div>
+              <div id={fieldset.name.errorId}>
+                <Icon type="alert-triangle" />
+                <span>{fieldset.name.error}</span>
+              </div>
             ) : null}
           </div>
 
           <div>
-            <button type="submit">Update</button>
+            <button type="submit">
+              <Icon type="check" />
+              <span>Update</span>
+            </button>{" "}
+            <Link to=".." relative="path">
+              <Icon type="x" />
+              <span>Cancel</span>
+            </Link>
           </div>
         </fieldset>
       </Form>
@@ -131,11 +147,24 @@ export default function NewTagPage() {
       <Form method="POST">
         <input type="hidden" name={conform.INTENT} value="delete" />
         <button {...doubleCheck.getButtonProps({ type: "submit" })}>
-          {navigation.state === "idle"
-            ? doubleCheck.isPending
-              ? "Confirm Delete"
-              : "Delete"
-            : "Deleting..."}
+          {navigation.state === "idle" ? (
+            doubleCheck.isPending ? (
+              <>
+                <Icon type="alert-triangle" />
+                <span>Confirm Delete</span>
+              </>
+            ) : (
+              <>
+                <Icon type="trash-2" />
+                <span>Delete</span>
+              </>
+            )
+          ) : (
+            <>
+              <Icon type="loader" />
+              <span>Deleting...</span>
+            </>
+          )}
         </button>
       </Form>
     </main>
@@ -148,9 +177,16 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <main>
-            <h1>Error</h1>
+            <h1>
+              <Icon type="alert-triangle" />
+              <span>Error</span>
+            </h1>
             <p>
-              Tag not found. <Link to="/tags">View all Tags</Link>
+              Tag not found.{" "}
+              <Link to="/tags">
+                <Icon type="tags" />
+                <span>View all Tags</span>
+              </Link>
             </p>
           </main>
         ),

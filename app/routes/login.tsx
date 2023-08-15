@@ -4,11 +4,13 @@ import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
+  Link,
   useActionData,
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Icon } from "~/components/icon";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/utils/auth.server";
 import { formatMetaTitle, safeRedirect } from "~/utils/misc";
@@ -85,7 +87,12 @@ export default function LoginPage() {
 
       <Form method="POST" {...form.props}>
         <fieldset disabled={disabled}>
-          {form.error ? <div id={form.errorId}>{form.error}</div> : null}
+          {form.error ? (
+            <div id={form.errorId}>
+              <Icon type="alert-triangle" />
+              <span>{form.error}</span>
+            </div>
+          ) : null}
 
           <div>
             <label htmlFor={fieldset.username.id}>Username</label>
@@ -95,7 +102,8 @@ export default function LoginPage() {
             />
             {fieldset.username.error ? (
               <div id={fieldset.username.errorId}>
-                {fieldset.username.error}
+                <Icon type="alert-triangle" />
+                <span>{fieldset.username.error}</span>
               </div>
             ) : null}
           </div>
@@ -108,7 +116,8 @@ export default function LoginPage() {
             />
             {fieldset.password.error ? (
               <div id={fieldset.password.errorId}>
-                {fieldset.password.error}
+                <Icon type="alert-triangle" />
+                <span>{fieldset.password.error}</span>
               </div>
             ) : null}
           </div>
@@ -120,12 +129,25 @@ export default function LoginPage() {
               />
               <label htmlFor={fieldset.remember.id}>Remember me</label>
             </div>
+            {fieldset.remember.error ? (
+              <div id={fieldset.remember.errorId}>
+                <Icon type="alert-triangle" />
+                <span>{fieldset.remember.error}</span>
+              </div>
+            ) : null}
           </div>
 
           <input {...conform.input(fieldset.redirectTo, { type: "hidden" })} />
 
           <div>
-            <button type="submit">Log in</button>
+            <button type="submit">
+              <Icon type="log-in" />
+              <span>Log in</span>
+            </button>
+            <Link to={loaderData.redirectTo}>
+              <Icon type="x" />
+              <span>Cancel</span>
+            </Link>
           </div>
         </fieldset>
       </Form>

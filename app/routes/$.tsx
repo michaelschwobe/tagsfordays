@@ -1,6 +1,7 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { Link, useLocation } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Icon } from "~/components/icon";
 import { formatMetaTitle } from "~/utils/misc";
 
 export async function loader() {
@@ -25,14 +26,20 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <main>
-            <h1>Error</h1>
+            <h1>
+              <Icon type="alert-triangle" />
+              <span>Error</span>
+            </h1>
 
             <p>
               We can't find this page: <code>{location.pathname}</code>
             </p>
 
             <div>
-              <Link to="/">Back to home</Link>
+              <Link to="/">
+                <Icon type="home" />
+                Back to home
+              </Link>
             </div>
           </main>
         ),

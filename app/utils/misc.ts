@@ -1,4 +1,6 @@
+import { clsx, type ClassValue } from "clsx";
 import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 export const APP_NAME = "TagsForDays";
 export const APP_DESCRIPTION_SHORT = "Relational bookmarking";
@@ -27,6 +29,14 @@ function callAll<Args extends Array<unknown>>(
   ...fns: Array<((...args: Args) => unknown) | undefined>
 ) {
   return (...args: Args) => fns.forEach((fn) => fn?.(...args));
+}
+
+export function dedupe<T>(arr: T[]) {
+  return [...new Set(arr)];
+}
+
+export function cn(...args: ClassValue[]) {
+  return twMerge(clsx(dedupe(args)));
 }
 
 export function getErrorMessage(error: unknown) {

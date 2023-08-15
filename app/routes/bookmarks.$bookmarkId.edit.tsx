@@ -11,6 +11,7 @@ import {
 } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Icon } from "~/components/icon";
 import {
   deleteBookmark,
   getBookmark,
@@ -131,7 +132,12 @@ export default function NewBookmarkPage() {
 
       <Form method="POST" {...form.props}>
         <fieldset disabled={disabled}>
-          {form.error ? <div id={form.errorId}>{form.error}</div> : null}
+          {form.error ? (
+            <div id={form.errorId}>
+              <Icon type="alert-triangle" />
+              <span>{form.error}</span>
+            </div>
+          ) : null}
 
           <input
             type="hidden"
@@ -146,7 +152,10 @@ export default function NewBookmarkPage() {
               autoComplete="false"
             />
             {fieldset.url.error ? (
-              <div id={fieldset.url.errorId}>{fieldset.url.error}</div>
+              <div id={fieldset.url.errorId}>
+                <Icon type="alert-triangle" />
+                <span>{fieldset.url.error}</span>
+              </div>
             ) : null}
           </div>
 
@@ -157,7 +166,11 @@ export default function NewBookmarkPage() {
               autoComplete="false"
             />
             {fieldset.title.error ? (
-              <div id={fieldset.title.errorId}>{fieldset.title.error}</div>
+              <div id={fieldset.title.errorId}>
+                <Icon type="alert-triangle" />
+                <span></span>
+                {fieldset.title.error}
+              </div>
             ) : null}
           </div>
 
@@ -170,7 +183,8 @@ export default function NewBookmarkPage() {
             />
             {fieldset.description.error ? (
               <div id={fieldset.description.errorId}>
-                {fieldset.description.error}
+                <Icon type="alert-triangle" />
+                <span>{fieldset.description.error}</span>
               </div>
             ) : null}
           </div>
@@ -184,14 +198,18 @@ export default function NewBookmarkPage() {
             </div>
             {fieldset.favorite.error ? (
               <div id={fieldset.favorite.errorId}>
-                {fieldset.favorite.error}
+                <Icon type="alert-triangle" />
+                <span>{fieldset.favorite.error}</span>
               </div>
             ) : null}
           </div>
 
           <div>
             <fieldset>
-              <legend>Tags</legend>
+              <legend>
+                <Icon type="tags" />
+                <span>Tags</span>
+              </legend>
 
               <div>
                 {tagsSelected.map((tag, index) => (
@@ -202,8 +220,9 @@ export default function NewBookmarkPage() {
                       value={tag.defaultValue}
                     />{" "}
                     <button {...list.remove(fieldset.tags.name, { index })}>
-                      <span className="sr-only">Remove</span> {tag.defaultValue}
-                      <span aria-hidden="true">&times;</span>
+                      <span className="sr-only">Remove</span>{" "}
+                      <span>{tag.defaultValue}</span>
+                      <Icon type="x" />
                     </button>
                   </span>
                 ))}
@@ -217,9 +236,8 @@ export default function NewBookmarkPage() {
                     })}
                     key={tag.name}
                   >
-                    <span className="sr-only">Add</span>{" "}
-                    <span aria-hidden="true">+</span>
-                    {tag.name}
+                    <Icon type="plus" />
+                    <span className="sr-only">Add</span> <span>{tag.name}</span>
                   </button>
                 ))}
               </div>
@@ -227,7 +245,14 @@ export default function NewBookmarkPage() {
           </div>
 
           <div>
-            <button type="submit">Update</button>
+            <button type="submit">
+              <Icon type="check" />
+              <span>Update</span>
+            </button>{" "}
+            <Link to=".." relative="path">
+              <Icon type="x" />
+              <span>Cancel</span>
+            </Link>
           </div>
         </fieldset>
       </Form>
@@ -235,11 +260,24 @@ export default function NewBookmarkPage() {
       <Form method="POST">
         <input type="hidden" name={conform.INTENT} value="delete" />
         <button {...doubleCheck.getButtonProps({ type: "submit" })}>
-          {navigation.state === "idle"
-            ? doubleCheck.isPending
-              ? "Confirm Delete"
-              : "Delete"
-            : "Deleting..."}
+          {navigation.state === "idle" ? (
+            doubleCheck.isPending ? (
+              <>
+                <Icon type="alert-triangle" />
+                <span>Confirm Delete</span>
+              </>
+            ) : (
+              <>
+                <Icon type="trash-2" />
+                <span>Delete</span>
+              </>
+            )
+          ) : (
+            <>
+              <Icon type="loader" />
+              <span>Deleting...</span>
+            </>
+          )}
         </button>
       </Form>
     </main>
@@ -252,10 +290,16 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <main>
-            <h1>Error</h1>
+            <h1>
+              <Icon type="alert-triangle" />
+              <span>Error</span>
+            </h1>
             <p>
               Bookmark not found.{" "}
-              <Link to="/bookmarks">View all Bookmarks</Link>
+              <Link to="/bookmarks">
+                <Icon type="bookmarks" />
+                <span>View all Bookmarks</span>
+              </Link>
             </p>
           </main>
         ),

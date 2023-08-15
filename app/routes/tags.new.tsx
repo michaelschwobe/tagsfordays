@@ -2,8 +2,9 @@ import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData, useNavigation } from "@remix-run/react";
+import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Icon } from "~/components/icon";
 import { createTag, getTagByName } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import { formatMetaTitle } from "~/utils/misc";
@@ -64,7 +65,12 @@ export default function NewTagPage() {
 
       <Form method="POST" {...form.props}>
         <fieldset disabled={disabled}>
-          {form.error ? <div id={form.errorId}>{form.error}</div> : null}
+          {form.error ? (
+            <div id={form.errorId}>
+              <Icon type="alert-triangle" />
+              <span>{form.error}</span>
+            </div>
+          ) : null}
 
           <div>
             <label htmlFor={fieldset.name.id}>Name</label>
@@ -73,12 +79,22 @@ export default function NewTagPage() {
               autoComplete="false"
             />
             {fieldset.name.error ? (
-              <div id={fieldset.name.errorId}>{fieldset.name.error}</div>
+              <div id={fieldset.name.errorId}>
+                <Icon type="alert-triangle" />
+                <span>{fieldset.name.error}</span>
+              </div>
             ) : null}
           </div>
 
           <div>
-            <button type="submit">Add</button>
+            <button type="submit">
+              <Icon type="check" />
+              <span>Add</span>
+            </button>{" "}
+            <Link to=".." relative="path">
+              <Icon type="x" />
+              <span>Cancel</span>
+            </Link>
           </div>
         </fieldset>
       </Form>

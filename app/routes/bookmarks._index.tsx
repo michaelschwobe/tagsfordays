@@ -10,6 +10,7 @@ import {
   useNavigation,
 } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Icon } from "~/components/icon";
 import { SearchHelp } from "~/components/search-help";
 import { favoriteBookmark, getBookmarks } from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
@@ -122,9 +123,13 @@ export default function BookmarksIndexPage() {
             ) : null}
           </fieldset>
           <div>
-            <button type="submit">Submit</button>{" "}
+            <button type="submit">
+              <Icon type="search" />
+              <span className="sr-only">Submit</span>
+            </button>{" "}
             <Link to="." reloadDocument>
-              Clear Filters
+              <Icon type="x" />
+              <span className="sr-only">Clear Filters</span>
             </Link>
           </div>
         </fieldset>
@@ -144,16 +149,21 @@ export default function BookmarksIndexPage() {
         <SearchHelp
           items={[
             <Link key="new" to="new">
-              + Add Bookmark
+              <Icon type="plus" />
+              <span>Add Bookmark</span>
             </Link>,
             <Link key="all" to="." reloadDocument>
-              View all bookmarks
+              <Icon type="bookmarks" />
+              <span>View all bookmarks</span>
             </Link>,
           ]}
         />
       ) : (
         <div>
-          <Link to="new">+ Add Bookmark</Link>
+          <Link to="new">
+            <Icon type="plus" />
+            <span>Add Bookmark</span>
+          </Link>
         </div>
       )}
 
@@ -162,6 +172,7 @@ export default function BookmarksIndexPage() {
           {loaderData.bookmarks.map((bookmark) => (
             <li key={bookmark.id}>
               <Link to={bookmark.id}>
+                <Icon type="bookmark" />
                 <div>{bookmark.title}</div>
                 <div>{bookmark.url}</div>
               </Link>
@@ -185,7 +196,12 @@ export default function BookmarksIndexPage() {
                       value={bookmark.favorite === true ? "false" : "true"}
                     />
                     <button type="submit">
-                      {bookmark.favorite ? "💚" : "🤍"} Favorite
+                      {bookmark.favorite ? (
+                        <Icon type="heart" className="text-red-500" />
+                      ) : (
+                        <Icon type="heart" />
+                      )}{" "}
+                      Favorite
                     </button>
                   </fieldset>
                 </Form>
@@ -193,7 +209,12 @@ export default function BookmarksIndexPage() {
                 <Link
                   to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}
                 >
-                  {bookmark.favorite ? "💚" : "🤍"} Favorite
+                  {bookmark.favorite ? (
+                    <Icon type="heart" className="text-red-500" />
+                  ) : (
+                    <Icon type="heart" />
+                  )}{" "}
+                  Favorite
                 </Link>
               )}
             </li>

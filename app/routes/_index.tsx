@@ -1,6 +1,7 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import { Icon } from "~/components/icon";
 import { getLatestBookmarks } from "~/models/bookmark.server";
 import { getLatestTags } from "~/models/tag.server";
 import { APP_DESCRIPTION, APP_DESCRIPTION_SHORT, APP_NAME } from "~/utils/misc";
@@ -36,6 +37,7 @@ export default function HomePage() {
               {loaderData.latestBookmarks.map((bookmark) => (
                 <li key={bookmark.id}>
                   <Link to={`/bookmarks/${bookmark.id}`}>
+                    <Icon type="bookmark" />
                     <div>{bookmark.title}</div>
                     <div>{bookmark.url}</div>
                   </Link>
@@ -43,12 +45,19 @@ export default function HomePage() {
               ))}
             </ul>
             <div>
-              <Link to="/bookmarks">View all&hellip;</Link>
+              <Link to="/bookmarks">
+                <Icon type="bookmarks" />
+                <span>View all&hellip;</span>
+              </Link>
             </div>
           </>
         ) : (
           <p>
-            None found. <Link to="/bookmarks/new">+ Add Bookmark</Link>
+            None found.{" "}
+            <Link to="/bookmarks/new">
+              <Icon type="plus" />
+              <span>Add Bookmark</span>
+            </Link>
           </p>
         )}
       </div>
@@ -60,17 +69,27 @@ export default function HomePage() {
             <ul>
               {loaderData.latestTags.map((tag) => (
                 <li key={tag.id}>
-                  <Link to={`/tags/${tag.id}`}>{tag.name}</Link>
+                  <Link to={`/tags/${tag.id}`}>
+                    <Icon type="tag" />
+                    <span>{tag.name}</span>
+                  </Link>
                 </li>
               ))}
             </ul>
             <div>
-              <Link to="/tags">View all&hellip;</Link>
+              <Link to="/tags">
+                <Icon type="tags" />
+                <span>View all&hellip;</span>
+              </Link>
             </div>
           </>
         ) : (
           <p>
-            None found. <Link to="/tags/new">+ Add Tag</Link>
+            None found.{" "}
+            <Link to="/tags/new">
+              <Icon type="plus" />
+              <span>Add Tag</span>
+            </Link>
           </p>
         )}
       </div>

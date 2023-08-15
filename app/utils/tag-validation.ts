@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { IdSchema } from "./misc-validation";
+import { IdSchema } from "~/utils/misc-validation";
 
 export const TagIdSchema = IdSchema;
 

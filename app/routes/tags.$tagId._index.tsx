@@ -102,7 +102,7 @@ export default function TagDetailPage() {
         </div>
       )}
 
-      <Link to="edit">
+      <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}/edit`}>
         <Icon type="pencil" />
         <span>Edit</span>
       </Link>

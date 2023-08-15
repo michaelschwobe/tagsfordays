@@ -1,7 +1,7 @@
 import * as z from "zod";
-import { SEARCH_KEYS } from "./bookmark";
-import { CheckboxSchema, IdSchema, UrlSchema } from "./misc-validation";
-import { TagNameSchema } from "./tag-validation";
+import { SEARCH_KEYS } from "~/utils/bookmark";
+import { CheckboxSchema, IdSchema, UrlSchema } from "~/utils/misc-validation";
+import { TagNameSchema } from "~/utils/tag-validation";
 
 export const BookmarkIdSchema = IdSchema;
 

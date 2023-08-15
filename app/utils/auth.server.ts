@@ -1,7 +1,7 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import type { User } from "~/models/user.server";
 import { getUserById } from "~/models/user.server";
-import { USER_LOGIN_ROUTE } from "~/utils/misc";
+import { USER_LOGIN_ROUTE, safeRedirect } from "~/utils/misc";
 
 const USER_SESSION_KEY = "userId";
 const USER_SESSION_AGE = 60 * 60 * 24 * 7; // 7 days
@@ -91,8 +91,10 @@ export async function createUserSession({
 }
 
 export async function logout(request: Request) {
+  const url = new URL(request.url);
+  const safeRedirectTo = safeRedirect(url.searchParams.get("redirectTo"));
   const session = await getSessionFromRequest(request);
-  return redirect("/", {
+  return redirect(safeRedirectTo, {
     headers: {
       "Set-Cookie": await sessionStorage.destroySession(session),
     },

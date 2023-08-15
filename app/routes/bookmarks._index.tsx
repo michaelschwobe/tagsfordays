@@ -148,7 +148,10 @@ export default function BookmarksIndexPage() {
       {hasSearchValue && !hasBookmarks ? (
         <SearchHelp
           items={[
-            <Link key="new" to="new">
+            <Link
+              key="new"
+              to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
+            >
               <Icon type="plus" />
               <span>Add Bookmark</span>
             </Link>,
@@ -160,7 +163,7 @@ export default function BookmarksIndexPage() {
         />
       ) : (
         <div>
-          <Link to="new">
+          <Link to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}>
             <Icon type="plus" />
             <span>Add Bookmark</span>
           </Link>

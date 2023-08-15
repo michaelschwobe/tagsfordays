@@ -5,6 +5,7 @@ import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Icon } from "~/components/icon";
 import { getTags, getTagsOrderedByRelations } from "~/models/tag.server";
 import {
+  USER_LOGIN_ROUTE,
   formatItemsFoundByCount,
   formatMetaTitle,
   toTitleCase,
@@ -45,7 +46,7 @@ export default function TagsIndexPage() {
       </h1>
 
       <div>
-        <Link to="new">
+        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}>
           <Icon type="plus" />
           <span>Add Tag</span>
         </Link>

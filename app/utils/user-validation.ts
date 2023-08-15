@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { CheckboxSchema } from "./misc-validation";
+import { CheckboxSchema } from "~/utils/misc-validation";
 
 export const UserUsernameSchema = z
   .string({ required_error: "Username is required" })

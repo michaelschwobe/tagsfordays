@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { singleton } from "./singleton.server";
+import { singleton } from "~/utils/singleton.server";
 
 const prisma = singleton("prisma", () => new PrismaClient());
 prisma.$connect();

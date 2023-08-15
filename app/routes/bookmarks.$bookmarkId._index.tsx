@@ -165,7 +165,7 @@ export default function BookmarkDetailPage() {
         <span>Share</span>
       </button>
 
-      <Link to="edit">
+      <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}/edit`}>
         <Icon type="pencil" />
         <span>Edit</span>
       </Link>

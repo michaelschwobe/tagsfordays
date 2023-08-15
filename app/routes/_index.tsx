@@ -4,7 +4,12 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { Icon } from "~/components/icon";
 import { getLatestBookmarks } from "~/models/bookmark.server";
 import { getLatestTags } from "~/models/tag.server";
-import { APP_DESCRIPTION, APP_DESCRIPTION_SHORT, APP_NAME } from "~/utils/misc";
+import {
+  APP_DESCRIPTION,
+  APP_DESCRIPTION_SHORT,
+  APP_NAME,
+  USER_LOGIN_ROUTE,
+} from "~/utils/misc";
 
 export async function loader() {
   const [latestBookmarks, latestTags] = await Promise.all([
@@ -54,7 +59,7 @@ export default function HomePage() {
         ) : (
           <p>
             None found.{" "}
-            <Link to="/bookmarks/new">
+            <Link to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}>
               <Icon type="plus" />
               <span>Add Bookmark</span>
             </Link>
@@ -86,7 +91,7 @@ export default function HomePage() {
         ) : (
           <p>
             None found.{" "}
-            <Link to="/tags/new">
+            <Link to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}>
               <Icon type="plus" />
               <span>Add Tag</span>
             </Link>

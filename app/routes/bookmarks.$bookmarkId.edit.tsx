@@ -177,7 +177,7 @@ export default function NewBookmarkPage() {
           <div>
             <label htmlFor={fieldset.description.id}>Description</label>
             <textarea
-              {...conform.input(fieldset.description)}
+              {...conform.textarea(fieldset.description)}
               autoComplete="false"
               rows={8}
             />

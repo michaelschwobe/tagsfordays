@@ -1,14 +1,21 @@
-export const SEARCH_KEYS = ["url", "title", "description", "tags"] as const;
+export const BOOKMARK_SEARCH_KEYS = [
+  "url",
+  "title",
+  "description",
+  "tags",
+] as const;
 
-export type SearchKey = (typeof SEARCH_KEYS)[number];
+export type BookmarkSearchKey = (typeof BOOKMARK_SEARCH_KEYS)[number];
 
-export const SEARCH_OPTIONS = [
-  ["url", "URL"],
-  ["title", "Title"],
-  ["description", "Description"],
-  ["tags", "Tags"],
-] satisfies ReadonlyArray<[SearchKey, string]>;
+export const BOOKMARK_SEARCH_KEYS_LABEL_MAP = {
+  url: "URL",
+  title: "Title",
+  description: "Description",
+  tags: "Tags",
+} satisfies Readonly<Record<BookmarkSearchKey, string>>;
 
-export function getSearchKey(key: string | null) {
-  return SEARCH_KEYS.includes(key ?? "") ? (key as SearchKey) : "url";
+export function getBookmarkSearchKey(key: string | null) {
+  return BOOKMARK_SEARCH_KEYS.includes(key ?? "")
+    ? (key as BookmarkSearchKey)
+    : "url";
 }

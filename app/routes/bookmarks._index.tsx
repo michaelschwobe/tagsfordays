@@ -1,5 +1,4 @@
-import { conform, useForm } from "@conform-to/react";
-import { parse } from "@conform-to/zod";
+import { conform } from "@conform-to/react";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
@@ -11,14 +10,16 @@ import {
 } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Icon } from "~/components/icon";
+import { SearchForm } from "~/components/search-form";
 import { SearchHelp } from "~/components/search-help";
 import { favoriteBookmark, getBookmarks } from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
-import { SEARCH_KEYS, getSearchKey } from "~/utils/bookmark";
 import {
-  FavoriteBookmarkFormSchema,
-  SearchBookmarkFormSchema,
-} from "~/utils/bookmark-validation";
+  BOOKMARK_SEARCH_KEYS,
+  BOOKMARK_SEARCH_KEYS_LABEL_MAP,
+  getBookmarkSearchKey,
+} from "~/utils/bookmark";
+import { FavoriteBookmarkFormSchema } from "~/utils/bookmark-validation";
 import {
   USER_LOGIN_ROUTE,
   formatItemsFoundByCount,
@@ -29,7 +30,7 @@ import { useOptionalUser } from "~/utils/user";
 
 export async function loader({ request }: LoaderArgs) {
   const url = new URL(request.url);
-  const searchKey = getSearchKey(url.searchParams.get("searchKey"));
+  const searchKey = getBookmarkSearchKey(url.searchParams.get("searchKey"));
   const searchValue = url.searchParams.get("searchValue");
 
   const bookmarks = await getBookmarks({ searchKey, searchValue });
@@ -38,11 +39,12 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export async function action({ request }: ActionArgs) {
+  const userId = await requireUserId(request);
+
   const formData = await request.formData();
   const intent = formData.get(conform.INTENT);
 
   if (intent === "favorite") {
-    const userId = await requireUserId(request);
     const formFields = Object.fromEntries(formData.entries());
     const submission = FavoriteBookmarkFormSchema.safeParse(formFields);
     if (submission.success) {
@@ -67,83 +69,30 @@ export default function BookmarksIndexPage() {
   const navigation = useNavigation();
   const optionalUser = useOptionalUser();
 
-  const [form, fieldset] = useForm({
-    id: "search-bookmark",
-    defaultValue: {
-      searchValue: loaderData.searchValue ?? undefined,
-      searchKey: loaderData.searchKey,
-    },
-    //  lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
-    onValidate({ formData }) {
-      return parse(formData, { schema: SearchBookmarkFormSchema });
-    },
-  });
-
   const disabled = ["submitting", "loading"].includes(navigation.state);
   const hasBookmarks = loaderData.bookmarks.length > 0;
   const hasSearchValue = (loaderData.searchValue ?? "").length > 0;
 
   return (
     <main>
-      <h1>Bookmarks</h1>
+      <SearchForm
+        searchKey={loaderData.searchKey}
+        searchKeys={[...BOOKMARK_SEARCH_KEYS]}
+        searchKeysLabelMap={BOOKMARK_SEARCH_KEYS_LABEL_MAP}
+        searchValue={loaderData.searchValue}
+      />
 
-      <Form method="GET" {...form.props}>
-        <fieldset disabled={disabled}>
-          <div>
-            <label htmlFor={fieldset.searchValue.id}>Search for</label>{" "}
-            <input
-              {...conform.input(fieldset.searchValue, { type: "text" })}
-              autoComplete="false"
-            />{" "}
-            {fieldset.searchValue.error ? (
-              <div id={fieldset.searchValue.errorId}>
-                {fieldset.searchValue.error}
-              </div>
-            ) : null}
-          </div>
-          <fieldset>
-            <legend>Search by</legend>{" "}
-            <div>
-              {conform
-                .collection(fieldset.searchKey, {
-                  type: "radio",
-                  options: SEARCH_KEYS.slice(),
-                })
-                .map((props, index) => (
-                  <label htmlFor={props.id} key={index}>
-                    <input {...props} />
-                    <span>{props.value}</span>
-                  </label>
-                ))}
-            </div>
-            {fieldset.searchKey.error ? (
-              <div id={fieldset.searchKey.errorId}>
-                {fieldset.searchKey.error}
-              </div>
-            ) : null}
-          </fieldset>
-          <div>
-            <button type="submit">
-              <Icon type="search" />
-              <span className="sr-only">Submit</span>
-            </button>{" "}
-            <Link to="." reloadDocument>
-              <Icon type="x" />
-              <span className="sr-only">Clear Filters</span>
-            </Link>
-          </div>
-        </fieldset>
-      </Form>
-
-      <h2>
-        {toTitleCase(
-          formatItemsFoundByCount({
-            count: loaderData.bookmarks.length,
-            single: "bookmark",
-            plural: "bookmarks",
-          }),
-        )}
-      </h2>
+      <h1>
+        {hasSearchValue
+          ? toTitleCase(
+              formatItemsFoundByCount({
+                count: loaderData.bookmarks.length,
+                single: "bookmark",
+                plural: "bookmarks",
+              }),
+            )
+          : "Bookmarks"}
+      </h1>
 
       {hasSearchValue && !hasBookmarks ? (
         <SearchHelp

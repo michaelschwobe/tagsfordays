@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { SEARCH_KEYS } from "~/utils/bookmark";
 import { CheckboxSchema, IdSchema, UrlSchema } from "~/utils/misc-validation";
 import { TagNameSchema } from "~/utils/tag-validation";
 
@@ -22,14 +21,6 @@ export const BookmarkDescriptionSchema = z
 export const BookmarkFavoriteSchema = CheckboxSchema;
 
 export const BookmarkTagsSchema = z.array(TagNameSchema);
-
-export const SearchBookmarkFormSchema = z.object({
-  searchValue: z
-    .string({ required_error: "Search term is required" })
-    .min(2, { message: "Search term is too short" })
-    .max(45, { message: "Search term is too long" }),
-  searchKey: z.enum(SEARCH_KEYS, { required_error: "Search key is required" }),
-});
 
 export const CreateBookmarkFormSchema = z.object({
   url: BookmarkUrlSchema,

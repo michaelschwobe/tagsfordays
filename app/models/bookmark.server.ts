@@ -1,5 +1,5 @@
 import type { Bookmark, Tag, User } from "@prisma/client";
-import type { SearchKey } from "~/utils/bookmark";
+import type { BookmarkSearchKey } from "~/utils/bookmark";
 import { prisma } from "~/utils/db.server";
 
 export function getBookmark({ id }: Pick<Bookmark, "id">) {
@@ -37,7 +37,7 @@ export function getBookmarks({
   searchKey,
   searchValue,
 }: {
-  searchKey: SearchKey;
+  searchKey: BookmarkSearchKey;
   searchValue?: string | null;
 }) {
   if (searchValue && searchKey === "tags") {

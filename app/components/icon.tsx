@@ -37,7 +37,7 @@ export interface IconProps extends React.ComponentPropsWithoutRef<"svg"> {
   type: IconType;
 }
 
-export const Icon = forwardRef<SVGSVGElement, IconProps>(
+export const Icon = forwardRef<React.ElementRef<"svg">, IconProps>(
   ({ className, type, ...props }, forwardedRef) => {
     return (
       <svg

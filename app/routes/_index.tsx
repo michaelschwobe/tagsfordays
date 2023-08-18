@@ -30,7 +30,7 @@ export default function HomePage() {
     <main>
       <h1>{APP_NAME}</h1>
       <LatestBookmarks data={loaderData.latestBookmarks} />
-      <LatestTags data={loaderData.latestTags} />=
+      <LatestTags data={loaderData.latestTags} />
     </main>
   );
 }

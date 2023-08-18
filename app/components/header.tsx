@@ -15,24 +15,25 @@ export interface HeaderNavLinkProps extends NavLinkProps {
   iconType: IconType;
 }
 
-export const HeaderNavLink = forwardRef<HTMLAnchorElement, HeaderNavLinkProps>(
-  ({ children, className, iconType, to, ...props }, forwardedRef) => {
-    return (
-      <NavLink
-        {...props}
-        className={cn(
-          "flex items-center gap-2 p-3 aria-[current=page]:underline",
-          className,
-        )}
-        to={to}
-        ref={forwardedRef}
-      >
-        <Icon className="max-sm:text-xl" type={iconType} />
-        <span className="max-sm:sr-only">{children}</span>
-      </NavLink>
-    );
-  },
-);
+export const HeaderNavLink = forwardRef<
+  React.ElementRef<typeof NavLink>,
+  HeaderNavLinkProps
+>(({ children, className, iconType, to, ...props }, forwardedRef) => {
+  return (
+    <NavLink
+      {...props}
+      className={cn(
+        "flex items-center gap-2 p-3 aria-[current=page]:underline",
+        className,
+      )}
+      to={to}
+      ref={forwardedRef}
+    >
+      <Icon className="max-sm:text-xl" type={iconType} />
+      <span className="max-sm:sr-only">{children}</span>
+    </NavLink>
+  );
+});
 
 HeaderNavLink.displayName = "HeaderNavLink";
 
@@ -42,7 +43,7 @@ export interface HeaderProps
   className?: string;
 }
 
-export const Header = forwardRef<HTMLDivElement, HeaderProps>(
+export const Header = forwardRef<React.ElementRef<"header">, HeaderProps>(
   ({ className, ...props }, forwardedRef) => {
     const location = useLocation();
     const optionalUser = useOptionalUser();

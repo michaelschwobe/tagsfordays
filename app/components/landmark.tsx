@@ -12,7 +12,7 @@ export interface LandmarkProps {
   type: "trigger" | "target";
 }
 
-export const Landmark = forwardRef<HTMLAnchorElement, LandmarkProps>(
+export const Landmark = forwardRef<React.ElementRef<"a">, LandmarkProps>(
   ({ className, label, slug, type, ...props }, forwardedRef) => {
     return (
       <a

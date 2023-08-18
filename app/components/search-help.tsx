@@ -6,7 +6,7 @@ export interface SearchHelpProps
   items?: React.ReactNode[];
 }
 
-export const SearchHelp = forwardRef<HTMLDivElement, SearchHelpProps>(
+export const SearchHelp = forwardRef<React.ElementRef<"div">, SearchHelpProps>(
   ({ items, ...props }, forwardedRef) => {
     return (
       <div {...props} ref={forwardedRef}>

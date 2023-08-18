@@ -1,8 +1,6 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
 import { json, type LinksFunction, type LoaderArgs } from "@remix-run/node";
 import {
-  Form,
-  Link,
   Links,
   LiveReload,
   Meta,
@@ -10,16 +8,13 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useLocation,
 } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { Icon } from "~/components/icon";
+import { Header } from "~/components/header";
 import { Landmark } from "~/components/landmark";
 import tailwindStylesheetUrl from "~/tailwind.css";
 import { getUser } from "~/utils/auth.server";
 import { getEnv } from "~/utils/env.server";
-import { USER_LOGIN_ROUTE, USER_LOGOUT_ROUTE } from "~/utils/misc";
-import { useOptionalUser } from "~/utils/user";
 
 export async function loader({ request }: LoaderArgs) {
   const ENV = getEnv();
@@ -75,48 +70,12 @@ function Document({
 
 export default function App() {
   const loaderData = useLoaderData<typeof loader>();
-  const location = useLocation();
-  const optionalUser = useOptionalUser();
 
   return (
     <Document env={loaderData.ENV}>
       <Landmark type="trigger" slug="main" label="main content" />
 
-      <header>
-        <nav>
-          <div>
-            <Link to="/">
-              <Icon type="home" /> <span>Home</span>
-            </Link>
-            <Link to="/bookmarks">
-              <Icon type="bookmarks" /> <span>Bookmarks</span>
-            </Link>
-            <Link to="/tags">
-              <Icon type="tags" /> <span>Tags</span>
-            </Link>
-          </div>
-          <div>
-            {optionalUser ? (
-              <Form
-                method="POST"
-                action={`${USER_LOGOUT_ROUTE}?redirectTo=${location.pathname}`}
-              >
-                <button type="submit">
-                  <Icon type="log-out" />
-                  <span className="sr-only">
-                    Log Out {optionalUser.username}
-                  </span>
-                </button>
-              </Form>
-            ) : (
-              <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
-                <Icon type="log-in" />
-                <span className="sr-only">Log In</span>
-              </Link>
-            )}
-          </div>
-        </nav>
-      </header>
+      <Header />
 
       <Landmark type="target" slug="main" label="main content" />
       <Outlet />

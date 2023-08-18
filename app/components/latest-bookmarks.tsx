@@ -19,39 +19,46 @@ export const LatestBookmarks = forwardRef<
   return (
     <aside
       {...props}
-      className={cn("LatestBookmarks", className)}
+      className={cn("grid gap-2", className)}
       ref={forwardedRef}
     >
-      <h2>Latest Bookmarks</h2>
+      <h2 className="text-lg font-semibold">Latest Bookmarks</h2>
+
       {data.length > 0 ? (
-        <>
-          <ul>
-            {data.map((bookmark) => (
-              <li key={bookmark.id}>
-                <Link to={`/bookmarks/${bookmark.id}`}>
-                  <Icon type="bookmark" />
-                  <div>{bookmark.title}</div>
-                  <div>{bookmark.url}</div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div>
-            <Link to="/bookmarks">
-              <Icon type="bookmarks" />
-              <span>View all&hellip;</span>
-            </Link>
-          </div>
-        </>
+        <ul className="flex flex-col gap-1">
+          {data.map((bookmark) => (
+            <li key={bookmark.id}>
+              <Link
+                className="inline-flex items-baseline gap-2 hover:underline"
+                to={`/bookmarks/${bookmark.id}`}
+              >
+                <Icon className="self-center" type="bookmark" />
+                <span className="grow">
+                  <span className="block truncate">{bookmark.title}</span>
+                  <span className="block truncate text-xs">{bookmark.url}</span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       ) : (
         <p>
           None found.{" "}
-          <Link to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}>
-            <Icon type="plus" />
+          <Link
+            className="inline-flex items-baseline gap-[0.25em]"
+            to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
+          >
+            <Icon className="self-center" type="plus" />
             <span>Add Bookmark</span>
           </Link>
         </p>
       )}
+
+      <div>
+        <Link className="underline hover:underline-offset-2" to="/bookmarks">
+          View all&hellip;
+        </Link>
+      </div>
     </aside>
   );
 });

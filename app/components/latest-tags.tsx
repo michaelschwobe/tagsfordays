@@ -19,38 +19,43 @@ export const LatestTags = forwardRef<
   return (
     <aside
       {...props}
-      className={cn("LatestTags", className)}
+      className={cn("grid gap-2", className)}
       ref={forwardedRef}
     >
-      <h2>Latest Tags</h2>
+      <h2 className="text-lg font-semibold">Latest Tags</h2>
+
       {data.length > 0 ? (
-        <>
-          <ul>
-            {data.map((tag) => (
-              <li key={tag.id}>
-                <Link to={`/tags/${tag.id}`}>
-                  <Icon type="tag" />
-                  <span>{tag.name}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div>
-            <Link to="/tags">
-              <Icon type="tags" />
-              <span>View all&hellip;</span>
-            </Link>
-          </div>
-        </>
+        <ul className="flex flex-col gap-1">
+          {data.map((tag) => (
+            <li key={tag.id}>
+              <Link
+                className="inline-flex items-baseline gap-2 hover:underline"
+                to={`/tags/${tag.id}`}
+              >
+                <Icon className="self-center" type="tag" />
+                <span className="truncate">{tag.name}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       ) : (
         <p>
           None found.{" "}
-          <Link to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}>
-            <Icon type="plus" />
+          <Link
+            className="inline-flex items-baseline gap-[0.25em]"
+            to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}
+          >
+            <Icon className="self-center" type="plus" />
             <span>Add Tag</span>
           </Link>
         </p>
       )}
+
+      <div>
+        <Link className="underline hover:underline-offset-2" to="/tags">
+          View all&hellip;
+        </Link>
+      </div>
     </aside>
   );
 });

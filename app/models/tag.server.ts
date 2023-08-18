@@ -63,6 +63,7 @@ export function getLatestTags({ take = 5 }: { take?: number } = {}) {
     take,
   });
 }
+export type LatestTagsData = Awaited<ReturnType<typeof getLatestTags>>;
 
 export function createTag({
   name,

@@ -87,6 +87,9 @@ export function getLatestBookmarks({ take = 5 }: { take?: number } = {}) {
     take,
   });
 }
+export type LatestBookmarksData = Awaited<
+  ReturnType<typeof getLatestBookmarks>
+>;
 
 export function createBookmark({
   url,

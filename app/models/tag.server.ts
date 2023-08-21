@@ -1,7 +1,7 @@
 import type { Tag, User } from "@prisma/client";
 import { prisma } from "~/utils/db.server";
 
-export function getTag({ id }: Pick<Tag, "id">) {
+export async function getTag({ id }: Pick<Tag, "id">) {
   return prisma.tag.findFirst({
     select: {
       id: true,
@@ -27,14 +27,14 @@ export function getTag({ id }: Pick<Tag, "id">) {
   });
 }
 
-export function getTagByName({ name }: Pick<Tag, "name">) {
+export async function getTagByName({ name }: Pick<Tag, "name">) {
   return prisma.tag.findUnique({
     select: { id: true },
     where: { name },
   });
 }
 
-export function getTags() {
+export async function getTags() {
   return prisma.tag.findMany({
     select: {
       id: true,
@@ -45,7 +45,7 @@ export function getTags() {
   });
 }
 
-export function getTagsOrderedByRelations() {
+export async function getTagsOrderedByRelations() {
   return prisma.tag.findMany({
     select: {
       id: true,
@@ -56,7 +56,7 @@ export function getTagsOrderedByRelations() {
   });
 }
 
-export function getLatestTags({ take = 5 }: { take?: number } = {}) {
+export async function getLatestTags({ take = 5 }: { take?: number } = {}) {
   return prisma.tag.findMany({
     select: { id: true, name: true },
     orderBy: { createdAt: "asc" },
@@ -65,7 +65,7 @@ export function getLatestTags({ take = 5 }: { take?: number } = {}) {
 }
 export type LatestTagsData = Awaited<ReturnType<typeof getLatestTags>>;
 
-export function createTag({
+export async function createTag({
   name,
   userId,
 }: Pick<Tag, "name"> & {
@@ -81,7 +81,7 @@ export function createTag({
   });
 }
 
-export function updateTag({
+export async function updateTag({
   id,
   name,
   userId,
@@ -92,7 +92,7 @@ export function updateTag({
   });
 }
 
-export function deleteTag({
+export async function deleteTag({
   id,
   userId,
 }: Pick<Tag, "id"> & { userId: User["id"] }) {
@@ -101,7 +101,7 @@ export function deleteTag({
   });
 }
 
-export function deleteTagByName({
+export async function deleteTagByName({
   name,
   userId,
 }: Pick<Tag, "name"> & { userId: User["id"] }) {

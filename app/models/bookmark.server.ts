@@ -2,7 +2,7 @@ import type { Bookmark, Tag, User } from "@prisma/client";
 import type { BookmarkSearchKey } from "~/utils/bookmark";
 import { prisma } from "~/utils/db.server";
 
-export function getBookmark({ id }: Pick<Bookmark, "id">) {
+export async function getBookmark({ id }: Pick<Bookmark, "id">) {
   return prisma.bookmark.findFirst({
     select: {
       id: true,
@@ -26,14 +26,14 @@ export function getBookmark({ id }: Pick<Bookmark, "id">) {
   });
 }
 
-export function getBookmarkByUrl({ url }: Pick<Bookmark, "url">) {
+export async function getBookmarkByUrl({ url }: Pick<Bookmark, "url">) {
   return prisma.bookmark.findUnique({
     select: { id: true },
     where: { url },
   });
 }
 
-export function getBookmarks({
+export async function getBookmarks({
   searchKey,
   searchValue,
 }: {
@@ -80,7 +80,7 @@ export function getBookmarks({
   });
 }
 
-export function getLatestBookmarks({ take = 5 }: { take?: number } = {}) {
+export async function getLatestBookmarks({ take = 5 }: { take?: number } = {}) {
   return prisma.bookmark.findMany({
     select: { id: true, url: true, title: true },
     orderBy: [{ createdAt: "desc" }, { title: "asc" }],
@@ -91,7 +91,7 @@ export type LatestBookmarksData = Awaited<
   ReturnType<typeof getLatestBookmarks>
 >;
 
-export function createBookmark({
+export async function createBookmark({
   url,
   title,
   description,
@@ -125,7 +125,7 @@ export function createBookmark({
   });
 }
 
-export function updateBookmark({
+export async function updateBookmark({
   id,
   url,
   title,
@@ -159,7 +159,7 @@ export function updateBookmark({
   });
 }
 
-export function favoriteBookmark({
+export async function favoriteBookmark({
   id,
   favorite,
   userId,
@@ -172,7 +172,7 @@ export function favoriteBookmark({
   });
 }
 
-export function deleteBookmark({
+export async function deleteBookmark({
   id,
   userId,
 }: Pick<Bookmark, "id"> & { userId: User["id"] }) {

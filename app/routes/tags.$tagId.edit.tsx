@@ -14,7 +14,9 @@ import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Button } from "~/components/ui/button";
+import { FormControl } from "~/components/ui/form-control";
 import { FormDescription } from "~/components/ui/form-description";
+import { FormItem } from "~/components/ui/form-item";
 import { FormLabel } from "~/components/ui/form-label";
 import { FormMessage } from "~/components/ui/form-message";
 import { H1 } from "~/components/ui/h1";
@@ -130,9 +132,9 @@ export default function NewTagPage() {
             value={fieldset.id.defaultValue}
           />
 
-          <div className="flex flex-col gap-1">
+          <FormItem>
             <FormLabel htmlFor={fieldset.name.id}>Name</FormLabel>
-            <div>
+            <FormControl>
               <Input
                 className="max-sm:w-full"
                 {...conform.input(fieldset.name, {
@@ -141,16 +143,16 @@ export default function NewTagPage() {
                 })}
                 autoComplete="false"
               />
-            </div>
+            </FormControl>
             <FormDescription id={fieldset.name.descriptionId}>
               Comma separate names, ex: <code>t1,t2,t3</code>
             </FormDescription>
             <FormMessage id={fieldset.name.errorId}>
               {fieldset.name.error}
             </FormMessage>
-          </div>
+          </FormItem>
 
-          <div className="grid grid-cols-2 gap-2 sm:w-80">
+          <FormItem className="sm:w-80" isButtonGroup>
             <Button type="submit">
               <Icon type="check" />
               <span>Update</span>
@@ -159,7 +161,7 @@ export default function NewTagPage() {
               <Icon type="x" />
               <span>Cancel</span>
             </LinkButton>
-          </div>
+          </FormItem>
         </fieldset>
       </Form>
     </Main>

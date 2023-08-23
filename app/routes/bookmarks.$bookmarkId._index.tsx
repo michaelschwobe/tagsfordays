@@ -9,6 +9,8 @@ import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { FormControl } from "~/components/ui/form-control";
+import { FormItem } from "~/components/ui/form-item";
 import { H1 } from "~/components/ui/h1";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
@@ -101,9 +103,9 @@ export default function BookmarkDetailPage() {
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
+        <FormItem>
           <div className="text-sm font-medium">URL</div>
-          <div>
+          <FormControl>
             <LinkButton
               className="overflow-hidden max-sm:w-full"
               to={loaderData.bookmark.url}
@@ -113,28 +115,28 @@ export default function BookmarkDetailPage() {
               <span className="truncate">{loaderData.bookmark.url}</span>
               <Icon type="external-link" />
             </LinkButton>
-          </div>
-        </div>
+          </FormControl>
+        </FormItem>
 
-        <div className="flex flex-col gap-1">
+        <FormItem>
           <div className="text-sm font-medium">Title</div>
-          <div className="flex items-center py-2">
+          <FormControl className="py-2">
             <H2>{loaderData.bookmark.title ?? "(Untitled)"}</H2>
-          </div>
-        </div>
+          </FormControl>
+        </FormItem>
 
-        <div className="flex flex-col gap-1">
+        <FormItem>
           <div className="text-sm font-medium">Description</div>
-          <div className="flex items-center py-2">
+          <FormControl className="py-2">
             <p>{loaderData.bookmark.description}</p>
-          </div>
-        </div>
+          </FormControl>
+        </FormItem>
 
-        <div className="flex flex-col gap-1">
-          <div className="mr-auto flex items-center gap-2 text-sm font-medium">
+        <FormItem>
+          <div className="mb-2 mr-auto flex items-center gap-2 text-sm font-medium">
             Tags <Badge>{loaderData.bookmark.tags.length}</Badge>
           </div>
-          <div className="flex items-center py-2">
+          <FormControl>
             {loaderData.bookmark.tags.length > 0 ? (
               <ul className="flex flex-wrap gap-2">
                 {loaderData.bookmark.tags.map(({ tag }) => (
@@ -154,18 +156,18 @@ export default function BookmarkDetailPage() {
                 </LinkButton>
               </div>
             )}
-          </div>
-        </div>
+          </FormControl>
+        </FormItem>
 
-        <div className="flex flex-col gap-1">
+        <FormItem>
           <div className="text-sm font-medium">Favorite</div>
-          <div>
+          <FormControl>
             <ButtonFavorite
               entityId={loaderData.bookmark.id}
               entityValue={loaderData.bookmark.favorite}
             />
-          </div>
-        </div>
+          </FormControl>
+        </FormItem>
       </div>
     </Main>
   );

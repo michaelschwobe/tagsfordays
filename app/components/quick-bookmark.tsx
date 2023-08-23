@@ -1,6 +1,8 @@
 import { forwardRef, useId } from "react";
 import { Button } from "~/components/ui/button";
+import { FormControl } from "~/components/ui/form-control";
 import { FormDescription } from "~/components/ui/form-description";
+import { FormItem } from "~/components/ui/form-item";
 import { FormLabel } from "~/components/ui/form-label";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
@@ -34,9 +36,9 @@ export const QuickBookmark = forwardRef<
 
       {optionalUser ? (
         <form method="POST" action={redirectTo}>
-          <div className="flex flex-col gap-1">
+          <FormItem>
             <FormLabel htmlFor={`${id}-url`}>URL</FormLabel>
-            <div className="flex gap-2">
+            <FormControl>
               <Input
                 className="w-full"
                 type="text"
@@ -49,11 +51,11 @@ export const QuickBookmark = forwardRef<
                 <Icon type="check" />
                 <span className="sr-only">Add</span>
               </Button>
-            </div>
+            </FormControl>
             <FormDescription id={`${id}-url-description`}>
               Use secure URLs, ex: <code>https://</code>
             </FormDescription>
-          </div>
+          </FormItem>
         </form>
       ) : (
         <div>

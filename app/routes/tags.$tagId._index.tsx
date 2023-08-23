@@ -7,6 +7,8 @@ import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
+import { FormControl } from "~/components/ui/form-control";
+import { FormItem } from "~/components/ui/form-item";
 import { H1 } from "~/components/ui/h1";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
@@ -87,19 +89,18 @@ export default function TagDetailPage() {
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
+        <FormItem>
           <div className="text-sm font-medium">Name</div>
-          <div className="flex items-center py-2">
+          <FormControl className="py-2">
             <H2>{loaderData.tag.name}</H2>
-          </div>
-        </div>
+          </FormControl>
+        </FormItem>
 
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2 text-sm font-medium">
+        <FormItem>
+          <div className="mb-2 flex items-center gap-2 text-sm font-medium">
             Bookmarks <Badge>{loaderData.tag.bookmarks.length}</Badge>
           </div>
-
-          <div className="flex items-center py-2">
+          <FormControl>
             {loaderData.tag.bookmarks.length > 0 ? (
               <ul className="flex flex-col gap-2">
                 {loaderData.tag.bookmarks.map(({ bookmark }) => (
@@ -127,8 +128,8 @@ export default function TagDetailPage() {
                 </LinkButton>
               </div>
             )}
-          </div>
-        </div>
+          </FormControl>
+        </FormItem>
       </div>
     </Main>
   );

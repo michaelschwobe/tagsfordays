@@ -15,7 +15,9 @@ import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { FormControl } from "~/components/ui/form-control";
 import { FormDescription } from "~/components/ui/form-description";
+import { FormItem } from "~/components/ui/form-item";
 import { FormLabel } from "~/components/ui/form-label";
 import { FormMessage } from "~/components/ui/form-message";
 import { H1 } from "~/components/ui/h1";
@@ -171,9 +173,9 @@ export default function NewBookmarkPage() {
             value={fieldset.id.defaultValue}
           />
 
-          <div className="flex flex-col gap-1">
+          <FormItem>
             <FormLabel htmlFor={fieldset.url.id}>URL</FormLabel>
-            <div>
+            <FormControl>
               <Input
                 className="max-sm:w-full"
                 {...conform.input(fieldset.url, {
@@ -182,49 +184,49 @@ export default function NewBookmarkPage() {
                 })}
                 autoComplete="false"
               />
-            </div>
+            </FormControl>
             <FormDescription id={fieldset.url.descriptionId}>
               Use secure URLs, ex: <code>https://</code>
             </FormDescription>
             <FormMessage id={fieldset.url.errorId}>
               {fieldset.url.error}
             </FormMessage>
-          </div>
+          </FormItem>
 
-          <div className="flex flex-col gap-1">
+          <FormItem>
             <FormLabel htmlFor={fieldset.title.id}>Title</FormLabel>
-            <div>
+            <FormControl>
               <Input
                 className="max-sm:w-full"
                 {...conform.input(fieldset.title, { type: "text" })}
                 autoComplete="false"
               />
-            </div>
+            </FormControl>
             <FormMessage id={fieldset.title.errorId}>
               {fieldset.title.error}
             </FormMessage>
-          </div>
+          </FormItem>
 
-          <div className="flex flex-col gap-1">
+          <FormItem>
             <FormLabel htmlFor={fieldset.description.id}>Description</FormLabel>
-            <div>
+            <FormControl>
               <Textarea
                 className="max-sm:w-full"
                 {...conform.textarea(fieldset.description)}
                 autoComplete="false"
                 rows={5}
               />
-            </div>
+            </FormControl>
             <FormMessage id={fieldset.description.errorId}>
               {fieldset.description.error}
             </FormMessage>
-          </div>
+          </FormItem>
 
           <fieldset>
-            <legend className="mb-1 flex items-center gap-2 text-sm font-medium">
+            <legend className="mb-2 flex items-center gap-2 text-sm font-medium">
               Tags <Badge>{tagsSelected.length}</Badge>
             </legend>
-            <div className="flex flex-wrap gap-2">
+            <FormControl className="flex-wrap">
               {tagsAll.map((tag) =>
                 "key" in tag ? (
                   <Fragment key={tag.key}>
@@ -257,25 +259,25 @@ export default function NewBookmarkPage() {
                   </Button>
                 ),
               )}
-            </div>
+            </FormControl>
             <FormMessage id={fieldset.tags.errorId}>
               {fieldset.tags.error}
             </FormMessage>
           </fieldset>
 
-          <div className="flex flex-col gap-1">
-            <div className="flex h-10 items-center gap-2">
+          <FormItem>
+            <FormControl>
               <input
                 {...conform.input(fieldset.favorite, { type: "checkbox" })}
               />
               <Label htmlFor={fieldset.favorite.id}>Favorite</Label>
-            </div>
+            </FormControl>
             <FormMessage id={fieldset.favorite.errorId}>
               {fieldset.favorite.error}
             </FormMessage>
-          </div>
+          </FormItem>
 
-          <div className="grid grid-cols-2 gap-2 sm:w-80">
+          <FormItem className="sm:w-80" isButtonGroup>
             <Button type="submit">
               <Icon type="check" />
               <span>Update</span>
@@ -284,7 +286,7 @@ export default function NewBookmarkPage() {
               <Icon type="x" />
               <span>Cancel</span>
             </LinkButton>
-          </div>
+          </FormItem>
         </fieldset>
       </Form>
     </Main>

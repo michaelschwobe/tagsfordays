@@ -12,6 +12,8 @@ import { useId } from "react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Button } from "~/components/ui/button";
+import { FormControl } from "~/components/ui/form-control";
+import { FormItem } from "~/components/ui/form-item";
 import { FormLabel } from "~/components/ui/form-label";
 import { FormMessage } from "~/components/ui/form-message";
 import { H1 } from "~/components/ui/h1";
@@ -102,49 +104,49 @@ export default function LoginPage() {
         >
           <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
-          <div className="flex flex-col gap-1">
+          <FormItem>
             <FormLabel htmlFor={fieldset.username.id}>Username</FormLabel>
-            <div>
+            <FormControl>
               <Input
                 className="max-sm:w-full"
                 {...conform.input(fieldset.username, { type: "text" })}
                 autoComplete="username"
               />
-            </div>
+            </FormControl>
             <FormMessage id={fieldset.username.errorId}>
               {fieldset.username.error}
             </FormMessage>
-          </div>
+          </FormItem>
 
-          <div className="flex flex-col gap-1">
+          <FormItem>
             <FormLabel htmlFor={fieldset.password.id}>Password</FormLabel>
-            <div>
+            <FormControl>
               <Input
                 className="max-sm:w-full"
                 {...conform.input(fieldset.password, { type: "password" })}
                 autoComplete="current-password"
               />
-            </div>
+            </FormControl>
             <FormMessage id={fieldset.password.errorId}>
               {fieldset.password.error}
             </FormMessage>
-          </div>
+          </FormItem>
 
-          <div className="flex flex-col gap-1">
-            <div className="flex h-10 items-center gap-2">
+          <FormItem>
+            <FormControl>
               <input
                 {...conform.input(fieldset.remember, { type: "checkbox" })}
               />
               <Label htmlFor={fieldset.remember.id}>Remember me</Label>
-            </div>
+            </FormControl>
             <FormMessage id={fieldset.remember.errorId}>
               {fieldset.remember.error}
             </FormMessage>
-          </div>
+          </FormItem>
 
           <input {...conform.input(fieldset.redirectTo, { type: "hidden" })} />
 
-          <div className="grid grid-cols-2 gap-2 sm:w-80">
+          <FormItem className="sm:w-80" isButtonGroup>
             <Button type="submit">
               <Icon type="log-in" />
               <span>Log in</span>
@@ -153,7 +155,7 @@ export default function LoginPage() {
               <Icon type="x" />
               <span>Cancel</span>
             </LinkButton>
-          </div>
+          </FormItem>
         </fieldset>
       </Form>
     </Main>

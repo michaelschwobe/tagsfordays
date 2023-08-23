@@ -1,6 +1,8 @@
 import { forwardRef, useId } from "react";
 import { Button } from "~/components/ui/button";
+import { FormControl } from "~/components/ui/form-control";
 import { FormDescription } from "~/components/ui/form-description";
+import { FormItem } from "~/components/ui/form-item";
 import { FormLabel } from "~/components/ui/form-label";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
@@ -32,9 +34,9 @@ export const QuickTag = forwardRef<React.ElementRef<"aside">, QuickTagProps>(
 
         {optionalUser ? (
           <form method="POST" action={redirectTo}>
-            <div className="flex flex-col gap-1">
+            <FormItem>
               <FormLabel htmlFor={`${id}-name`}>Name</FormLabel>
-              <div className="flex gap-2">
+              <FormControl>
                 <Input
                   className="w-full"
                   type="text"
@@ -47,11 +49,11 @@ export const QuickTag = forwardRef<React.ElementRef<"aside">, QuickTagProps>(
                   <Icon type="check" />
                   <span className="sr-only">Add</span>
                 </Button>
-              </div>
+              </FormControl>
               <FormDescription id={`${id}-name-description`}>
                 Comma separate names, ex: <code>t1,t2,t3</code>
               </FormDescription>
-            </div>
+            </FormItem>
           </form>
         ) : (
           <div>

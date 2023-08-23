@@ -3,6 +3,8 @@ import { parse } from "@conform-to/zod";
 import { Form, useNavigation } from "@remix-run/react";
 import { useId } from "react";
 import { Button } from "~/components/ui/button";
+import { FormControl } from "~/components/ui/form-control";
+import { FormItem } from "~/components/ui/form-item";
 import { FormLabel } from "~/components/ui/form-label";
 import { FormMessage } from "~/components/ui/form-message";
 import { Icon } from "~/components/ui/icon";
@@ -53,24 +55,24 @@ export function SearchForm({
       >
         <legend className="sr-only">Search database</legend>
 
-        <div className="grow">
+        <FormItem className="grow">
           <FormLabel className="sr-only" htmlFor={fieldset.searchValue.id}>
             Search Term
           </FormLabel>
-          <div>
+          <FormControl>
             <Input
               className="w-full"
               {...conform.input(fieldset.searchValue, { type: "text" })}
               placeholder="Search for…"
               autoComplete="false"
             />
-          </div>
+          </FormControl>
           <FormMessage id={fieldset.searchValue.errorId}>
             {fieldset.searchValue.error}
           </FormMessage>
-        </div>
+        </FormItem>
 
-        <div className="flex flex-col gap-1">
+        <FormItem>
           <div
             className="sr-only text-sm font-medium"
             id={fieldset.searchKey.descriptionId}
@@ -98,9 +100,9 @@ export function SearchForm({
           <FormMessage id={fieldset.searchKey.errorId}>
             {fieldset.searchKey.error}
           </FormMessage>
-        </div>
+        </FormItem>
 
-        <div className="grid grid-cols-2 gap-2">
+        <FormItem isButtonGroup>
           <Button type="submit">
             <Icon type="search" />
             <span className="sr-only">Submit</span>
@@ -110,7 +112,7 @@ export function SearchForm({
             <Icon type="x" />
             <span className="sr-only">Reset Filters</span>
           </LinkButton>
-        </div>
+        </FormItem>
       </fieldset>
     </Form>
   );

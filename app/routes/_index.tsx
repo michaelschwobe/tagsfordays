@@ -4,6 +4,8 @@ import { useLoaderData } from "@remix-run/react";
 import { LatestBookmarks } from "~/components/latest-bookmarks";
 import { LatestTags } from "~/components/latest-tags";
 import { Main } from "~/components/main";
+import { QuickBookmark } from "~/components/quick-bookmark";
+import { QuickTag } from "~/components/quick-tag";
 import { getLatestBookmarks } from "~/models/bookmark.server";
 import { getLatestTags } from "~/models/tag.server";
 import { APP_DESCRIPTION, APP_DESCRIPTION_SHORT, APP_NAME } from "~/utils/misc";
@@ -34,6 +36,10 @@ export default function HomePage() {
       <p className="mb-4">{APP_DESCRIPTION}</p>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-8">
+        <QuickBookmark />
+
+        <QuickTag />
+
         <LatestBookmarks
           className="rounded-xl border border-black p-6"
           data={loaderData.latestBookmarks}

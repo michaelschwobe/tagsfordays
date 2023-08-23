@@ -1,8 +1,13 @@
 import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
-import { Form, Link, useNavigation } from "@remix-run/react";
+import { Form, useNavigation } from "@remix-run/react";
 import { useId } from "react";
-import { Icon } from "~/components/icon";
+import { Button } from "~/components/ui/button";
+import { FormLabel } from "~/components/ui/form-label";
+import { FormMessage } from "~/components/ui/form-message";
+import { Icon } from "~/components/ui/icon";
+import { Input } from "~/components/ui/input";
+import { LinkButton } from "~/components/ui/link-button";
 import { cn } from "~/utils/misc";
 import { toSearchFormSchema } from "~/utils/misc-validation";
 
@@ -27,8 +32,8 @@ export function SearchForm({
   searchValue,
 }: SearchFormProps) {
   const navigation = useNavigation();
-  const id = useId();
 
+  const id = useId();
   const [form, fieldset] = useForm({
     id,
     defaultValue: {
@@ -44,67 +49,67 @@ export function SearchForm({
     <Form className={cn("", className)} method="GET" {...form.props}>
       <fieldset
         className="flex flex-col gap-2 sm:flex-row sm:items-start"
-        disabled={navigation.state === "submitting"}
+        disabled={["submitting", "loading"].includes(navigation.state)}
       >
-        <div>
-          <span className="sr-only">Search within</span>{" "}
-          <div className="flex justify-center gap-1 border border-gray-500 px-2 focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600">
+        <legend className="sr-only">Search database</legend>
+
+        <div className="grow">
+          <FormLabel className="sr-only" htmlFor={fieldset.searchValue.id}>
+            Search Term
+          </FormLabel>
+          <div>
+            <Input
+              className="w-full"
+              {...conform.input(fieldset.searchValue, { type: "text" })}
+              placeholder="Search for…"
+              autoComplete="false"
+            />
+          </div>
+          <FormMessage id={fieldset.searchValue.errorId}>
+            {fieldset.searchValue.error}
+          </FormMessage>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <div
+            className="sr-only text-sm font-medium"
+            id={fieldset.searchKey.descriptionId}
+          >
+            Search key
+          </div>
+          <div className="flex h-10 items-center gap-1 rounded-lg bg-black p-1 text-white">
             {conform
               .collection(fieldset.searchKey, {
                 type: "radio",
                 options: searchKeys,
+                description: true,
               })
               .map((props, index) => (
                 <label
-                  className="cursor-pointer px-3 py-2 hover:underline [&:has(:checked)]:underline"
-                  htmlFor={props.id}
                   key={index}
+                  className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-1 font-medium transition-all focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600 hover:bg-white/30 [&:has(:checked)]:bg-white [&:has(:checked)]:text-black"
+                  htmlFor={props.id}
                 >
                   <input className="sr-only" {...props} />
                   <span>{searchKeysLabelMap[props.value] ?? props.value}</span>
                 </label>
               ))}
           </div>
-          {fieldset.searchKey.error ? (
-            <div id={fieldset.searchKey.errorId}>
-              {fieldset.searchKey.error}
-            </div>
-          ) : null}
-        </div>
-
-        <div className="grow">
-          <label className="sr-only" htmlFor={fieldset.searchValue.id}>
-            Search for
-          </label>{" "}
-          <input
-            className="w-full border-gray-500"
-            {...conform.input(fieldset.searchValue, { type: "text" })}
-            autoComplete="false"
-          />{" "}
-          {fieldset.searchValue.error ? (
-            <div id={fieldset.searchValue.errorId}>
-              {fieldset.searchValue.error}
-            </div>
-          ) : null}
+          <FormMessage id={fieldset.searchKey.errorId}>
+            {fieldset.searchKey.error}
+          </FormMessage>
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <button
-            className="flex justify-center border border-black p-3"
-            type="submit"
-          >
+          <Button type="submit">
             <Icon type="search" />
             <span className="sr-only">Submit</span>
-          </button>
+          </Button>
 
-          <Link
-            className="flex justify-center border border-black p-3 sm:max-w-max"
-            to="."
-            reloadDocument
-          >
+          <LinkButton to="." reloadDocument>
             <Icon type="x" />
             <span className="sr-only">Reset Filters</span>
-          </Link>
+          </LinkButton>
         </div>
       </fieldset>
     </Form>

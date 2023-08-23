@@ -1,15 +1,14 @@
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { Icon } from "~/components/icon";
+import { Main } from "~/components/main";
+import { Badge } from "~/components/ui/badge";
+import { Icon } from "~/components/ui/icon";
+import { LinkButton } from "~/components/ui/link-button";
 import { getTags, getTagsOrderedByRelations } from "~/models/tag.server";
-import {
-  USER_LOGIN_ROUTE,
-  formatItemsFoundByCount,
-  formatMetaTitle,
-  toTitleCase,
-} from "~/utils/misc";
+import { formatMetaTitle } from "~/utils/misc";
+import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ request }: LoaderArgs) {
   const url = new URL(request.url);
@@ -23,9 +22,13 @@ export async function loader({ request }: LoaderArgs) {
   return json({ orderBy, tags });
 }
 
-export const meta: V2_MetaFunction = () => {
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+  if (!data?.tags) {
+    return [{ title: "404: Tags Not Found" }];
+  }
+
   const title = formatMetaTitle("Tags");
-  const description = "Tags"; // TODO: Add description
+  const description = "Tags"; // TODO: Add better tags description
 
   return [{ title }, { name: "description", content: description }];
 };
@@ -34,59 +37,63 @@ export default function TagsIndexPage() {
   const loaderData = useLoaderData<typeof loader>();
 
   return (
-    <main>
-      <h1>
-        {toTitleCase(
-          formatItemsFoundByCount({
-            count: loaderData.tags.length,
-            single: "tag",
-            plural: "tags",
-          }),
-        )}
-      </h1>
+    <Main>
+      <div className="mb-4 flex items-center gap-2">
+        <h1 className="mr-auto flex items-center gap-2 text-xl font-semibold">
+          <Icon type="tags" />
+          Tags <Badge>{loaderData.tags.length}</Badge>
+        </h1>
 
-      <div>
-        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}>
+        <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}>
           <Icon type="plus" />
-          <span>Add Tag</span>
-        </Link>
+          <Icon type="tag" />
+          <span className="sr-only">Add Tag</span>
+        </LinkButton>
       </div>
 
-      {loaderData.tags.length > 0 ? (
-        <Form method="GET">
-          <span>Order By:</span>{" "}
-          <button
-            type={loaderData.orderBy === "name" ? "button" : "submit"}
-            name="orderBy"
-            value="name"
-            aria-pressed={loaderData.orderBy === "name"}
-          >
-            Name
-          </button>{" "}
-          <button
-            type={loaderData.orderBy === "relations" ? "button" : "submit"}
-            name="orderBy"
-            value="relations"
-            aria-pressed={loaderData.orderBy === "relations"}
-          >
-            Relations
-          </button>
+      {loaderData.tags.length > 1 ? (
+        <Form className="mb-4" method="GET">
+          <div className="sr-only">Order By:</div>
+          <div className="inline-flex h-10 items-center gap-1 rounded-lg bg-black p-1 text-white max-sm:w-full">
+            <button
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-1 font-medium transition-all focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600 hover:bg-white/30 aria-[pressed=true]:bg-white aria-[pressed=true]:text-black"
+              type={
+                loaderData.orderBy === "name" || loaderData.orderBy === null
+                  ? "button"
+                  : "submit"
+              }
+              aria-pressed={
+                loaderData.orderBy === "name" || loaderData.orderBy === null
+              }
+            >
+              Name
+            </button>{" "}
+            <button
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-1 font-medium transition-all focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600 hover:bg-white/30 aria-[pressed=true]:bg-white aria-[pressed=true]:text-black"
+              type={loaderData.orderBy === "relations" ? "button" : "submit"}
+              name="orderBy"
+              value="relations"
+              aria-pressed={loaderData.orderBy === "relations"}
+            >
+              Relations
+            </button>
+          </div>
         </Form>
       ) : null}
 
       {loaderData.tags.length > 0 ? (
-        <ul>
+        <ul className="flex flex-wrap gap-2">
           {loaderData.tags.map((tag) => (
             <li key={tag.id}>
-              <Link to={tag.id}>
-                <Icon type="tag" />
-                <span>{tag.name}</span> <span>({tag._count.bookmarks})</span>
-              </Link>
+              <LinkButton to={tag.id}>
+                <span>{tag.name}</span>
+                <span className="text-xs">({tag._count.bookmarks})</span>
+              </LinkButton>
             </li>
           ))}
         </ul>
       ) : null}
-    </main>
+    </Main>
   );
 }
 

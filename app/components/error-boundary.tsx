@@ -32,13 +32,13 @@ export function GeneralErrorBoundary({
   }
 
   return (
-    <div>
+    <>
       {isRouteErrorResponse(error)
         ? (statusHandlers?.[error.status] ?? defaultStatusHandler)({
             error,
             params,
           })
         : unexpectedErrorHandler(error)}
-    </div>
+    </>
   );
 }

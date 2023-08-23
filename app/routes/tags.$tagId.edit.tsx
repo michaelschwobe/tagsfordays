@@ -4,14 +4,22 @@ import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
-  Link,
   useActionData,
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
+import { useId } from "react";
 import invariant from "tiny-invariant";
+import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { Icon } from "~/components/icon";
+import { Main } from "~/components/main";
+import { Button } from "~/components/ui/button";
+import { FormDescription } from "~/components/ui/form-description";
+import { FormLabel } from "~/components/ui/form-label";
+import { FormMessage } from "~/components/ui/form-message";
+import { Icon } from "~/components/ui/icon";
+import { Input } from "~/components/ui/input";
+import { LinkButton } from "~/components/ui/link-button";
 import {
   deleteTag,
   getTag,
@@ -19,7 +27,7 @@ import {
   updateTag,
 } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import { formatMetaTitle, useDoubleCheck } from "~/utils/misc";
+import { formatMetaTitle } from "~/utils/misc";
 import { UpdateTagFormSchema } from "~/utils/tag-validation";
 
 export async function loader({ params, request }: LoaderArgs) {
@@ -70,9 +78,11 @@ export const action = async ({ params, request }: ActionArgs) => {
 };
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
-  const title = data?.tag
-    ? formatMetaTitle("Editing Tag…")
-    : "404: Tag Not Found";
+  if (!data?.tag.name) {
+    return [{ title: "404: Tag Not Found" }];
+  }
+
+  const title = formatMetaTitle("Editing Tag…");
 
   return [{ title }];
 };
@@ -82,10 +92,9 @@ export default function NewTagPage() {
   const loaderData = useLoaderData<typeof loader>();
   const navigation = useNavigation();
 
-  const doubleCheck = useDoubleCheck();
-
+  const id = useId();
   const [form, fieldset] = useForm({
-    id: "update-tag",
+    id,
     defaultValue: {
       id: loaderData.tag.id,
       name: loaderData.tag.name,
@@ -96,20 +105,23 @@ export default function NewTagPage() {
     },
   });
 
-  const disabled = ["submitting", "loading"].includes(navigation.state);
-
   return (
-    <main>
-      <h1>Edit Tag</h1>
+    <Main>
+      <div className="mb-4 flex items-center gap-2">
+        <h1 className="mr-auto flex items-center gap-2 text-xl font-semibold">
+          <Icon type="pencil" />
+          Edit Tag
+        </h1>
+
+        <ButtonDelete />
+      </div>
 
       <Form method="POST" {...form.props}>
-        <fieldset disabled={disabled}>
-          {form.error ? (
-            <div id={form.errorId}>
-              <Icon type="alert-triangle" />
-              <span>{form.error}</span>
-            </div>
-          ) : null}
+        <fieldset
+          className="flex flex-col gap-4"
+          disabled={["submitting", "loading"].includes(navigation.state)}
+        >
+          <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
           <input
             type="hidden"
@@ -117,57 +129,39 @@ export default function NewTagPage() {
             value={fieldset.id.defaultValue}
           />
 
-          <div>
-            <label htmlFor={fieldset.name.id}>Name</label>
-            <input
-              {...conform.input(fieldset.name, { type: "text" })}
-              autoComplete="false"
-            />
-            {fieldset.name.error ? (
-              <div id={fieldset.name.errorId}>
-                <Icon type="alert-triangle" />
-                <span>{fieldset.name.error}</span>
-              </div>
-            ) : null}
+          <div className="flex flex-col gap-1">
+            <FormLabel htmlFor={fieldset.name.id}>Name</FormLabel>
+            <div>
+              <Input
+                className="max-sm:w-full"
+                {...conform.input(fieldset.name, {
+                  type: "text",
+                  description: true,
+                })}
+                autoComplete="false"
+              />
+            </div>
+            <FormDescription id={fieldset.name.descriptionId}>
+              Comma separate names, ex: <code>t1,t2,t3</code>
+            </FormDescription>
+            <FormMessage id={fieldset.name.errorId}>
+              {fieldset.name.error}
+            </FormMessage>
           </div>
 
-          <div>
-            <button type="submit">
+          <div className="grid grid-cols-2 gap-2 sm:w-80">
+            <Button type="submit">
               <Icon type="check" />
               <span>Update</span>
-            </button>{" "}
-            <Link to=".." relative="path">
+            </Button>{" "}
+            <LinkButton to=".." relative="path">
               <Icon type="x" />
               <span>Cancel</span>
-            </Link>
+            </LinkButton>
           </div>
         </fieldset>
       </Form>
-
-      <Form method="POST">
-        <input type="hidden" name={conform.INTENT} value="delete" />
-        <button {...doubleCheck.getButtonProps({ type: "submit" })}>
-          {navigation.state === "idle" ? (
-            doubleCheck.isPending ? (
-              <>
-                <Icon type="alert-triangle" />
-                <span>Confirm Delete</span>
-              </>
-            ) : (
-              <>
-                <Icon type="trash-2" />
-                <span>Delete</span>
-              </>
-            )
-          ) : (
-            <>
-              <Icon type="loader" />
-              <span>Deleting...</span>
-            </>
-          )}
-        </button>
-      </Form>
-    </main>
+    </Main>
   );
 }
 
@@ -176,19 +170,21 @@ export function ErrorBoundary() {
     <GeneralErrorBoundary
       statusHandlers={{
         404: () => (
-          <main>
-            <h1>
+          <Main>
+            <h1 className="mb-4 flex items-center gap-2 text-xl font-semibold">
               <Icon type="alert-triangle" />
-              <span>Error</span>
+              Error
             </h1>
-            <p>
-              Tag not found.{" "}
-              <Link to="/tags">
+
+            <p className="mb-4">Tag not found.</p>
+
+            <div>
+              <LinkButton to="/tags">
                 <Icon type="tags" />
                 <span>View all Tags</span>
-              </Link>
-            </p>
-          </main>
+              </LinkButton>
+            </div>
+          </Main>
         ),
       }}
     />

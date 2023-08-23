@@ -4,14 +4,25 @@ import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
-  Link,
   useActionData,
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
+import { Fragment, useId } from "react";
 import invariant from "tiny-invariant";
+import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { Icon } from "~/components/icon";
+import { Main } from "~/components/main";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { FormDescription } from "~/components/ui/form-description";
+import { FormLabel } from "~/components/ui/form-label";
+import { FormMessage } from "~/components/ui/form-message";
+import { Icon } from "~/components/ui/icon";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { LinkButton } from "~/components/ui/link-button";
+import { Textarea } from "~/components/ui/textarea";
 import {
   deleteBookmark,
   getBookmark,
@@ -21,7 +32,7 @@ import {
 import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import { UpdateBookmarkFormSchema } from "~/utils/bookmark-validation";
-import { formatMetaTitle, useDoubleCheck } from "~/utils/misc";
+import { formatMetaTitle } from "~/utils/misc";
 
 export async function loader({ params, request }: LoaderArgs) {
   await requireUserId(request);
@@ -89,9 +100,11 @@ export const action = async ({ params, request }: ActionArgs) => {
 };
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
-  const title = data?.bookmark
-    ? formatMetaTitle("Editing Bookmark…")
-    : "404: Bookmark Not Found";
+  if (!data?.bookmark.url) {
+    return [{ title: "404: Bookmark Not Found" }];
+  }
+
+  const title = formatMetaTitle("Editing Bookmark…");
 
   return [{ title }];
 };
@@ -101,10 +114,9 @@ export default function NewBookmarkPage() {
   const loaderData = useLoaderData<typeof loader>();
   const navigation = useNavigation();
 
-  const doubleCheck = useDoubleCheck();
-
+  const id = useId();
   const [form, fieldset] = useForm({
-    id: "update-bookmark",
+    id,
     defaultValue: {
       id: loaderData.bookmark.id,
       url: loaderData.bookmark.url,
@@ -120,24 +132,37 @@ export default function NewBookmarkPage() {
   });
   const tagsList = useFieldList(form.ref, fieldset.tags);
 
-  const disabled = ["submitting", "loading"].includes(navigation.state);
-  const tagsSelected = tagsList.filter((el) => el.defaultValue != null);
-  const tagsNotSelected = loaderData.tags.filter(
-    (el) => !tagsSelected.map((el) => el.defaultValue).includes(el.name),
-  );
+  const tagsSelected = tagsList
+    .filter((t) => t.defaultValue != null)
+    .map((t) => ({ ...t, defaultValue: t.defaultValue ?? "" }));
+
+  const tagsNotSelected = loaderData.tags
+    .filter((t) => !tagsSelected.map((t) => t.defaultValue).includes(t.name))
+    .map((t) => ({ ...t, defaultValue: t.name ?? "" }));
+
+  const tagsAll = [...tagsSelected, ...tagsNotSelected].sort((a, b) => {
+    const a1 = a.defaultValue.toLowerCase();
+    const b1 = b.defaultValue.toLowerCase();
+    return a1 < b1 ? -1 : a1 > b1 ? 1 : 0;
+  });
 
   return (
-    <main>
-      <h1>Edit Bookmark</h1>
+    <Main>
+      <div className="mb-4 flex items-center gap-2">
+        <h1 className="mr-auto flex items-center gap-2 text-xl font-semibold">
+          <Icon type="pencil" />
+          Edit Bookmark
+        </h1>
+
+        <ButtonDelete />
+      </div>
 
       <Form method="POST" {...form.props}>
-        <fieldset disabled={disabled}>
-          {form.error ? (
-            <div id={form.errorId}>
-              <Icon type="alert-triangle" />
-              <span>{form.error}</span>
-            </div>
-          ) : null}
+        <fieldset
+          className="flex flex-col gap-4"
+          disabled={["submitting", "loading"].includes(navigation.state)}
+        >
+          <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
           <input
             type="hidden"
@@ -145,142 +170,123 @@ export default function NewBookmarkPage() {
             value={fieldset.id.defaultValue}
           />
 
-          <div>
-            <label htmlFor={fieldset.url.id}>URL</label>
-            <input
-              {...conform.input(fieldset.url, { type: "url" })}
-              autoComplete="false"
-            />
-            {fieldset.url.error ? (
-              <div id={fieldset.url.errorId}>
-                <Icon type="alert-triangle" />
-                <span>{fieldset.url.error}</span>
-              </div>
-            ) : null}
-          </div>
-
-          <div>
-            <label htmlFor={fieldset.title.id}>Title</label>
-            <input
-              {...conform.input(fieldset.title, { type: "text" })}
-              autoComplete="false"
-            />
-            {fieldset.title.error ? (
-              <div id={fieldset.title.errorId}>
-                <Icon type="alert-triangle" />
-                <span></span>
-                {fieldset.title.error}
-              </div>
-            ) : null}
-          </div>
-
-          <div>
-            <label htmlFor={fieldset.description.id}>Description</label>
-            <textarea
-              {...conform.textarea(fieldset.description)}
-              autoComplete="false"
-              rows={8}
-            />
-            {fieldset.description.error ? (
-              <div id={fieldset.description.errorId}>
-                <Icon type="alert-triangle" />
-                <span>{fieldset.description.error}</span>
-              </div>
-            ) : null}
-          </div>
-
-          <div>
+          <div className="flex flex-col gap-1">
+            <FormLabel htmlFor={fieldset.url.id}>URL</FormLabel>
             <div>
-              <input
-                {...conform.input(fieldset.favorite, { type: "checkbox" })}
+              <Input
+                className="max-sm:w-full"
+                {...conform.input(fieldset.url, {
+                  type: "url",
+                  description: true,
+                })}
+                autoComplete="false"
               />
-              <label htmlFor={fieldset.favorite.id}>Favorite</label>
             </div>
-            {fieldset.favorite.error ? (
-              <div id={fieldset.favorite.errorId}>
-                <Icon type="alert-triangle" />
-                <span>{fieldset.favorite.error}</span>
-              </div>
-            ) : null}
+            <FormDescription id={fieldset.url.descriptionId}>
+              Use secure URLs, ex: <code>https://</code>
+            </FormDescription>
+            <FormMessage id={fieldset.url.errorId}>
+              {fieldset.url.error}
+            </FormMessage>
           </div>
 
-          <div>
-            <fieldset>
-              <legend>
-                <Icon type="tags" />
-                <span>Tags</span>
-              </legend>
+          <div className="flex flex-col gap-1">
+            <FormLabel htmlFor={fieldset.title.id}>Title</FormLabel>
+            <div>
+              <Input
+                className="max-sm:w-full"
+                {...conform.input(fieldset.title, { type: "text" })}
+                autoComplete="false"
+              />
+            </div>
+            <FormMessage id={fieldset.title.errorId}>
+              {fieldset.title.error}
+            </FormMessage>
+          </div>
 
-              <div>
-                {tagsSelected.map((tag, index) => (
-                  <span key={tag.key}>
+          <div className="flex flex-col gap-1">
+            <FormLabel htmlFor={fieldset.description.id}>Description</FormLabel>
+            <div>
+              <Textarea
+                className="max-sm:w-full"
+                {...conform.textarea(fieldset.description)}
+                autoComplete="false"
+                rows={5}
+              />
+            </div>
+            <FormMessage id={fieldset.description.errorId}>
+              {fieldset.description.error}
+            </FormMessage>
+          </div>
+
+          <fieldset>
+            <legend className="mb-1 flex items-center gap-2 text-sm font-medium">
+              Tags <Badge>{tagsSelected.length}</Badge>
+            </legend>
+            <div className="flex flex-wrap gap-2">
+              {tagsAll.map((tag) =>
+                "key" in tag ? (
+                  <Fragment key={tag.key}>
                     <input
                       type="hidden"
                       name={tag.name}
                       value={tag.defaultValue}
-                    />{" "}
-                    <button {...list.remove(fieldset.tags.name, { index })}>
+                    />
+                    <Button
+                      {...list.remove(fieldset.tags.name, {
+                        index: tagsSelected.findIndex(
+                          (t) => t.defaultValue === tag.defaultValue,
+                        ),
+                      })}
+                    >
                       <span className="sr-only">Remove</span>{" "}
                       <span>{tag.defaultValue}</span>
                       <Icon type="x" />
-                    </button>
-                  </span>
-                ))}
-              </div>
-
-              <div>
-                {tagsNotSelected.map((tag) => (
-                  <button
+                    </Button>
+                  </Fragment>
+                ) : (
+                  <Button
+                    key={tag.name}
                     {...list.append(fieldset.tags.name, {
                       defaultValue: tag.name,
                     })}
-                    key={tag.name}
                   >
                     <Icon type="plus" />
                     <span className="sr-only">Add</span> <span>{tag.name}</span>
-                  </button>
-                ))}
-              </div>
-            </fieldset>
+                  </Button>
+                ),
+              )}
+            </div>
+            <FormMessage id={fieldset.tags.errorId}>
+              {fieldset.tags.error}
+            </FormMessage>
+          </fieldset>
+
+          <div className="flex flex-col gap-1">
+            <div className="flex h-10 items-center gap-2">
+              <input
+                {...conform.input(fieldset.favorite, { type: "checkbox" })}
+              />
+              <Label htmlFor={fieldset.favorite.id}>Favorite</Label>
+            </div>
+            <FormMessage id={fieldset.favorite.errorId}>
+              {fieldset.favorite.error}
+            </FormMessage>
           </div>
 
-          <div>
-            <button type="submit">
+          <div className="grid grid-cols-2 gap-2 sm:w-80">
+            <Button type="submit">
               <Icon type="check" />
               <span>Update</span>
-            </button>{" "}
-            <Link to=".." relative="path">
+            </Button>{" "}
+            <LinkButton to=".." relative="path">
               <Icon type="x" />
               <span>Cancel</span>
-            </Link>
+            </LinkButton>
           </div>
         </fieldset>
       </Form>
-
-      <Form method="POST">
-        <input type="hidden" name={conform.INTENT} value="delete" />
-        <button {...doubleCheck.getButtonProps({ type: "submit" })}>
-          {navigation.state === "idle" ? (
-            doubleCheck.isPending ? (
-              <>
-                <Icon type="alert-triangle" />
-                <span>Confirm Delete</span>
-              </>
-            ) : (
-              <>
-                <Icon type="trash-2" />
-                <span>Delete</span>
-              </>
-            )
-          ) : (
-            <>
-              <Icon type="loader" />
-              <span>Deleting...</span>
-            </>
-          )}
-        </button>
-      </Form>
-    </main>
+    </Main>
   );
 }
 
@@ -289,19 +295,21 @@ export function ErrorBoundary() {
     <GeneralErrorBoundary
       statusHandlers={{
         404: () => (
-          <main>
-            <h1>
+          <Main>
+            <h1 className="mb-4 flex items-center gap-2 text-xl font-semibold">
               <Icon type="alert-triangle" />
-              <span>Error</span>
+              Error
             </h1>
-            <p>
-              Bookmark not found.{" "}
-              <Link to="/bookmarks">
+
+            <p className="mb-4">Bookmark not found.</p>
+
+            <div>
+              <LinkButton to="/bookmarks">
                 <Icon type="bookmarks" />
                 <span>View all Bookmarks</span>
-              </Link>
-            </p>
-          </main>
+              </LinkButton>
+            </div>
+          </Main>
         ),
       }}
     />

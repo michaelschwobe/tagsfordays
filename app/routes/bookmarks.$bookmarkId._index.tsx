@@ -1,16 +1,16 @@
 import { conform } from "@conform-to/react";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import {
-  Form,
-  Link,
-  useLoaderData,
-  useLocation,
-  useNavigation,
-} from "@remix-run/react";
+import { useLoaderData, useLocation } from "@remix-run/react";
 import invariant from "tiny-invariant";
+import { ButtonDelete } from "~/components/button-delete";
+import { ButtonFavorite } from "~/components/button-favorite";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { Icon } from "~/components/icon";
+import { Main } from "~/components/main";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Icon } from "~/components/ui/icon";
+import { LinkButton } from "~/components/ui/link-button";
 import {
   deleteBookmark,
   favoriteBookmark,
@@ -18,15 +18,8 @@ import {
 } from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
 import { FavoriteBookmarkFormSchema } from "~/utils/bookmark-validation";
-import {
-  USER_LOGIN_ROUTE,
-  asyncShare,
-  formatItemsFoundByCount,
-  formatMetaTitle,
-  toTitleCase,
-  useDoubleCheck,
-} from "~/utils/misc";
-import { useOptionalUser } from "~/utils/user";
+import { asyncShare, formatMetaTitle } from "~/utils/misc";
+import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params["bookmarkId"], "bookmarkId not found");
@@ -68,12 +61,12 @@ export async function action({ params, request }: ActionArgs) {
 }
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
-  const title = data?.bookmark.title
-    ? formatMetaTitle(data.bookmark.title)
-    : "404: Bookmark Not Found";
-  const description = data?.bookmark.description
-    ? data.bookmark.description
-    : "Bookmark"; // TODO: Add description
+  if (!data?.bookmark.url) {
+    return [{ title: "404: Bookmark Not Found" }];
+  }
+
+  const title = formatMetaTitle(data.bookmark.title ?? "(Untitled)");
+  const description = data?.bookmark.description ?? "Bookmark"; // TODO: Add better bookmark description
 
   return [{ title }, { name: "description", content: description }];
 };
@@ -81,131 +74,100 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 export default function BookmarkDetailPage() {
   const loaderData = useLoaderData<typeof loader>();
   const location = useLocation();
-  const navigation = useNavigation();
-  const optionalUser = useOptionalUser();
-
-  const doubleCheck = useDoubleCheck();
 
   return (
-    <main>
-      <h1>{loaderData.bookmark.title}</h1>
-      <div>
-        <span>{loaderData.bookmark.url}</span> <Icon type="external-link" />
+    <Main>
+      <div className="mb-4 flex items-center gap-2">
+        <h1 className="mr-auto flex items-center gap-2 text-xl font-semibold">
+          <Icon type="bookmark" />
+          Bookmark
+        </h1>
+
+        <Button type="button" onClick={async () => await asyncShare()}>
+          <Icon type="share" />
+          <span className="sr-only">Share</span>
+        </Button>
+
+        <LinkButton
+          to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}/edit`}
+        >
+          <Icon type="pencil" />
+          <span className="sr-only">Edit</span>
+        </LinkButton>
+
+        <ButtonDelete />
       </div>
-      <p>{loaderData.bookmark.description}</p>
 
-      <h2>
-        <Icon type="tags" />
-        <span>
-          {toTitleCase(
-            formatItemsFoundByCount({
-              count: loaderData.bookmark.tags.length,
-              single: "related tag",
-              plural: "related tags",
-            }),
-          )}
-        </span>
-      </h2>
-      {loaderData.bookmark.tags.length > 0 ? (
-        <ul>
-          {loaderData.bookmark.tags.map(({ tag }) => (
-            <li key={tag.id}>
-              <Link to={`/tags/${tag.id}`}>
-                <Icon type="tag" />
-                <span>{tag.name}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div>
-          <Link to="/tags">
-            <Icon type="tags" />
-            <span>View all Tags</span>
-          </Link>
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
+          <div className="text-sm font-medium">URL</div>
+          <div>
+            <LinkButton
+              className="overflow-hidden max-sm:w-full"
+              to={loaderData.bookmark.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="truncate">{loaderData.bookmark.url}</span>
+              <Icon type="external-link" />
+            </LinkButton>
+          </div>
         </div>
-      )}
 
-      {optionalUser ? (
-        <Form method="POST">
-          <input type="hidden" name={conform.INTENT} value="favorite" />
-          <input
-            type="hidden"
-            id="id"
-            name="id"
-            value={loaderData.bookmark.id}
-          />
-          <input
-            type="hidden"
-            name="favorite"
-            value={loaderData.bookmark.favorite === true ? "false" : "true"}
-          />
-          <button type="submit">
-            {loaderData.bookmark.favorite ? (
-              <Icon type="heart" className="text-red-500" />
+        <div className="flex flex-col gap-1">
+          <div className="text-sm font-medium">Title</div>
+          <div className="flex items-center py-2">
+            <h2 className="text-lg font-semibold">
+              {loaderData.bookmark.title ?? "(Untitled)"}
+            </h2>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <div className="text-sm font-medium">Description</div>
+          <div className="flex items-center py-2">
+            <p>{loaderData.bookmark.description}</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <div className="mr-auto flex items-center gap-2 text-sm font-medium">
+            Tags <Badge>{loaderData.bookmark.tags.length}</Badge>
+          </div>
+          <div className="flex items-center py-2">
+            {loaderData.bookmark.tags.length > 0 ? (
+              <ul className="flex flex-wrap gap-2">
+                {loaderData.bookmark.tags.map(({ tag }) => (
+                  <li key={tag.id}>
+                    <LinkButton to={`/tags/${tag.id}`}>
+                      <Icon type="tag" />
+                      <span>{tag.name}</span>
+                    </LinkButton>
+                  </li>
+                ))}
+              </ul>
             ) : (
-              <Icon type="heart" />
-            )}{" "}
-            <span>Favorite</span>
-          </button>
-        </Form>
-      ) : (
-        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
-          {loaderData.bookmark.favorite ? (
-            <Icon type="heart" className="text-red-500" />
-          ) : (
-            <Icon type="heart" />
-          )}{" "}
-          <span>Favorite</span>
-        </Link>
-      )}
-
-      <button type="button" onClick={async () => await asyncShare()}>
-        <Icon type="share" />
-        <span>Share</span>
-      </button>
-
-      <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}/edit`}>
-        <Icon type="pencil" />
-        <span>Edit</span>
-      </Link>
-
-      {optionalUser ? (
-        <Form method="POST">
-          <input type="hidden" name={conform.INTENT} value="delete" />
-          <button {...doubleCheck.getButtonProps({ type: "submit" })}>
-            {navigation.state === "idle" ? (
-              doubleCheck.isPending ? (
-                <>
-                  <Icon type="alert-triangle" />
-                  <span>Confirm Delete</span>
-                </>
-              ) : (
-                <>
-                  <Icon type="trash-2" />
-                  <span>Delete</span>
-                </>
-              )
-            ) : (
-              <>
-                <Icon type="loader" />
-                <span>Deleting...</span>
-              </>
+              <div>
+                <LinkButton to="/tags">
+                  <Icon type="tags" />
+                  <span>View all Tags</span>
+                </LinkButton>
+              </div>
             )}
-          </button>
-        </Form>
-      ) : (
-        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
-          <Icon type="trash-2" />
-          <span>Delete</span>
-        </Link>
-      )}
+          </div>
+        </div>
 
-      <Link to="/bookmarks">
-        <Icon type="bookmarks" />
-        <span>View all Bookmarks</span>
-      </Link>
-    </main>
+        <div className="flex flex-col gap-1">
+          <div className="text-sm font-medium">Favorite</div>
+          <div>
+            <ButtonFavorite
+              entityId={loaderData.bookmark.id}
+              entityValue={loaderData.bookmark.favorite}
+            />
+          </div>
+        </div>
+      </div>
+    </Main>
   );
 }
 
@@ -214,19 +176,21 @@ export function ErrorBoundary() {
     <GeneralErrorBoundary
       statusHandlers={{
         404: () => (
-          <main>
-            <h1>
+          <Main>
+            <h1 className="mb-4 flex items-center gap-2 text-xl font-semibold">
               <Icon type="alert-triangle" />
-              <span>Error</span>
+              Error
             </h1>
-            <p>
-              Bookmark not found.{" "}
-              <Link to="/bookmarks">
+
+            <p className="mb-4">Bookmark not found.</p>
+
+            <div>
+              <LinkButton to="/bookmarks">
                 <Icon type="bookmarks" />
                 <span>View all Bookmarks</span>
-              </Link>
-            </p>
-          </main>
+              </LinkButton>
+            </div>
+          </Main>
         ),
       }}
     />

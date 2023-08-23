@@ -2,9 +2,17 @@ import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
+import { Form, useActionData, useNavigation } from "@remix-run/react";
+import { useId } from "react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { Icon } from "~/components/icon";
+import { Main } from "~/components/main";
+import { Button } from "~/components/ui/button";
+import { FormDescription } from "~/components/ui/form-description";
+import { FormLabel } from "~/components/ui/form-label";
+import { FormMessage } from "~/components/ui/form-message";
+import { Icon } from "~/components/ui/icon";
+import { Input } from "~/components/ui/input";
+import { LinkButton } from "~/components/ui/link-button";
 import { createTag, getTagByName } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import { formatMetaTitle } from "~/utils/misc";
@@ -49,56 +57,62 @@ export default function NewTagPage() {
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
 
+  const id = useId();
   const [form, fieldset] = useForm({
-    id: "create-tag",
+    id,
     lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
     onValidate({ formData }) {
       return parse(formData, { schema: CreateTagFormSchema });
     },
   });
 
-  const disabled = ["submitting", "loading"].includes(navigation.state);
-
   return (
-    <main>
-      <h1>New Tag</h1>
+    <Main>
+      <h1 className="mb-4 flex items-center gap-2 text-xl font-semibold">
+        <Icon type="plus" />
+        New Tag
+      </h1>
 
       <Form method="POST" {...form.props}>
-        <fieldset disabled={disabled}>
-          {form.error ? (
-            <div id={form.errorId}>
-              <Icon type="alert-triangle" />
-              <span>{form.error}</span>
-            </div>
-          ) : null}
+        <fieldset
+          className="flex flex-col gap-4"
+          disabled={["submitting", "loading"].includes(navigation.state)}
+        >
+          <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
-          <div>
-            <label htmlFor={fieldset.name.id}>Name</label>
-            <input
-              {...conform.input(fieldset.name, { type: "text" })}
-              autoComplete="false"
-            />
-            {fieldset.name.error ? (
-              <div id={fieldset.name.errorId}>
-                <Icon type="alert-triangle" />
-                <span>{fieldset.name.error}</span>
-              </div>
-            ) : null}
+          <div className="flex flex-col gap-1">
+            <FormLabel htmlFor={fieldset.name.id}>Name</FormLabel>
+            <div>
+              <Input
+                className="max-sm:w-full"
+                {...conform.input(fieldset.name, {
+                  type: "text",
+                  description: true,
+                })}
+                autoComplete="false"
+              />
+            </div>
+            <FormDescription id={fieldset.name.descriptionId}>
+              Comma separate names, ex: <code>t1,t2,t3</code>
+            </FormDescription>
+            <FormMessage id={fieldset.name.errorId}>
+              {fieldset.name.error}
+            </FormMessage>
           </div>
 
-          <div>
-            <button type="submit">
+          <div className="grid grid-cols-2 gap-2 sm:w-80">
+            <Button type="submit">
               <Icon type="check" />
               <span>Add</span>
-            </button>{" "}
-            <Link to=".." relative="path">
+            </Button>{" "}
+            <LinkButton to=".." relative="path">
               <Icon type="x" />
               <span>Cancel</span>
-            </Link>
+            </LinkButton>
           </div>
         </fieldset>
       </Form>
-    </main>
+    </Main>
   );
 }
 

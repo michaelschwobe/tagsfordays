@@ -1,17 +1,15 @@
 import { conform } from "@conform-to/react";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import {
-  Form,
-  Link,
-  useLoaderData,
-  useLocation,
-  useNavigation,
-} from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
+import { ButtonFavorite } from "~/components/button-favorite";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { Icon } from "~/components/icon";
+import { Main } from "~/components/main";
 import { SearchForm } from "~/components/search-form";
 import { SearchHelp } from "~/components/search-help";
+import { Badge } from "~/components/ui/badge";
+import { Icon } from "~/components/ui/icon";
+import { LinkButton } from "~/components/ui/link-button";
 import { favoriteBookmark, getBookmarks } from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
 import {
@@ -20,13 +18,8 @@ import {
   getBookmarkSearchKey,
 } from "~/utils/bookmark";
 import { FavoriteBookmarkFormSchema } from "~/utils/bookmark-validation";
-import {
-  USER_LOGIN_ROUTE,
-  formatItemsFoundByCount,
-  formatMetaTitle,
-  toTitleCase,
-} from "~/utils/misc";
-import { useOptionalUser } from "~/utils/user";
+import { formatMetaTitle } from "~/utils/misc";
+import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ request }: LoaderArgs) {
   const url = new URL(request.url);
@@ -58,122 +51,85 @@ export async function action({ request }: ActionArgs) {
 
 export const meta: V2_MetaFunction = () => {
   const title = formatMetaTitle("Bookmarks");
-  const description = "Bookmarks"; // TODO: Add description
+  const description = "Bookmarks"; // TODO: Add better bookmarks description
 
   return [{ title }, { name: "description", content: description }];
 };
 
 export default function BookmarksIndexPage() {
   const loaderData = useLoaderData<typeof loader>();
-  const location = useLocation();
-  const navigation = useNavigation();
-  const optionalUser = useOptionalUser();
 
-  const disabled = ["submitting", "loading"].includes(navigation.state);
   const hasBookmarks = loaderData.bookmarks.length > 0;
-  const hasSearchValue = (loaderData.searchValue ?? "").length > 0;
+  // const hasSearchValue = (loaderData.searchValue ?? "").length > 0;
 
   return (
-    <main>
+    <Main>
+      <div className="mb-4 flex items-center gap-2">
+        <h1 className="mr-auto flex items-center gap-2 text-xl font-semibold">
+          <Icon type="bookmarks" />
+          Bookmarks <Badge>{loaderData.bookmarks.length}</Badge>
+        </h1>
+
+        <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}>
+          <Icon type="plus" />
+          <Icon type="bookmark" />
+          <span className="sr-only">Add Bookmark</span>
+        </LinkButton>
+      </div>
+
       <SearchForm
+        className="mb-4"
         searchKey={loaderData.searchKey}
         searchKeys={[...BOOKMARK_SEARCH_KEYS]}
         searchKeysLabelMap={BOOKMARK_SEARCH_KEYS_LABEL_MAP}
         searchValue={loaderData.searchValue}
       />
 
-      <h1>
-        {hasSearchValue
-          ? toTitleCase(
-              formatItemsFoundByCount({
-                count: loaderData.bookmarks.length,
-                single: "bookmark",
-                plural: "bookmarks",
-              }),
-            )
-          : "Bookmarks"}
-      </h1>
-
-      {hasSearchValue && !hasBookmarks ? (
-        <SearchHelp
-          items={[
-            <Link
-              key="new"
-              to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
-            >
-              <Icon type="plus" />
-              <span>Add Bookmark</span>
-            </Link>,
-            <Link key="all" to="." reloadDocument>
-              <Icon type="bookmarks" />
-              <span>View all bookmarks</span>
-            </Link>,
-          ]}
-        />
-      ) : (
-        <div>
-          <Link to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}>
-            <Icon type="plus" />
-            <span>Add Bookmark</span>
-          </Link>
-        </div>
-      )}
+      <SearchHelp
+        className="mb-4"
+        count={loaderData.bookmarks.length}
+        single="bookmark"
+        plural="bookmarks"
+      />
 
       {hasBookmarks ? (
-        <ul>
+        <ul className="mb-4 flex flex-col gap-2">
           {loaderData.bookmarks.map((bookmark) => (
-            <li key={bookmark.id}>
-              <Link to={bookmark.id}>
+            <li key={bookmark.id} className="flex gap-2">
+              <LinkButton
+                className="grow justify-start overflow-hidden"
+                to={bookmark.id}
+              >
                 <Icon type="bookmark" />
-                <div>{bookmark.title}</div>
-                <div>{bookmark.url}</div>
-              </Link>
-              {optionalUser ? (
-                <Form method="POST">
-                  <fieldset disabled={disabled}>
-                    <input
-                      type="hidden"
-                      name={conform.INTENT}
-                      value="favorite"
-                    />
-                    <input
-                      type="hidden"
-                      id="id"
-                      name="id"
-                      value={bookmark.id}
-                    />
-                    <input
-                      type="hidden"
-                      name="favorite"
-                      value={bookmark.favorite === true ? "false" : "true"}
-                    />
-                    <button type="submit">
-                      {bookmark.favorite ? (
-                        <Icon type="heart" className="text-red-500" />
-                      ) : (
-                        <Icon type="heart" />
-                      )}{" "}
-                      Favorite
-                    </button>
-                  </fieldset>
-                </Form>
-              ) : (
-                <Link
-                  to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}
-                >
-                  {bookmark.favorite ? (
-                    <Icon type="heart" className="text-red-500" />
-                  ) : (
-                    <Icon type="heart" />
-                  )}{" "}
-                  Favorite
-                </Link>
-              )}
+                <span className="truncate">
+                  {bookmark.title ?? "(Untitled)"}
+                </span>
+              </LinkButton>
+
+              <LinkButton
+                className="basis-3/6 justify-between overflow-hidden"
+                to={bookmark.id}
+              >
+                <span className="truncate text-xs">{bookmark.url}</span>
+                <Icon type="external-link" />
+              </LinkButton>
+
+              <ButtonFavorite
+                entityId={bookmark.id}
+                entityValue={bookmark.favorite}
+              />
             </li>
           ))}
         </ul>
-      ) : null}
-    </main>
+      ) : (
+        <div>
+          <LinkButton to="." reloadDocument>
+            <Icon type="bookmarks" />
+            <span>View all bookmarks</span>
+          </LinkButton>
+        </div>
+      )}
+    </Main>
   );
 }
 

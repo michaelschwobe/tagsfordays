@@ -1,7 +1,8 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import type { User } from "~/models/user.server";
 import { getUserById } from "~/models/user.server";
-import { USER_LOGIN_ROUTE, safeRedirect } from "~/utils/misc";
+import { safeRedirect } from "~/utils/misc";
+import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 const USER_SESSION_KEY = "userId";
 const USER_SESSION_AGE = 60 * 60 * 24 * 7; // 7 days

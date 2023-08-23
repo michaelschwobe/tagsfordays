@@ -1,26 +1,18 @@
 import { conform } from "@conform-to/react";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import {
-  Form,
-  Link,
-  useLoaderData,
-  useLocation,
-  useNavigation,
-} from "@remix-run/react";
+import { Link, useLoaderData, useLocation } from "@remix-run/react";
 import invariant from "tiny-invariant";
+import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { Icon } from "~/components/icon";
+import { Main } from "~/components/main";
+import { Badge } from "~/components/ui/badge";
+import { Icon } from "~/components/ui/icon";
+import { LinkButton } from "~/components/ui/link-button";
 import { deleteTag, getTag } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import {
-  USER_LOGIN_ROUTE,
-  formatItemsFoundByCount,
-  formatMetaTitle,
-  toTitleCase,
-  useDoubleCheck,
-} from "~/utils/misc";
-import { useOptionalUser } from "~/utils/user";
+import { formatMetaTitle } from "~/utils/misc";
+import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params["tagId"], "tagId not found");
@@ -53,101 +45,93 @@ export async function action({ params, request }: ActionArgs) {
 }
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
-  const title = data?.tag.name
-    ? formatMetaTitle(data.tag.name)
-    : "404: Tag Not Found";
+  if (!data?.tag.name) {
+    return [{ title: "404: Tag Not Found" }];
+  }
 
-  return [{ title }];
+  const title = formatMetaTitle(data.tag.name);
+  const description = "Tag"; // TODO: Add better tag description
+
+  return [{ title }, { name: "description", content: description }];
 };
 
 export default function TagDetailPage() {
   const loaderData = useLoaderData<typeof loader>();
   const location = useLocation();
-  const navigation = useNavigation();
-  const optionalUser = useOptionalUser();
-
-  const doubleCheck = useDoubleCheck();
 
   return (
-    <main>
-      <h1>{loaderData.tag.name}</h1>
+    <Main>
+      <div className="mb-4 flex items-center gap-2">
+        <h1 className="mr-auto text-xl font-semibold">
+          <Icon
+            className="relative -top-px mr-[0.375em] inline-block"
+            type="tag"
+          />
+          Tag
+        </h1>
 
-      <h2>
-        {toTitleCase(
-          formatItemsFoundByCount({
-            count: loaderData.tag.bookmarks.length,
-            single: "related bookmark",
-            plural: "related bookmarks",
-          }),
-        )}
-      </h2>
-      {loaderData.tag.bookmarks.length > 0 ? (
-        <ul>
-          {loaderData.tag.bookmarks.map(({ bookmark }) => (
-            <li key={bookmark.id}>
-              <Link to={`/bookmarks/${bookmark.id}`}>
-                <Icon type="bookmark" />
-                <div>{bookmark.title}</div>
-                <div>{bookmark.url}</div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div>
-          <Link to="/bookmarks">
-            <Icon type="bookmarks" />
-            <span>View all Bookmarks</span>
-          </Link>
+        <LinkButton
+          to={`/bookmarks?searchValue=${loaderData.tag.name}&searchKey=tags`}
+        >
+          <Icon type="search" />
+          <span className="sr-only">Search</span>
+        </LinkButton>
+
+        <LinkButton
+          to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}/edit`}
+        >
+          <Icon type="pencil" />
+          <span className="sr-only">Edit</span>
+        </LinkButton>
+
+        <ButtonDelete />
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
+          <div className="text-sm font-medium">Name</div>
+          <div className="flex items-center py-2">
+            <h2>{loaderData.tag.name}</h2>
+          </div>
         </div>
-      )}
 
-      <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}/edit`}>
-        <Icon type="pencil" />
-        <span>Edit</span>
-      </Link>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            Bookmarks <Badge>{loaderData.tag.bookmarks.length}</Badge>
+          </div>
 
-      {optionalUser ? (
-        <Form method="POST">
-          <input type="hidden" name={conform.INTENT} value="delete" />
-          <button {...doubleCheck.getButtonProps({ type: "submit" })}>
-            {navigation.state === "idle" ? (
-              doubleCheck.isPending ? (
-                <>
-                  <Icon type="alert-triangle" />
-                  <span>Confirm Delete</span>
-                </>
-              ) : (
-                <>
-                  <Icon type="trash-2" />
-                  <span>Delete</span>
-                </>
-              )
+          <div className="flex items-center py-2">
+            {loaderData.tag.bookmarks.length > 0 ? (
+              <ul className="flex flex-col gap-2">
+                {loaderData.tag.bookmarks.map(({ bookmark }) => (
+                  <li key={bookmark.id}>
+                    <Link
+                      className="flex items-baseline gap-2 hover:underline"
+                      to={`/bookmarks/${bookmark.id}`}
+                    >
+                      <Icon className="translate-y-0.5" type="bookmark" />
+                      <span className="flex max-w-full flex-col overflow-hidden">
+                        <span className="truncate">
+                          {bookmark.title ?? "(Untitled)"}
+                        </span>
+                        <span className="truncate text-xs">{bookmark.url}</span>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             ) : (
-              <>
-                <Icon type="loader" />
-                <span>Deleting...</span>
-              </>
+              <div>
+                <LinkButton to="/bookmarks">
+                  <Icon type="bookmarks" />
+                  <span>View all Bookmarks</span>
+                </LinkButton>
+              </div>
             )}
-          </button>
-        </Form>
-      ) : (
-        <Link to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}>
-          <Icon type="trash-2" />
-          <span>Delete</span>
-        </Link>
-      )}
-
-      <Link to={`/bookmarks?searchValue=${loaderData.tag.name}&searchKey=tags`}>
-        <Icon type="search" />
-        <span>Search</span>
-      </Link>
-
-      <Link to="/tags">
-        <Icon type="tags" />
-        <span>View all Tags</span>
-      </Link>
-    </main>
+          </div>
+        </div>
+      </div>
+    </Main>
   );
 }
 
@@ -156,19 +140,24 @@ export function ErrorBoundary() {
     <GeneralErrorBoundary
       statusHandlers={{
         404: () => (
-          <main>
-            <h1>
-              <Icon type="alert-triangle" />
-              <span>Error</span>
+          <Main>
+            <h1 className="mb-4 text-xl font-semibold">
+              <Icon
+                className="relative -top-px mr-[0.375em] inline-block"
+                type="alert-triangle"
+              />
+              Error
             </h1>
-            <p>
-              Tag not found.{" "}
-              <Link to="/tags">
+
+            <p className="mb-4">Tag not found.</p>
+
+            <div>
+              <LinkButton to="/tags">
                 <Icon type="tags" />
                 <span>View all Tags</span>
-              </Link>
-            </p>
-          </main>
+              </LinkButton>
+            </div>
+          </Main>
         ),
       }}
     />

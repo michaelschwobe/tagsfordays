@@ -11,7 +11,7 @@ import {
 } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Header } from "~/components/header";
-import { Landmark } from "~/components/landmark";
+import { Landmark } from "~/components/ui/landmark";
 import tailwindStylesheetUrl from "~/tailwind.css";
 import { getUser } from "~/utils/auth.server";
 import { getEnv } from "~/utils/env.server";
@@ -86,6 +86,11 @@ export default function App() {
 export function ErrorBoundary() {
   return (
     <Document>
+      <Landmark type="trigger" slug="main" label="main content" />
+
+      <Header />
+
+      <Landmark type="target" slug="main" label="main content" />
       <GeneralErrorBoundary />
     </Document>
   );

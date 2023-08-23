@@ -1,8 +1,9 @@
 import { Link } from "@remix-run/react";
 import { forwardRef } from "react";
-import { Icon } from "~/components/icon";
+import { Icon } from "~/components/ui/icon";
 import type { LatestTagsData } from "~/models/tag.server";
-import { USER_LOGIN_ROUTE, cn } from "~/utils/misc";
+import { cn } from "~/utils/misc";
+import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export interface LatestTagsProps
   extends Omit<React.ComponentPropsWithoutRef<"aside">, "children"> {
@@ -19,20 +20,20 @@ export const LatestTags = forwardRef<
   return (
     <aside
       {...props}
-      className={cn("grid gap-2", className)}
+      className={cn("flex flex-col gap-2", className)}
       ref={forwardedRef}
     >
       <h2 className="text-lg font-semibold">Latest Tags</h2>
 
       {data.length > 0 ? (
-        <ul className="flex flex-col gap-1">
+        <ul className="flex flex-col gap-2">
           {data.map((tag) => (
             <li key={tag.id}>
               <Link
-                className="inline-flex items-baseline gap-2 hover:underline"
+                className="flex items-baseline gap-2 hover:underline"
                 to={`/tags/${tag.id}`}
               >
-                <Icon className="self-center" type="tag" />
+                <Icon className="translate-y-0.5" type="tag" />
                 <span className="truncate">{tag.name}</span>
               </Link>
             </li>
@@ -42,10 +43,10 @@ export const LatestTags = forwardRef<
         <p>
           None found.{" "}
           <Link
-            className="inline-flex items-baseline gap-[0.25em]"
+            className="flex w-full items-baseline gap-[0.25em] sm:max-w-fit"
             to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}
           >
-            <Icon className="self-center" type="plus" />
+            <Icon type="plus" />
             <span>Add Tag</span>
           </Link>
         </p>

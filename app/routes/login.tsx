@@ -4,13 +4,20 @@ import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
-  Link,
   useActionData,
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
+import { useId } from "react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { Icon } from "~/components/icon";
+import { Main } from "~/components/main";
+import { Button } from "~/components/ui/button";
+import { FormLabel } from "~/components/ui/form-label";
+import { FormMessage } from "~/components/ui/form-message";
+import { Icon } from "~/components/ui/icon";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { LinkButton } from "~/components/ui/link-button";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/utils/auth.server";
 import { formatMetaTitle, safeRedirect } from "~/utils/misc";
@@ -70,8 +77,9 @@ export default function LoginPage() {
   const loaderData = useLoaderData<typeof loader>();
   const navigation = useNavigation();
 
+  const id = useId();
   const [form, fieldset] = useForm({
-    id: "login-user",
+    id,
     defaultValue: { redirectTo: loaderData.redirectTo },
     lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
     onValidate({ formData }) {
@@ -79,79 +87,75 @@ export default function LoginPage() {
     },
   });
 
-  const disabled = ["submitting", "loading"].includes(navigation.state);
-
   return (
-    <main>
-      <h1>Login</h1>
+    <Main>
+      <h1 className="mb-4 flex items-center gap-2 text-xl font-semibold">
+        <Icon type="log-in" />
+        Login
+      </h1>
 
       <Form method="POST" {...form.props}>
-        <fieldset disabled={disabled}>
-          {form.error ? (
-            <div id={form.errorId}>
-              <Icon type="alert-triangle" />
-              <span>{form.error}</span>
-            </div>
-          ) : null}
+        <fieldset
+          className="flex flex-col gap-4"
+          disabled={["submitting", "loading"].includes(navigation.state)}
+        >
+          <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
-          <div>
-            <label htmlFor={fieldset.username.id}>Username</label>
-            <input
-              {...conform.input(fieldset.username, { type: "text" })}
-              autoComplete="username"
-            />
-            {fieldset.username.error ? (
-              <div id={fieldset.username.errorId}>
-                <Icon type="alert-triangle" />
-                <span>{fieldset.username.error}</span>
-              </div>
-            ) : null}
-          </div>
-
-          <div>
-            <label htmlFor={fieldset.password.id}>Password</label>
-            <input
-              {...conform.input(fieldset.password, { type: "password" })}
-              autoComplete="current-password"
-            />
-            {fieldset.password.error ? (
-              <div id={fieldset.password.errorId}>
-                <Icon type="alert-triangle" />
-                <span>{fieldset.password.error}</span>
-              </div>
-            ) : null}
-          </div>
-
-          <div>
+          <div className="flex flex-col gap-1">
+            <FormLabel htmlFor={fieldset.username.id}>Username</FormLabel>
             <div>
+              <Input
+                className="max-sm:w-full"
+                {...conform.input(fieldset.username, { type: "text" })}
+                autoComplete="username"
+              />
+            </div>
+            <FormMessage id={fieldset.username.errorId}>
+              {fieldset.username.error}
+            </FormMessage>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <FormLabel htmlFor={fieldset.password.id}>Password</FormLabel>
+            <div>
+              <Input
+                className="max-sm:w-full"
+                {...conform.input(fieldset.password, { type: "password" })}
+                autoComplete="current-password"
+              />
+            </div>
+            <FormMessage id={fieldset.password.errorId}>
+              {fieldset.password.error}
+            </FormMessage>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <div className="flex h-10 items-center gap-2">
               <input
                 {...conform.input(fieldset.remember, { type: "checkbox" })}
               />
-              <label htmlFor={fieldset.remember.id}>Remember me</label>
+              <Label htmlFor={fieldset.remember.id}>Remember me</Label>
             </div>
-            {fieldset.remember.error ? (
-              <div id={fieldset.remember.errorId}>
-                <Icon type="alert-triangle" />
-                <span>{fieldset.remember.error}</span>
-              </div>
-            ) : null}
+            <FormMessage id={fieldset.remember.errorId}>
+              {fieldset.remember.error}
+            </FormMessage>
           </div>
 
           <input {...conform.input(fieldset.redirectTo, { type: "hidden" })} />
 
-          <div>
-            <button type="submit">
+          <div className="grid grid-cols-2 gap-2 sm:w-80">
+            <Button type="submit">
               <Icon type="log-in" />
               <span>Log in</span>
-            </button>
-            <Link to={loaderData.redirectTo}>
+            </Button>{" "}
+            <LinkButton to={loaderData.redirectTo}>
               <Icon type="x" />
               <span>Cancel</span>
-            </Link>
+            </LinkButton>
           </div>
         </fieldset>
       </Form>
-    </main>
+    </Main>
   );
 }
 

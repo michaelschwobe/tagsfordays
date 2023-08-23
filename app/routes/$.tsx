@@ -1,7 +1,9 @@
 import type { V2_MetaFunction } from "@remix-run/node";
-import { Link, useLocation } from "@remix-run/react";
+import { useLocation } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { Icon } from "~/components/icon";
+import { Main } from "~/components/main";
+import { Icon } from "~/components/ui/icon";
+import { LinkButton } from "~/components/ui/link-button";
 import { formatMetaTitle } from "~/utils/misc";
 
 export async function loader() {
@@ -25,23 +27,23 @@ export function ErrorBoundary() {
     <GeneralErrorBoundary
       statusHandlers={{
         404: () => (
-          <main>
-            <h1>
+          <Main>
+            <h1 className="mb-4 flex items-center gap-2 text-xl font-semibold">
               <Icon type="alert-triangle" />
-              <span>Error</span>
+              Error
             </h1>
 
-            <p>
+            <p className="mb-4">
               We can't find this page: <code>{location.pathname}</code>
             </p>
 
             <div>
-              <Link to="/">
+              <LinkButton to="/">
                 <Icon type="home" />
                 Back to home
-              </Link>
+              </LinkButton>
             </div>
-          </main>
+          </Main>
         ),
       }}
     />

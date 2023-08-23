@@ -8,6 +8,7 @@ import { Main } from "~/components/main";
 import { SearchForm } from "~/components/search-form";
 import { SearchHelp } from "~/components/search-help";
 import { Badge } from "~/components/ui/badge";
+import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { favoriteBookmark, getBookmarks } from "~/models/bookmark.server";
@@ -65,10 +66,10 @@ export default function BookmarksIndexPage() {
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
-        <h1 className="mr-auto flex items-center gap-2 text-xl font-semibold">
+        <H1 className="mr-auto flex items-center gap-2">
           <Icon type="bookmarks" />
           Bookmarks <Badge>{loaderData.bookmarks.length}</Badge>
-        </h1>
+        </H1>
 
         <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}>
           <Icon type="plus" />

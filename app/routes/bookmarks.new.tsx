@@ -16,6 +16,7 @@ import { Button } from "~/components/ui/button";
 import { FormDescription } from "~/components/ui/form-description";
 import { FormLabel } from "~/components/ui/form-label";
 import { FormMessage } from "~/components/ui/form-message";
+import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -110,10 +111,10 @@ export default function NewBookmarkPage() {
 
   return (
     <Main>
-      <h1 className="mb-4 flex items-center gap-2 text-xl font-semibold">
+      <H1 className="mb-4 flex items-center gap-2">
         <Icon type="plus" />
         New Bookmark
-      </h1>
+      </H1>
 
       <Form method="POST" {...form.props}>
         <fieldset

@@ -6,6 +6,7 @@ import { LatestTags } from "~/components/latest-tags";
 import { Main } from "~/components/main";
 import { QuickBookmark } from "~/components/quick-bookmark";
 import { QuickTag } from "~/components/quick-tag";
+import { H1 } from "~/components/ui/h1";
 import { getLatestBookmarks } from "~/models/bookmark.server";
 import { getLatestTags } from "~/models/tag.server";
 import { APP_DESCRIPTION, APP_DESCRIPTION_SHORT, APP_NAME } from "~/utils/misc";
@@ -31,9 +32,10 @@ export default function HomePage() {
 
   return (
     <Main>
-      <h1 className="mb-1 text-xl font-semibold">{APP_NAME}</h1>
-
-      <p className="mb-4">{APP_DESCRIPTION}</p>
+      <div className="mb-4 flex flex-wrap items-baseline gap-x-8 gap-y-2">
+        <H1>{APP_NAME}</H1>
+        <p className="text-lg leading-tight">{APP_DESCRIPTION}</p>
+      </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-8">
         <QuickBookmark />

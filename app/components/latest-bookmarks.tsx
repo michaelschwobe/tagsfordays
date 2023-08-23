@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import { forwardRef } from "react";
+import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import type { LatestBookmarksData } from "~/models/bookmark.server";
 import { cn } from "~/utils/misc";
@@ -23,7 +24,7 @@ export const LatestBookmarks = forwardRef<
       className={cn("flex flex-col gap-2", className)}
       ref={forwardedRef}
     >
-      <h2 className="text-lg font-semibold">Latest Bookmarks</h2>
+      <H2>Latest Bookmarks</H2>
 
       {data.length > 0 ? (
         <ul className="flex flex-col gap-2">

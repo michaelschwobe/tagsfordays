@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import { forwardRef } from "react";
+import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import type { LatestTagsData } from "~/models/tag.server";
 import { cn } from "~/utils/misc";
@@ -23,7 +24,7 @@ export const LatestTags = forwardRef<
       className={cn("flex flex-col gap-2", className)}
       ref={forwardedRef}
     >
-      <h2 className="text-lg font-semibold">Latest Tags</h2>
+      <H2>Latest Tags</H2>
 
       {data.length > 0 ? (
         <ul className="flex flex-col gap-2">

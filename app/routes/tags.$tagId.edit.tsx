@@ -17,6 +17,7 @@ import { Button } from "~/components/ui/button";
 import { FormDescription } from "~/components/ui/form-description";
 import { FormLabel } from "~/components/ui/form-label";
 import { FormMessage } from "~/components/ui/form-message";
+import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { LinkButton } from "~/components/ui/link-button";
@@ -108,10 +109,10 @@ export default function NewTagPage() {
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
-        <h1 className="mr-auto flex items-center gap-2 text-xl font-semibold">
+        <H1 className="mr-auto flex items-center gap-2">
           <Icon type="pencil" />
           Edit Tag
-        </h1>
+        </H1>
 
         <ButtonDelete />
       </div>
@@ -171,10 +172,10 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <Main>
-            <h1 className="mb-4 flex items-center gap-2 text-xl font-semibold">
+            <H1 className="mb-4 flex items-center gap-2">
               <Icon type="alert-triangle" />
               Error
-            </h1>
+            </H1>
 
             <p className="mb-4">Tag not found.</p>
 

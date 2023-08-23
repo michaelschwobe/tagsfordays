@@ -9,6 +9,8 @@ import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { H1 } from "~/components/ui/h1";
+import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import {
@@ -78,10 +80,10 @@ export default function BookmarkDetailPage() {
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
-        <h1 className="mr-auto flex items-center gap-2 text-xl font-semibold">
+        <H1 className="mr-auto flex items-center gap-2">
           <Icon type="bookmark" />
           Bookmark
-        </h1>
+        </H1>
 
         <Button type="button" onClick={async () => await asyncShare()}>
           <Icon type="share" />
@@ -117,9 +119,7 @@ export default function BookmarkDetailPage() {
         <div className="flex flex-col gap-1">
           <div className="text-sm font-medium">Title</div>
           <div className="flex items-center py-2">
-            <h2 className="text-lg font-semibold">
-              {loaderData.bookmark.title ?? "(Untitled)"}
-            </h2>
+            <H2>{loaderData.bookmark.title ?? "(Untitled)"}</H2>
           </div>
         </div>
 
@@ -177,10 +177,10 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <Main>
-            <h1 className="mb-4 flex items-center gap-2 text-xl font-semibold">
+            <H1 className="mb-4 flex items-center gap-2">
               <Icon type="alert-triangle" />
               Error
-            </h1>
+            </H1>
 
             <p className="mb-4">Bookmark not found.</p>
 

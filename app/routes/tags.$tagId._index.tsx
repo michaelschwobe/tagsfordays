@@ -7,6 +7,8 @@ import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
+import { H1 } from "~/components/ui/h1";
+import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { deleteTag, getTag } from "~/models/tag.server";
@@ -62,13 +64,10 @@ export default function TagDetailPage() {
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
-        <h1 className="mr-auto text-xl font-semibold">
-          <Icon
-            className="relative -top-px mr-[0.375em] inline-block"
-            type="tag"
-          />
+        <H1 className="mr-auto flex items-center gap-2">
+          <Icon type="tag" />
           Tag
-        </h1>
+        </H1>
 
         <LinkButton
           to={`/bookmarks?searchValue=${loaderData.tag.name}&searchKey=tags`}
@@ -91,7 +90,7 @@ export default function TagDetailPage() {
         <div className="flex flex-col gap-1">
           <div className="text-sm font-medium">Name</div>
           <div className="flex items-center py-2">
-            <h2>{loaderData.tag.name}</h2>
+            <H2>{loaderData.tag.name}</H2>
           </div>
         </div>
 
@@ -141,13 +140,10 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <Main>
-            <h1 className="mb-4 text-xl font-semibold">
-              <Icon
-                className="relative -top-px mr-[0.375em] inline-block"
-                type="alert-triangle"
-              />
+            <H1 className="mb-4 flex items-center gap-2">
+              <Icon type="alert-triangle" />
               Error
-            </h1>
+            </H1>
 
             <p className="mb-4">Tag not found.</p>
 

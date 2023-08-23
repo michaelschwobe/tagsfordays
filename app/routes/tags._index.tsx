@@ -4,6 +4,7 @@ import { Form, useLoaderData } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
+import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { getTags, getTagsOrderedByRelations } from "~/models/tag.server";
@@ -39,10 +40,10 @@ export default function TagsIndexPage() {
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
-        <h1 className="mr-auto flex items-center gap-2 text-xl font-semibold">
+        <H1 className="mr-auto flex items-center gap-2">
           <Icon type="tags" />
           Tags <Badge>{loaderData.tags.length}</Badge>
-        </h1>
+        </H1>
 
         <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}>
           <Icon type="plus" />

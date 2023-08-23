@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import { H2 } from "~/components/ui/h2";
 import { cn, formatItemsFoundByCount, toTitleCase } from "~/utils/misc";
 
 type FormatItemsFoundByCountProps = Parameters<
@@ -18,18 +19,13 @@ export const SearchHelp = forwardRef<React.ElementRef<"div">, SearchHelpProps>(
 
     return (
       <div {...props} className={cn(className)} ref={forwardedRef}>
-        <h2
-          className={cn(
-            "mb-2 text-lg font-semibold",
-            hasItems ? "sr-only" : "",
-          )}
-        >
+        <H2 className={hasItems ? "sr-only" : "mb-2"}>
           {toTitleCase(formatItemsFoundByCount({ count, single, plural }))}
-        </h2>
+        </H2>
 
         {!hasItems ? (
           <>
-            <p className="mb-2 font-semibold">Suggestions:</p>
+            <p className="mb-2">Suggestions:</p>
             <ul className="list-disc pl-4">
               <li>Make sure all words are spelled correctly.</li>
               <li>Try different keywords.</li>

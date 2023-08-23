@@ -2,6 +2,7 @@ import { forwardRef, useId } from "react";
 import { Button } from "~/components/ui/button";
 import { FormDescription } from "~/components/ui/form-description";
 import { FormLabel } from "~/components/ui/form-label";
+import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { LinkButton } from "~/components/ui/link-button";
@@ -29,7 +30,7 @@ export const QuickBookmark = forwardRef<
       className={cn("flex flex-col gap-2", className)}
       ref={forwardedRef}
     >
-      <h2 className="text-lg font-semibold">Quick Bookmark</h2>
+      <H2>Quick Bookmark</H2>
 
       {optionalUser ? (
         <form method="POST" action={redirectTo}>

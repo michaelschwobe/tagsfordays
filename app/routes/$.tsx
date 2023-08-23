@@ -2,6 +2,7 @@ import type { V2_MetaFunction } from "@remix-run/node";
 import { useLocation } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
+import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { formatMetaTitle } from "~/utils/misc";
@@ -28,10 +29,10 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <Main>
-            <h1 className="mb-4 flex items-center gap-2 text-xl font-semibold">
+            <H1 className="mb-4 flex items-center gap-2">
               <Icon type="alert-triangle" />
               Error
-            </h1>
+            </H1>
 
             <p className="mb-4">
               We can't find this page: <code>{location.pathname}</code>

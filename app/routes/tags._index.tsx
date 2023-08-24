@@ -55,9 +55,9 @@ export default function TagsIndexPage() {
       {loaderData.tags.length > 1 ? (
         <Form className="mb-4" method="GET">
           <div className="sr-only">Order By:</div>
-          <div className="inline-flex h-10 items-center gap-1 rounded-lg bg-black p-1 text-white max-sm:w-full">
+          <div className="inline-flex h-10 items-center gap-1 rounded-lg bg-gray-200 p-1 max-sm:w-full">
             <button
-              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-1 font-medium transition-all focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600 hover:bg-white/30 aria-[pressed=true]:bg-white aria-[pressed=true]:text-black"
+              className="inline-flex h-full cursor-pointer items-center justify-center gap-2 rounded px-3 py-1 text-sm font-medium transition-all focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600 hover:bg-white/40 aria-[pressed=true]:bg-white aria-[pressed=true]:text-black"
               type={
                 loaderData.orderBy === "name" || loaderData.orderBy === null
                   ? "button"
@@ -70,7 +70,7 @@ export default function TagsIndexPage() {
               Name
             </button>{" "}
             <button
-              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-1 font-medium transition-all focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600 hover:bg-white/30 aria-[pressed=true]:bg-white aria-[pressed=true]:text-black"
+              className="inline-flex h-full cursor-pointer items-center justify-center gap-2 rounded px-3 py-1 text-sm font-medium transition-all focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600 hover:bg-white/40 aria-[pressed=true]:bg-white aria-[pressed=true]:text-black"
               type={loaderData.orderBy === "relations" ? "button" : "submit"}
               name="orderBy"
               value="relations"

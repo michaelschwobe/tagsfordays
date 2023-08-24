@@ -102,16 +102,24 @@ export default function BookmarksIndexPage() {
                 to={bookmark.id}
               >
                 <Icon type="bookmark" />
-                <span className="truncate">
-                  {bookmark.title ?? "(Untitled)"}
+                <span className="truncate text-sm">
+                  {bookmark.title ? (
+                    <span>{bookmark.title}</span>
+                  ) : (
+                    <span aria-label="Untitled">--</span>
+                  )}
                 </span>
               </LinkButton>
 
               <LinkButton
-                className="basis-3/6 justify-between overflow-hidden"
-                to={bookmark.id}
+                className="basis-3/6 justify-between overflow-hidden font-normal"
+                to={bookmark.url}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <span className="truncate text-xs">{bookmark.url}</span>
+                <span className="truncate text-xs font-normal">
+                  {bookmark.url}
+                </span>
                 <Icon type="external-link" />
               </LinkButton>
 

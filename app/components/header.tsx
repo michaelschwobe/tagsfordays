@@ -27,13 +27,13 @@ export const HeaderNavLink = forwardRef<
     <NavLink
       {...props}
       className={cn(
-        "flex h-10 items-center gap-2 px-3 aria-[current=page]:underline sm:h-14",
+        "flex h-full items-center gap-2 px-3 font-medium aria-[current=page]:text-black aria-[current=page]:underline",
         className,
       )}
       to={to}
       ref={forwardedRef}
     >
-      <Icon className="max-sm:text-xl" type={iconType} />
+      <Icon className="max-sm:text-lg" type={iconType} />
       <span className="max-sm:sr-only">{children}</span>
     </NavLink>
   );
@@ -47,24 +47,30 @@ export interface HeaderButtonProps
   children: React.ReactNode;
   /** Sets the `class` attribute. */
   className?: string;
+  /** Sets the icon type. **Required** */
+  iconType: IconType;
 }
 
-export const HeaderButton = forwardRef<
+export const HeaderNavButton = forwardRef<
   React.ElementRef<"button">,
   HeaderButtonProps
->(({ children, className, ...props }, forwardedRef) => {
+>(({ children, className, iconType, ...props }, forwardedRef) => {
   return (
     <button
       {...props}
-      className={cn("flex h-10 items-center gap-2 px-3 sm:h-14", className)}
+      className={cn(
+        "flex h-full items-center gap-2 px-3 font-medium",
+        className,
+      )}
       ref={forwardedRef}
     >
-      {children}
+      <Icon className="max-sm:text-lg" type={iconType} />
+      <span className="sr-only">{children}</span>
     </button>
   );
 });
 
-HeaderButton.displayName = "HeaderButton";
+HeaderNavButton.displayName = "HeaderNavButton";
 
 export interface HeaderProps
   extends Omit<React.ComponentPropsWithoutRef<"header">, "children"> {
@@ -80,42 +86,45 @@ export const Header = forwardRef<React.ElementRef<"header">, HeaderProps>(
     return (
       <header
         {...props}
-        className={cn("sticky top-0 bg-black text-white shadow", className)}
+        className={cn(
+          "sticky top-0 border-b border-gray-200 bg-gray-100/90 backdrop-blur-sm sm:px-8",
+          className,
+        )}
         ref={forwardedRef}
       >
-        <nav className="flex items-center justify-evenly gap-2 sm:justify-start sm:px-3">
-          <HeaderNavLink iconType="home" to="/">
+        <nav className="flex h-12 items-center justify-evenly gap-2 text-sm sm:-mx-3 sm:h-14 sm:justify-start">
+          <HeaderNavLink to="/" iconType="home">
             Home
           </HeaderNavLink>
 
-          <HeaderNavLink iconType="bookmarks" to="/bookmarks">
+          <HeaderNavLink to="/bookmarks" iconType="bookmarks">
             Bookmarks
           </HeaderNavLink>
 
-          <HeaderNavLink iconType="tags" to="/tags">
+          <HeaderNavLink className="sm:mr-auto" to="/tags" iconType="tags">
             Tags
           </HeaderNavLink>
 
           {optionalUser ? (
             <Form
-              className="sm:ml-auto sm:inline-flex sm:items-baseline sm:gap-2"
+              className="sm:flex sm:items-center"
               method="POST"
               action={`${USER_LOGOUT_ROUTE}?redirectTo=${location.pathname}`}
             >
-              <span className="max-sm:sr-only">Logged in as</span>{" "}
-              <span className="font-semibold max-sm:sr-only">
-                {optionalUser.username}
+              <span className="max-sm:sr-only">
+                Logged in as{" "}
+                <span className="font-medium text-black">
+                  {optionalUser.username}
+                </span>
               </span>{" "}
-              <HeaderButton type="submit">
-                <span className="max-sm:sr-only">Log out</span>
-                <Icon type="log-out" />
-              </HeaderButton>
+              <HeaderNavButton type="submit" iconType="log-out">
+                Log out
+              </HeaderNavButton>
             </Form>
           ) : (
             <HeaderNavLink
-              className="sm:ml-auto"
-              iconType="log-in"
               to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}
+              iconType="log-in"
             >
               Log in
             </HeaderNavLink>

@@ -35,7 +35,8 @@ export function ErrorBoundary() {
             </H1>
 
             <p className="mb-4">
-              We can't find this page: <code>{location.pathname}</code>
+              We can&rsquo;t find this page:{" "}
+              <code className="text-black">{location.pathname}</code>
             </p>
 
             <div>

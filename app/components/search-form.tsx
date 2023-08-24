@@ -79,7 +79,7 @@ export function SearchForm({
           >
             Search key
           </div>
-          <div className="flex h-10 items-center gap-1 rounded-lg bg-black p-1 text-white">
+          <div className="flex h-10 items-center gap-1 rounded-lg bg-gray-200 p-1">
             {conform
               .collection(fieldset.searchKey, {
                 type: "radio",
@@ -89,7 +89,7 @@ export function SearchForm({
               .map((props, index) => (
                 <label
                   key={index}
-                  className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-1 font-medium transition-all focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600 hover:bg-white/30 [&:has(:checked)]:bg-white [&:has(:checked)]:text-black"
+                  className="inline-flex h-full cursor-pointer items-center justify-center gap-2 rounded px-3 py-1 text-sm font-medium transition-all focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600 hover:bg-white/40 [&:has(:checked)]:bg-white [&:has(:checked)]:text-black"
                   htmlFor={props.id}
                 >
                   <input className="sr-only" {...props} />

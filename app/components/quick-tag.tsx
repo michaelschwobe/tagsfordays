@@ -51,7 +51,8 @@ export const QuickTag = forwardRef<React.ElementRef<"aside">, QuickTagProps>(
                 </Button>
               </FormControl>
               <FormDescription id={`${id}-name-description`}>
-                Comma separate names, ex: <code>t1,t2,t3</code>
+                Comma separate names, ex:{" "}
+                <code className="text-black">t1,t2,t3</code>
               </FormDescription>
             </FormItem>
           </form>

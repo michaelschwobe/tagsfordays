@@ -186,7 +186,7 @@ export default function NewBookmarkPage() {
               />
             </FormControl>
             <FormDescription id={fieldset.url.descriptionId}>
-              Use secure URLs, ex: <code>https://</code>
+              Use secure URLs, ex: <code className="text-black">https://</code>
             </FormDescription>
             <FormMessage id={fieldset.url.errorId}>
               {fieldset.url.error}

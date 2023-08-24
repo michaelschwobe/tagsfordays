@@ -11,7 +11,11 @@ export interface MainProps extends React.ComponentPropsWithoutRef<"main"> {
 export const Main = forwardRef<React.ElementRef<"main">, MainProps>(
   ({ children, className, ...props }, forwardedRef) => {
     return (
-      <main {...props} className={cn("p-6", className)} ref={forwardedRef}>
+      <main
+        {...props}
+        className={cn("p-4 sm:p-8", className)}
+        ref={forwardedRef}
+      >
         {children}
       </main>
     );

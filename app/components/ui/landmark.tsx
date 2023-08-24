@@ -18,7 +18,7 @@ export const Landmark = forwardRef<React.ElementRef<"a">, LandmarkProps>(
       <a
         {...props}
         className={cn(
-          "fixed -top-10 left-4 z-50 block bg-black px-3 py-2 text-sm text-white transition-all focus:top-4",
+          "fixed -top-10 left-4 z-50 block bg-gray-300 px-3 py-2 text-sm text-white transition-all focus:top-4",
           className,
         )}
         id={type === "trigger" ? `${slug}-trigger` : slug}

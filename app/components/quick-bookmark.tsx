@@ -53,7 +53,7 @@ export const QuickBookmark = forwardRef<
               </Button>
             </FormControl>
             <FormDescription id={`${id}-url-description`}>
-              Use secure URLs, ex: <code>https://</code>
+              Use secure URLs, ex: <code className="text-black">https://</code>
             </FormDescription>
           </FormItem>
         </form>

@@ -111,9 +111,14 @@ export default function TagDetailPage() {
                     >
                       <Icon className="translate-y-0.5" type="bookmark" />
                       <span className="flex max-w-full flex-col overflow-hidden">
-                        <span className="truncate">
-                          {bookmark.title ?? "(Untitled)"}
+                        <span className="truncate text-black">
+                          {bookmark.title ? (
+                            <span>{bookmark.title}</span>
+                          ) : (
+                            <span aria-label="Untitled">--</span>
+                          )}
                         </span>
+                        <span className="sr-only">&mdash;</span>
                         <span className="truncate text-xs">{bookmark.url}</span>
                       </span>
                     </Link>

@@ -69,8 +69,8 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: "404: Bookmark Not Found" }];
   }
 
-  const title = formatMetaTitle(data.bookmark.title ?? "(Untitled)");
-  const description = data?.bookmark.description ?? "Bookmark"; // TODO: Add better bookmark description
+  const title = formatMetaTitle(data.bookmark.title ?? "Untitled bookmark");
+  const description = data?.bookmark.description ?? data?.bookmark.url;
 
   return [{ title }, { name: "description", content: description }];
 };
@@ -121,14 +121,26 @@ export default function BookmarkDetailPage() {
         <FormItem>
           <div className="text-sm font-medium">Title</div>
           <FormControl className="py-2">
-            <H2>{loaderData.bookmark.title ?? "(Untitled)"}</H2>
+            <H2>
+              {loaderData.bookmark.title ? (
+                <span>{loaderData.bookmark.title}</span>
+              ) : (
+                <span aria-label="Untitled">--</span>
+              )}
+            </H2>
           </FormControl>
         </FormItem>
 
         <FormItem>
           <div className="text-sm font-medium">Description</div>
           <FormControl className="py-2">
-            <p>{loaderData.bookmark.description}</p>
+            <p className="text-black">
+              {loaderData.bookmark.description ? (
+                <span>{loaderData.bookmark.description}</span>
+              ) : (
+                <span aria-label="Undescribed">--</span>
+              )}
+            </p>
           </FormControl>
         </FormItem>
 

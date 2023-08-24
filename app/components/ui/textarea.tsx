@@ -15,7 +15,7 @@ export const Textarea = forwardRef<React.ElementRef<"textarea">, TextareaProps>(
       <textarea
         {...props}
         className={cn(
-          "min-h-[5rem] w-80 rounded-md border border-black bg-white px-3 py-2 transition-colors file:border-0 file:bg-transparent placeholder:italic placeholder:text-gray-400 disabled:cursor-not-allowed disabled:opacity-50",
+          "min-h-[5rem] w-80 rounded-md border border-gray-300 bg-white px-3 py-2 text-black transition-colors file:border-0 file:bg-transparent placeholder:italic placeholder:text-gray-400 disabled:cursor-not-allowed disabled:opacity-50",
           className,
         )}
         name={name}

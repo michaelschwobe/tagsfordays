@@ -13,7 +13,10 @@ export const H1 = forwardRef<React.ElementRef<"h1">, H1Props>(
     return (
       <h1
         {...props}
-        className={cn("text-2xl font-medium leading-none", className)}
+        className={cn(
+          "text-2xl font-medium leading-none text-black",
+          className,
+        )}
         ref={forwardedRef}
       >
         {children}

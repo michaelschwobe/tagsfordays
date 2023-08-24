@@ -96,7 +96,8 @@ export default function NewTagPage() {
               />
             </FormControl>
             <FormDescription id={fieldset.name.descriptionId}>
-              Comma separate names, ex: <code>t1,t2,t3</code>
+              Comma separate names, ex:{" "}
+              <code className="text-black">t1,t2,t3</code>
             </FormDescription>
             <FormMessage id={fieldset.name.errorId}>
               {fieldset.name.error}

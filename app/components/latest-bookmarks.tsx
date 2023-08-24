@@ -36,9 +36,14 @@ export const LatestBookmarks = forwardRef<
               >
                 <Icon className="translate-y-0.5" type="bookmark" />
                 <span className="flex max-w-full flex-col overflow-hidden">
-                  <span className="truncate">
-                    {bookmark.title ?? "(Untitled)"}
+                  <span className="truncate text-black">
+                    {bookmark.title ? (
+                      <span>{bookmark.title}</span>
+                    ) : (
+                      <span aria-label="Untitled">--</span>
+                    )}
                   </span>
+                  <span className="sr-only">&mdash;</span>
                   <span className="truncate text-xs">{bookmark.url}</span>
                 </span>
               </Link>
@@ -49,7 +54,7 @@ export const LatestBookmarks = forwardRef<
         <p>
           None found.{" "}
           <Link
-            className="flex w-full items-center gap-[0.25em] sm:max-w-fit"
+            className="flex w-full items-center gap-[0.25em] text-black sm:max-w-fit"
             to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
           >
             <Icon type="plus" />
@@ -59,7 +64,10 @@ export const LatestBookmarks = forwardRef<
       )}
 
       <div>
-        <Link className="underline hover:underline-offset-2" to="/bookmarks">
+        <Link
+          className="text-black underline hover:underline-offset-2"
+          to="/bookmarks"
+        >
           View all&hellip;
         </Link>
       </div>

@@ -35,7 +35,7 @@ export const LatestTags = forwardRef<
                 to={`/tags/${tag.id}`}
               >
                 <Icon className="translate-y-0.5" type="tag" />
-                <span className="truncate">{tag.name}</span>
+                <span className="truncate text-black">{tag.name}</span>
               </Link>
             </li>
           ))}
@@ -44,7 +44,7 @@ export const LatestTags = forwardRef<
         <p>
           None found.{" "}
           <Link
-            className="flex w-full items-baseline gap-[0.25em] sm:max-w-fit"
+            className="flex w-full items-baseline gap-[0.25em] text-black sm:max-w-fit"
             to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}
           >
             <Icon type="plus" />
@@ -54,7 +54,10 @@ export const LatestTags = forwardRef<
       )}
 
       <div>
-        <Link className="underline hover:underline-offset-2" to="/tags">
+        <Link
+          className="text-black underline hover:underline-offset-2"
+          to="/tags"
+        >
           View all&hellip;
         </Link>
       </div>

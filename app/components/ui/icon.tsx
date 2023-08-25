@@ -11,6 +11,7 @@ export const ICON_TYPES = [
   "external-link",
   "heart",
   "home",
+  "laptop",
   "loader",
   "log-in",
   "log-out",

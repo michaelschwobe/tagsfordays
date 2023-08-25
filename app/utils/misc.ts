@@ -36,6 +36,16 @@ export function cn(...args: ClassValue[]) {
   return twMerge(clsx(dedupe(args)));
 }
 
+export function getDomainUrl(request: Request) {
+  const host =
+    request.headers.get("X-Forwarded-Host") ?? request.headers.get("host");
+  if (!host) {
+    throw new Error("Could not determine domain URL.");
+  }
+  const protocol = host.includes("localhost") ? "http" : "https";
+  return `${protocol}://${host}`;
+}
+
 export function getErrorMessage(error: unknown) {
   if (typeof error === "string") return error;
   if (

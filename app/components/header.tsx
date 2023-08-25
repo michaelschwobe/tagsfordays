@@ -1,9 +1,15 @@
+import { conform, useForm } from "@conform-to/react";
+import { parse } from "@conform-to/zod";
 import type { NavLinkProps } from "@remix-run/react";
-import { Form, NavLink, useLocation } from "@remix-run/react";
-import { forwardRef } from "react";
+import { Form, NavLink, useFetcher, useLocation } from "@remix-run/react";
+import { forwardRef, useId } from "react";
 import type { IconType } from "~/components/ui/icon";
 import { Icon } from "~/components/ui/icon";
+import { type action as rootAction } from "~/root";
 import { cn } from "~/utils/misc";
+import { THEME_ICON_AND_TEXT_MAP, useOptimisticTheme } from "~/utils/theme";
+import { UpdateThemeFormSchema } from "~/utils/theme-validation";
+import type { Theme } from "~/utils/theme.server";
 import {
   USER_LOGIN_ROUTE,
   USER_LOGOUT_ROUTE,
@@ -47,14 +53,16 @@ export interface HeaderButtonProps
   children: React.ReactNode;
   /** Sets the `class` attribute. */
   className?: string;
-  /** Sets the icon type. **Required** */
+  /** Sets the button svg content. **Required** */
   iconType: IconType;
+  /** Sets the button `type` attribute. **Required** */
+  type: "button" | "submit";
 }
 
 export const HeaderNavButton = forwardRef<
   React.ElementRef<"button">,
   HeaderButtonProps
->(({ children, className, iconType, ...props }, forwardedRef) => {
+>(({ children, className, iconType, type, ...props }, forwardedRef) => {
   return (
     <button
       {...props}
@@ -62,6 +70,7 @@ export const HeaderNavButton = forwardRef<
         "flex h-full items-center gap-2 px-3 font-medium",
         className,
       )}
+      type={type}
       ref={forwardedRef}
     >
       <Icon className="max-sm:text-lg" type={iconType} />
@@ -72,14 +81,63 @@ export const HeaderNavButton = forwardRef<
 
 HeaderNavButton.displayName = "HeaderNavButton";
 
+export interface HeaderNavButtonThemeProps {
+  /** Sets the `class` attribute. */
+  className?: string | undefined;
+  /** Sets the default theme. */
+  userTheme?: Theme | null | undefined;
+}
+
+export const HeaderNavButtonTheme = ({
+  className,
+  userTheme,
+}: HeaderNavButtonThemeProps) => {
+  const fetcher = useFetcher<typeof rootAction>();
+
+  const id = useId();
+  const [form] = useForm({
+    id,
+    lastSubmission: fetcher.data!, // Lie! exactOptionalPropertyTypes mismatch,
+    onValidate({ formData }) {
+      return parse(formData, { schema: UpdateThemeFormSchema });
+    },
+  });
+
+  const optimisticTheme = useOptimisticTheme();
+  const currTheme = optimisticTheme ?? userTheme ?? "system";
+  const nextTheme =
+    currTheme === "system"
+      ? "light"
+      : currTheme === "light"
+      ? "dark"
+      : "system";
+  const { icon, text } = THEME_ICON_AND_TEXT_MAP[currTheme];
+
+  return (
+    <fetcher.Form
+      className={cn(className)}
+      method="POST"
+      action="/"
+      {...form.props}
+    >
+      <input type="hidden" name={conform.INTENT} value="update-theme" />
+      <input type="hidden" name="theme" value={nextTheme} />
+      <HeaderNavButton type="submit" iconType={icon}>
+        {text} theme
+      </HeaderNavButton>
+    </fetcher.Form>
+  );
+};
+
 export interface HeaderProps
-  extends Omit<React.ComponentPropsWithoutRef<"header">, "children"> {
+  extends Omit<React.ComponentPropsWithoutRef<"header">, "children">,
+    Pick<HeaderNavButtonThemeProps, "userTheme"> {
   /** Sets the `class` attribute. */
   className?: string;
 }
 
 export const Header = forwardRef<React.ElementRef<"header">, HeaderProps>(
-  ({ className, ...props }, forwardedRef) => {
+  ({ className, userTheme, ...props }, forwardedRef) => {
     const location = useLocation();
     const optionalUser = useOptionalUser();
 
@@ -104,6 +162,8 @@ export const Header = forwardRef<React.ElementRef<"header">, HeaderProps>(
           <HeaderNavLink className="sm:mr-auto" to="/tags" iconType="tags">
             Tags
           </HeaderNavLink>
+
+          <HeaderNavButtonTheme userTheme={userTheme} />
 
           {optionalUser ? (
             <Form

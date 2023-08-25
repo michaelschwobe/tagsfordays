@@ -1,5 +1,8 @@
+import { conform } from "@conform-to/react";
+import { parse } from "@conform-to/zod";
 import { cssBundleHref } from "@remix-run/css-bundle";
-import { json, type LinksFunction, type LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LinksFunction, LoaderArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -14,14 +17,46 @@ import { Header } from "~/components/header";
 import { Landmark } from "~/components/ui/landmark";
 import tailwindStylesheetUrl from "~/tailwind.css";
 import { getUser } from "~/utils/auth.server";
+import { ClientHintCheck, getClientHints } from "~/utils/client-hints";
 import { getEnv } from "~/utils/env.server";
+import { getDomainUrl } from "~/utils/misc";
+import { useTheme } from "~/utils/theme";
+import { UpdateThemeFormSchema } from "~/utils/theme-validation";
+import type { Theme } from "~/utils/theme.server";
+import { getThemeCookie, setThemeCookie } from "~/utils/theme.server";
 
 export async function loader({ request }: LoaderArgs) {
   const ENV = getEnv();
 
   const user = await getUser(request);
 
-  return json({ ENV, user });
+  const requestInfo = {
+    clientHints: getClientHints(request),
+    origin: getDomainUrl(request),
+    path: new URL(request.url).pathname,
+    userPrefs: { theme: getThemeCookie(request) },
+  };
+
+  return json({ ENV, requestInfo, user });
+}
+
+export async function action({ request }: ActionArgs) {
+  const formData = await request.formData();
+  const intent = formData.get(conform.INTENT);
+
+  if (intent !== "update-theme") {
+    throw new Response("Invalid intent", { status: 400 });
+  }
+
+  const submission = parse(formData, { schema: UpdateThemeFormSchema });
+
+  if (!submission.value || submission.intent !== "update-theme") {
+    return json(submission);
+  }
+
+  return json(submission, {
+    headers: { "set-cookie": setThemeCookie(submission.value.theme) },
+  });
 }
 
 export const links: LinksFunction = () => {
@@ -41,15 +76,18 @@ export const links: LinksFunction = () => {
 function Document({
   children,
   env = {},
+  theme = "light",
 }: {
   children: React.ReactNode;
   env?: Record<string, string>;
+  theme?: Theme;
 }) {
   return (
-    <html lang="en" className="h-full overflow-x-hidden">
+    <html lang="en" className={`${theme} h-full overflow-x-hidden`}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <ClientHintCheck />
         <Meta />
         <Links />
       </head>
@@ -70,12 +108,13 @@ function Document({
 
 export default function App() {
   const loaderData = useLoaderData<typeof loader>();
+  const theme = useTheme();
 
   return (
-    <Document env={loaderData.ENV}>
+    <Document env={loaderData.ENV} theme={theme}>
       <Landmark type="trigger" slug="main" label="main content" />
 
-      <Header />
+      <Header userTheme={loaderData.requestInfo.userPrefs.theme} />
 
       <Landmark type="target" slug="main" label="main content" />
       <Outlet />

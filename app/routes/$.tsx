@@ -29,10 +29,12 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <Main>
-            <H1 className="mb-4 flex items-center gap-2">
-              <Icon type="alert-triangle" />
-              Error
-            </H1>
+            <div className="mb-4 flex items-center gap-2">
+              <H1>
+                <Icon type="alert-triangle" />
+                Error
+              </H1>
+            </div>
 
             <p className="mb-4">
               We can&rsquo;t find this page:{" "}

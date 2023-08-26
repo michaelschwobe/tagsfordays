@@ -1,68 +1,73 @@
-import { Link } from "@remix-run/react";
 import { forwardRef } from "react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "~/components/ui/card";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
+import { LinkButton } from "~/components/ui/link-button";
 import type { LatestTagsData } from "~/models/tag.server";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export interface LatestTagsProps
-  extends Omit<React.ComponentPropsWithoutRef<"aside">, "children"> {
+  extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
   /** Sets the `class` attribute. */
   className?: string;
   /** Sets the "found" content. */
   data: LatestTagsData;
 }
 
-export const LatestTags = forwardRef<
-  React.ElementRef<"aside">,
-  LatestTagsProps
->(({ className, data, ...props }, forwardedRef) => {
-  return (
-    <aside
-      {...props}
-      className={cn("flex flex-col gap-2", className)}
-      ref={forwardedRef}
-    >
-      <H2>Latest Tags</H2>
-
-      {data.length > 0 ? (
-        <ul className="flex flex-col gap-2">
-          {data.map((tag) => (
-            <li key={tag.id}>
-              <Link
-                className="flex items-baseline gap-2 hover:underline"
-                to={`/tags/${tag.id}`}
-              >
-                <Icon className="translate-y-0.5" type="tag" />
-                <span className="truncate text-black">{tag.name}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>
-          None found.{" "}
-          <Link
-            className="flex w-full items-baseline gap-[0.25em] text-black sm:max-w-fit"
-            to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}
-          >
-            <Icon type="plus" />
-            <span>Add Tag</span>
-          </Link>
-        </p>
-      )}
-
-      <div>
-        <Link
-          className="text-black underline hover:underline-offset-2"
-          to="/tags"
-        >
-          View all&hellip;
-        </Link>
-      </div>
-    </aside>
-  );
-});
+export const LatestTags = forwardRef<React.ElementRef<"div">, LatestTagsProps>(
+  ({ className, data, ...props }, forwardedRef) => {
+    return (
+      <Card {...props} className={cn(className)} ref={forwardedRef}>
+        <CardHeader>
+          <H2>Latest Tags</H2>
+        </CardHeader>
+        {data.length > 0 ? (
+          <>
+            <CardContent>
+              <ul className="flex flex-wrap gap-2">
+                {data.map((tag) => (
+                  <li key={tag.id}>
+                    <LinkButton
+                      className="max-w-[11rem]"
+                      to={`/tags/${tag.id}`}
+                      size="sm"
+                    >
+                      <Icon type="tag" />
+                      <span className="truncate">{tag.name}</span>
+                    </LinkButton>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+            <CardFooter className="mt-auto">
+              <LinkButton to="/tags" className="max-sm:w-full" variant="filled">
+                <Icon type="tags" />
+                <span>View all tags</span>
+              </LinkButton>
+            </CardFooter>
+          </>
+        ) : (
+          <>
+            <CardContent>
+              <p>None found.</p>
+            </CardContent>
+            <CardFooter className="mt-auto">
+              <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}>
+                <Icon type="plus" />
+                <span>Add tag</span>
+              </LinkButton>
+            </CardFooter>
+          </>
+        )}
+      </Card>
+    );
+  },
+);
 
 LatestTags.displayName = "LatestTags";

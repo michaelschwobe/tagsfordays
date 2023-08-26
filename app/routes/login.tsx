@@ -92,10 +92,19 @@ export default function LoginPage() {
 
   return (
     <Main>
-      <H1 className="mb-4 flex items-center gap-2">
-        <Icon type="log-in" />
-        Login
-      </H1>
+      <div className="mb-4 flex items-center gap-2">
+        <H1>
+          <Icon type="log-in" />
+          Login
+        </H1>
+        <LinkButton
+          to={loaderData.redirectTo.replace(/\/edit|\/new/, "")}
+          size="md-icon"
+        >
+          <Icon type="x" />
+          <span className="sr-only">Cancel</span>
+        </LinkButton>
+      </div>
 
       <Form method="POST" {...form.props}>
         <fieldset
@@ -108,7 +117,6 @@ export default function LoginPage() {
             <FormLabel htmlFor={fieldset.username.id}>Username</FormLabel>
             <FormControl>
               <Input
-                className="max-sm:w-full"
                 {...conform.input(fieldset.username, { type: "text" })}
                 autoComplete="username"
               />
@@ -122,7 +130,6 @@ export default function LoginPage() {
             <FormLabel htmlFor={fieldset.password.id}>Password</FormLabel>
             <FormControl>
               <Input
-                className="max-sm:w-full"
                 {...conform.input(fieldset.password, { type: "password" })}
                 autoComplete="current-password"
               />
@@ -146,15 +153,16 @@ export default function LoginPage() {
 
           <input {...conform.input(fieldset.redirectTo, { type: "hidden" })} />
 
-          <FormItem className="sm:w-80" isButtonGroup>
-            <Button type="submit">
+          <FormItem isButtonGroup>
+            <Button
+              type="submit"
+              className="max-sm:w-full"
+              variant="filled"
+              size="lg"
+            >
               <Icon type="log-in" />
               <span>Log in</span>
-            </Button>{" "}
-            <LinkButton to={loaderData.redirectTo}>
-              <Icon type="x" />
-              <span>Cancel</span>
-            </LinkButton>
+            </Button>
           </FormItem>
         </fieldset>
       </Form>

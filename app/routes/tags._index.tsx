@@ -1,10 +1,12 @@
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
+import { ButtonGroup, ButtonGroupButton } from "~/components/ui/button-group";
 import { H1 } from "~/components/ui/h1";
+import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { getTags, getTagsOrderedByRelations } from "~/models/tag.server";
@@ -40,45 +42,39 @@ export default function TagsIndexPage() {
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
-        <H1 className="mr-auto flex items-center gap-2">
+        <H1>
           <Icon type="tags" />
-          Tags <Badge>{loaderData.tags.length}</Badge>
+          Tags <Badge aria-hidden>{loaderData.tags.length}</Badge>
         </H1>
-
-        <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}>
+        <LinkButton
+          to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}
+          variant="filled"
+        >
           <Icon type="plus" />
           <Icon type="tag" />
-          <span className="sr-only">Add Tag</span>
+          <span className="sr-only">Add tag</span>
         </LinkButton>
       </div>
 
       {loaderData.tags.length > 1 ? (
         <Form className="mb-4" method="GET">
-          <div className="sr-only">Order By:</div>
-          <div className="inline-flex h-10 items-center gap-1 rounded-lg bg-gray-200 p-1 max-sm:w-full">
-            <button
-              className="inline-flex h-full cursor-pointer items-center justify-center gap-2 rounded px-3 py-1 text-sm font-medium transition-all focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600 hover:bg-white/40 aria-[pressed=true]:bg-white aria-[pressed=true]:text-black"
-              type={
-                loaderData.orderBy === "name" || loaderData.orderBy === null
-                  ? "button"
-                  : "submit"
-              }
+          <div className="sr-only">Order By</div>
+          <ButtonGroup>
+            <ButtonGroupButton
               aria-pressed={
                 loaderData.orderBy === "name" || loaderData.orderBy === null
               }
             >
               Name
-            </button>{" "}
-            <button
-              className="inline-flex h-full cursor-pointer items-center justify-center gap-2 rounded px-3 py-1 text-sm font-medium transition-all focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600 hover:bg-white/40 aria-[pressed=true]:bg-white aria-[pressed=true]:text-black"
-              type={loaderData.orderBy === "relations" ? "button" : "submit"}
+            </ButtonGroupButton>{" "}
+            <ButtonGroupButton
               name="orderBy"
               value="relations"
               aria-pressed={loaderData.orderBy === "relations"}
             >
               Relations
-            </button>
-          </div>
+            </ButtonGroupButton>
+          </ButtonGroup>
         </Form>
       ) : null}
 
@@ -86,14 +82,27 @@ export default function TagsIndexPage() {
         <ul className="flex flex-wrap gap-2">
           {loaderData.tags.map((tag) => (
             <li key={tag.id}>
-              <LinkButton to={tag.id}>
-                <span>{tag.name}</span>
-                <span className="text-xs">({tag._count.bookmarks})</span>
+              <LinkButton className="max-w-[11rem]" to={tag.id} size="sm">
+                <Icon type="tag" />
+                <span className="truncate">{tag.name}</span>
+                <Badge>{tag._count.bookmarks}</Badge>
               </LinkButton>
             </li>
           ))}
         </ul>
-      ) : null}
+      ) : (
+        <>
+          <H2 className="mb-2">No Tags Found</H2>
+          <div>
+            <Link
+              className="text-black underline hover:underline-offset-2"
+              to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}
+            >
+              Add tag
+            </Link>
+          </div>
+        </>
+      )}
     </Main>
   );
 }

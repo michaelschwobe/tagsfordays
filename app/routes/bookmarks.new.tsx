@@ -8,7 +8,7 @@ import {
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
-import { Fragment, useId } from "react";
+import { useId } from "react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
@@ -113,10 +113,16 @@ export default function NewBookmarkPage() {
 
   return (
     <Main>
-      <H1 className="mb-4 flex items-center gap-2">
-        <Icon type="plus" />
-        New Bookmark
-      </H1>
+      <div className="mb-4 flex items-center gap-2">
+        <H1>
+          <Icon type="bookmark" />
+          New Bookmark
+        </H1>
+        <LinkButton to=".." relative="path" size="md-icon">
+          <Icon type="x" />
+          <span className="sr-only">Cancel</span>
+        </LinkButton>
+      </div>
 
       <Form method="POST" {...form.props}>
         <fieldset
@@ -129,7 +135,6 @@ export default function NewBookmarkPage() {
             <FormLabel htmlFor={fieldset.url.id}>URL</FormLabel>
             <FormControl>
               <Input
-                className="max-sm:w-full"
                 {...conform.input(fieldset.url, {
                   type: "url",
                   description: true,
@@ -149,7 +154,6 @@ export default function NewBookmarkPage() {
             <FormLabel htmlFor={fieldset.title.id}>Title</FormLabel>
             <FormControl>
               <Input
-                className="max-sm:w-full"
                 {...conform.input(fieldset.title, { type: "text" })}
                 autoComplete="false"
               />
@@ -163,7 +167,6 @@ export default function NewBookmarkPage() {
             <FormLabel htmlFor={fieldset.description.id}>Description</FormLabel>
             <FormControl>
               <Textarea
-                className="max-sm:w-full"
                 {...conform.textarea(fieldset.description)}
                 autoComplete="false"
                 rows={5}
@@ -176,18 +179,21 @@ export default function NewBookmarkPage() {
 
           <fieldset>
             <legend className="mb-2 flex items-center gap-2 text-sm font-medium">
-              Tags <Badge>{tagsSelected.length}</Badge>
+              Tags <Badge aria-hidden>{tagsSelected.length}</Badge>
             </legend>
             <FormControl className="flex-wrap">
               {tagsAll.map((tag) =>
                 "key" in tag ? (
-                  <Fragment key={tag.key}>
+                  <div key={tag.key}>
                     <input
                       type="hidden"
                       name={tag.name}
                       value={tag.defaultValue}
                     />
                     <Button
+                      className="max-w-[11rem]"
+                      size="sm"
+                      variant="filled"
                       {...list.remove(fieldset.tags.name, {
                         index: tagsSelected.findIndex(
                           (t) => t.defaultValue === tag.defaultValue,
@@ -195,20 +201,24 @@ export default function NewBookmarkPage() {
                       })}
                     >
                       <span className="sr-only">Remove</span>{" "}
-                      <span>{tag.defaultValue}</span>
+                      <span className="truncate">{tag.defaultValue}</span>
                       <Icon type="x" />
                     </Button>
-                  </Fragment>
+                  </div>
                 ) : (
-                  <Button
-                    key={tag.name}
-                    {...list.append(fieldset.tags.name, {
-                      defaultValue: tag.name,
-                    })}
-                  >
-                    <Icon type="plus" />
-                    <span className="sr-only">Add</span> <span>{tag.name}</span>
-                  </Button>
+                  <div key={tag.name}>
+                    <Button
+                      className="max-w-[11rem]"
+                      size="sm"
+                      {...list.append(fieldset.tags.name, {
+                        defaultValue: tag.name,
+                      })}
+                    >
+                      <Icon type="plus" />
+                      <span className="sr-only">Add</span>{" "}
+                      <span className="truncate">{tag.name}</span>
+                    </Button>
+                  </div>
                 ),
               )}
             </FormControl>
@@ -229,15 +239,16 @@ export default function NewBookmarkPage() {
             </FormMessage>
           </FormItem>
 
-          <FormItem className="sm:w-80" isButtonGroup>
-            <Button type="submit">
-              <Icon type="check" />
-              <span>Add</span>
-            </Button>{" "}
-            <LinkButton to=".." relative="path">
-              <Icon type="x" />
-              <span>Cancel</span>
-            </LinkButton>
+          <FormItem isButtonGroup>
+            <Button
+              type="submit"
+              className="max-sm:w-full"
+              variant="filled"
+              size="lg"
+            >
+              <Icon type="plus" />
+              <span>Add bookmark</span>
+            </Button>
           </FormItem>
         </fieldset>
       </Form>

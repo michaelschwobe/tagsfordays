@@ -6,7 +6,6 @@ import { LatestTags } from "~/components/latest-tags";
 import { Main } from "~/components/main";
 import { QuickBookmark } from "~/components/quick-bookmark";
 import { QuickTag } from "~/components/quick-tag";
-import { H1 } from "~/components/ui/h1";
 import { getLatestBookmarks } from "~/models/bookmark.server";
 import { getLatestTags } from "~/models/tag.server";
 import { APP_DESCRIPTION, APP_DESCRIPTION_SHORT, APP_NAME } from "~/utils/misc";
@@ -14,7 +13,7 @@ import { APP_DESCRIPTION, APP_DESCRIPTION_SHORT, APP_NAME } from "~/utils/misc";
 export async function loader() {
   const [latestBookmarks, latestTags] = await Promise.all([
     getLatestBookmarks(),
-    getLatestTags(),
+    getLatestTags({ take: 9 }),
   ]);
 
   return json({ latestBookmarks, latestTags });
@@ -32,25 +31,19 @@ export default function HomePage() {
 
   return (
     <Main>
-      <div className="mb-4 flex flex-wrap items-baseline gap-x-8 gap-y-2">
-        <H1>{APP_NAME}</H1>
-        <p className="text-lg leading-tight">{APP_DESCRIPTION}</p>
-      </div>
+      <div className="grid gap-2 sm:grid-cols-2 sm:gap-8">
+        <div className="sr-only">
+          <h1>{APP_NAME}</h1>
+          <p>{APP_DESCRIPTION}</p>
+        </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-8">
-        <QuickBookmark />
+        <QuickBookmark redirectTo="/" />
 
-        <QuickTag />
+        <QuickTag redirectTo="/" />
 
-        <LatestBookmarks
-          className="rounded-xl border border-gray-200 bg-gray-50 p-6"
-          data={loaderData.latestBookmarks}
-        />
+        <LatestBookmarks data={loaderData.latestBookmarks} />
 
-        <LatestTags
-          className="rounded-xl border border-gray-200 bg-gray-50 p-6"
-          data={loaderData.latestTags}
-        />
+        <LatestTags data={loaderData.latestTags} />
       </div>
     </Main>
   );

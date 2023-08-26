@@ -8,6 +8,7 @@ import { Main } from "~/components/main";
 import { SearchForm } from "~/components/search-form";
 import { SearchHelp } from "~/components/search-help";
 import { Badge } from "~/components/ui/badge";
+import { FormItem } from "~/components/ui/form-item";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
@@ -66,15 +67,17 @@ export default function BookmarksIndexPage() {
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
-        <H1 className="mr-auto flex items-center gap-2">
+        <H1>
           <Icon type="bookmarks" />
-          Bookmarks <Badge>{loaderData.bookmarks.length}</Badge>
+          Bookmarks <Badge aria-hidden>{loaderData.bookmarks.length}</Badge>
         </H1>
-
-        <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}>
+        <LinkButton
+          to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
+          variant="filled"
+        >
           <Icon type="plus" />
           <Icon type="bookmark" />
-          <span className="sr-only">Add Bookmark</span>
+          <span className="sr-only">Add bookmark</span>
         </LinkButton>
       </div>
 
@@ -89,17 +92,18 @@ export default function BookmarksIndexPage() {
       <SearchHelp
         className="mb-4"
         count={loaderData.bookmarks.length}
-        single="bookmark"
+        singular="bookmark"
         plural="bookmarks"
       />
 
       {hasBookmarks ? (
-        <ul className="mb-4 flex flex-col gap-2">
+        <ul className="divide-y divide-slate-300 rounded-md border border-slate-300 bg-white">
           {loaderData.bookmarks.map((bookmark) => (
-            <li key={bookmark.id} className="flex gap-2">
+            <li key={bookmark.id} className="flex gap-1 p-1">
               <LinkButton
-                className="grow justify-start overflow-hidden"
-                to={bookmark.id}
+                className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
+                to={`/bookmarks/${bookmark.id}`}
+                variant="ghost"
               >
                 <Icon type="bookmark" />
                 <span className="truncate text-sm">
@@ -112,10 +116,11 @@ export default function BookmarksIndexPage() {
               </LinkButton>
 
               <LinkButton
-                className="basis-3/6 justify-between overflow-hidden font-normal"
+                className="grow justify-between overflow-hidden font-normal"
                 to={bookmark.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                variant="ghost"
               >
                 <span className="truncate text-xs font-normal">
                   {bookmark.url}
@@ -126,17 +131,35 @@ export default function BookmarksIndexPage() {
               <ButtonFavorite
                 entityId={bookmark.id}
                 entityValue={bookmark.favorite}
+                variant="ghost"
               />
             </li>
           ))}
         </ul>
       ) : (
-        <div>
-          <LinkButton to="." reloadDocument>
-            <Icon type="bookmarks" />
-            <span>View all bookmarks</span>
-          </LinkButton>
-        </div>
+        <>
+          <FormItem isButtonGroup>
+            <LinkButton
+              to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
+              className="max-sm:w-full"
+              size="lg"
+              variant="filled"
+            >
+              <Icon type="plus" />
+              <span>Add bookmark</span>
+            </LinkButton>{" "}
+            <LinkButton
+              to="."
+              reloadDocument
+              className="max-sm:w-full"
+              size="lg"
+            >
+              <Icon type="bookmarks" />
+              <span>View all bookmarks</span>
+            </LinkButton>
+          </FormItem>
+          <div></div>
+        </>
       )}
     </Main>
   );

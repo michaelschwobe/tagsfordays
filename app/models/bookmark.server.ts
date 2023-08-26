@@ -80,7 +80,7 @@ export async function getBookmarks({
   });
 }
 
-export async function getLatestBookmarks({ take = 5 }: { take?: number } = {}) {
+export async function getLatestBookmarks({ take = 3 }: { take?: number } = {}) {
   return prisma.bookmark.findMany({
     select: { id: true, url: true, title: true },
     orderBy: [{ createdAt: "desc" }, { title: "asc" }],

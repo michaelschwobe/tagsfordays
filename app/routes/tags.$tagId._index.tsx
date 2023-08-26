@@ -1,7 +1,7 @@
 import { conform } from "@conform-to/react";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Link, useLoaderData, useLocation } from "@remix-run/react";
+import { useLoaderData, useLocation } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
@@ -66,26 +66,10 @@ export default function TagDetailPage() {
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
-        <H1 className="mr-auto flex items-center gap-2">
+        <H1>
           <Icon type="tag" />
           Tag
         </H1>
-
-        <LinkButton
-          to={`/bookmarks?searchValue=${loaderData.tag.name}&searchKey=tags`}
-        >
-          <Icon type="search" />
-          <span className="sr-only">Search</span>
-        </LinkButton>
-
-        <LinkButton
-          to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}/edit`}
-        >
-          <Icon type="pencil" />
-          <span className="sr-only">Edit</span>
-        </LinkButton>
-
-        <ButtonDelete />
       </div>
 
       <div className="flex flex-col gap-4">
@@ -97,43 +81,29 @@ export default function TagDetailPage() {
         </FormItem>
 
         <FormItem>
-          <div className="mb-2 flex items-center gap-2 text-sm font-medium">
-            Bookmarks <Badge>{loaderData.tag.bookmarks.length}</Badge>
+          <div className="text-sm font-medium">Relations</div>
+          <div>
+            <LinkButton
+              to={`/bookmarks?searchValue=${loaderData.tag.name}&searchKey=tags`}
+            >
+              <Icon type="bookmarks" />
+              <span>Bookmarks</span>
+              <Badge aria-hidden>{loaderData.tag.bookmarks.length}</Badge>
+            </LinkButton>
           </div>
-          <FormControl>
-            {loaderData.tag.bookmarks.length > 0 ? (
-              <ul className="flex flex-col gap-2">
-                {loaderData.tag.bookmarks.map(({ bookmark }) => (
-                  <li key={bookmark.id}>
-                    <Link
-                      className="flex items-baseline gap-2 hover:underline"
-                      to={`/bookmarks/${bookmark.id}`}
-                    >
-                      <Icon className="translate-y-0.5" type="bookmark" />
-                      <span className="flex max-w-full flex-col overflow-hidden">
-                        <span className="truncate text-black">
-                          {bookmark.title ? (
-                            <span>{bookmark.title}</span>
-                          ) : (
-                            <span aria-label="Untitled">--</span>
-                          )}
-                        </span>
-                        <span className="sr-only">&mdash;</span>
-                        <span className="truncate text-xs">{bookmark.url}</span>
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div>
-                <LinkButton to="/bookmarks">
-                  <Icon type="bookmarks" />
-                  <span>View all Bookmarks</span>
-                </LinkButton>
-              </div>
-            )}
-          </FormControl>
+        </FormItem>
+
+        <FormItem isButtonGroup>
+          <LinkButton
+            to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}/edit`}
+            className="max-sm:w-full"
+            size="lg"
+            variant="filled"
+          >
+            <Icon type="pencil" />
+            <span>Edit tag</span>
+          </LinkButton>{" "}
+          <ButtonDelete singular="tag" className="max-sm:w-full" size="lg" />
         </FormItem>
       </div>
     </Main>
@@ -146,17 +116,19 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <Main>
-            <H1 className="mb-4 flex items-center gap-2">
-              <Icon type="alert-triangle" />
-              Error
-            </H1>
+            <div className="mb-4 flex items-center gap-2">
+              <H1>
+                <Icon type="alert-triangle" />
+                Error
+              </H1>
+            </div>
 
             <p className="mb-4">Tag not found.</p>
 
             <div>
               <LinkButton to="/tags">
                 <Icon type="tags" />
-                <span>View all Tags</span>
+                <span>View all tags</span>
               </LinkButton>
             </div>
           </Main>

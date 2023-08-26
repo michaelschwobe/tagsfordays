@@ -71,10 +71,16 @@ export default function NewTagPage() {
 
   return (
     <Main>
-      <H1 className="mb-4 flex items-center gap-2">
-        <Icon type="plus" />
-        New Tag
-      </H1>
+      <div className="mb-4 flex items-center gap-2">
+        <H1>
+          <Icon type="tag" />
+          New Tag
+        </H1>
+        <LinkButton to=".." relative="path" size="md-icon">
+          <Icon type="x" />
+          <span className="sr-only">Cancel</span>
+        </LinkButton>
+      </div>
 
       <Form method="POST" {...form.props}>
         <fieldset
@@ -87,7 +93,6 @@ export default function NewTagPage() {
             <FormLabel htmlFor={fieldset.name.id}>Name</FormLabel>
             <FormControl>
               <Input
-                className="max-sm:w-full"
                 {...conform.input(fieldset.name, {
                   type: "text",
                   description: true,
@@ -104,15 +109,16 @@ export default function NewTagPage() {
             </FormMessage>
           </FormItem>
 
-          <FormItem className="sm:w-80" isButtonGroup>
-            <Button type="submit">
-              <Icon type="check" />
-              <span>Add</span>
-            </Button>{" "}
-            <LinkButton to=".." relative="path">
-              <Icon type="x" />
-              <span>Cancel</span>
-            </LinkButton>
+          <FormItem isButtonGroup>
+            <Button
+              type="submit"
+              className="max-sm:w-full"
+              variant="filled"
+              size="lg"
+            >
+              <Icon type="plus" />
+              <span>Add tag</span>
+            </Button>
           </FormItem>
         </fieldset>
       </Form>

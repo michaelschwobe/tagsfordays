@@ -1,13 +1,19 @@
-import { Link } from "@remix-run/react";
 import { forwardRef } from "react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "~/components/ui/card";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
+import { LinkButton } from "~/components/ui/link-button";
 import type { LatestBookmarksData } from "~/models/bookmark.server";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export interface LatestBookmarksProps
-  extends Omit<React.ComponentPropsWithoutRef<"aside">, "children"> {
+  extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
   /** Sets the `class` attribute. */
   className?: string;
   /** Sets the "found" content. */
@@ -15,63 +21,76 @@ export interface LatestBookmarksProps
 }
 
 export const LatestBookmarks = forwardRef<
-  React.ElementRef<"aside">,
+  React.ElementRef<"div">,
   LatestBookmarksProps
 >(({ className, data, ...props }, forwardedRef) => {
   return (
-    <aside
-      {...props}
-      className={cn("flex flex-col gap-2", className)}
-      ref={forwardedRef}
-    >
-      <H2>Latest Bookmarks</H2>
-
+    <Card {...props} className={cn(className)} ref={forwardedRef}>
+      <CardHeader>
+        <H2>Latest Bookmarks</H2>
+      </CardHeader>
       {data.length > 0 ? (
-        <ul className="flex flex-col gap-2">
-          {data.map((bookmark) => (
-            <li key={bookmark.id}>
-              <Link
-                className="flex items-baseline gap-2 hover:underline"
-                to={`/bookmarks/${bookmark.id}`}
-              >
-                <Icon className="translate-y-0.5" type="bookmark" />
-                <span className="flex max-w-full flex-col overflow-hidden">
-                  <span className="truncate text-black">
-                    {bookmark.title ? (
-                      <span>{bookmark.title}</span>
-                    ) : (
-                      <span aria-label="Untitled">--</span>
-                    )}
-                  </span>
-                  <span className="sr-only">&mdash;</span>
-                  <span className="truncate text-xs">{bookmark.url}</span>
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>
-          None found.{" "}
-          <Link
-            className="flex w-full items-center gap-[0.25em] text-black sm:max-w-fit"
-            to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
-          >
-            <Icon type="plus" />
-            <span>Add Bookmark</span>
-          </Link>
-        </p>
-      )}
+        <>
+          <CardContent>
+            <ul className="divide-y divide-slate-300 rounded-md border border-slate-300 bg-white">
+              {data.map((bookmark) => (
+                <li key={bookmark.id} className="flex gap-1 p-1">
+                  <LinkButton
+                    className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
+                    to={`/bookmarks/${bookmark.id}`}
+                    variant="ghost"
+                  >
+                    <Icon type="bookmark" />
+                    <span className="truncate text-sm">
+                      {bookmark.title ? (
+                        <span>{bookmark.title}</span>
+                      ) : (
+                        <span aria-label="Untitled">--</span>
+                      )}
+                    </span>
+                  </LinkButton>
 
-      <div>
-        <Link
-          className="text-black underline hover:underline-offset-2"
-          to="/bookmarks"
-        >
-          View all&hellip;
-        </Link>
-      </div>
-    </aside>
+                  <LinkButton
+                    className="grow justify-between overflow-hidden font-normal"
+                    to={bookmark.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="ghost"
+                  >
+                    <span className="truncate text-xs font-normal">
+                      {bookmark.url}
+                    </span>
+                    <Icon type="external-link" />
+                  </LinkButton>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+          <CardFooter className="mt-auto">
+            <LinkButton
+              to="/bookmarks"
+              className="max-sm:w-full"
+              variant="filled"
+            >
+              <Icon type="bookmarks" />
+              <span>View all bookmarks</span>
+            </LinkButton>
+          </CardFooter>
+        </>
+      ) : (
+        <>
+          <CardContent>
+            <p>None found.</p>
+          </CardContent>
+          <CardFooter className="mt-auto">
+            <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}>
+              <Icon type="plus" />
+              <span>Add bookmark</span>
+            </LinkButton>
+          </CardFooter>
+        </>
+      )}
+    </Card>
   );
 });
 

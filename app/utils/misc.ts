@@ -62,20 +62,20 @@ export function getErrorMessage(error: unknown) {
 
 export function formatItemsFoundByCount({
   count = 0,
-  single,
+  singular,
   plural,
 }: {
   count?: number | undefined;
-  single: string;
+  singular: string;
   plural: string;
 }) {
   if (count === 0) {
-    return `no ${plural} found`;
+    return `No ${plural} found`;
   }
   if (count === 1) {
-    return `found ${count} ${single}`;
+    return `Found ${count} ${singular}`;
   }
-  return `found ${count} ${plural}`;
+  return `Found ${count} ${plural}`;
 }
 
 export function formatMetaTitle(title: string) {

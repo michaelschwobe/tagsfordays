@@ -8,7 +8,7 @@ import {
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
-import { Fragment, useId } from "react";
+import { useId } from "react";
 import invariant from "tiny-invariant";
 import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
@@ -112,7 +112,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   return [{ title }];
 };
 
-export default function NewBookmarkPage() {
+export default function EditBookmarkPage() {
   const actionData = useActionData<typeof action>();
   const loaderData = useLoaderData<typeof loader>();
   const navigation = useNavigation();
@@ -152,12 +152,14 @@ export default function NewBookmarkPage() {
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
-        <H1 className="mr-auto flex items-center gap-2">
-          <Icon type="pencil" />
+        <H1>
+          <Icon type="bookmark" />
           Edit Bookmark
         </H1>
-
-        <ButtonDelete />
+        <LinkButton to=".." relative="path" size="md-icon">
+          <Icon type="x" />
+          <span className="sr-only">Cancel</span>
+        </LinkButton>
       </div>
 
       <Form method="POST" {...form.props}>
@@ -177,7 +179,6 @@ export default function NewBookmarkPage() {
             <FormLabel htmlFor={fieldset.url.id}>URL</FormLabel>
             <FormControl>
               <Input
-                className="max-sm:w-full"
                 {...conform.input(fieldset.url, {
                   type: "url",
                   description: true,
@@ -197,7 +198,6 @@ export default function NewBookmarkPage() {
             <FormLabel htmlFor={fieldset.title.id}>Title</FormLabel>
             <FormControl>
               <Input
-                className="max-sm:w-full"
                 {...conform.input(fieldset.title, { type: "text" })}
                 autoComplete="false"
               />
@@ -211,7 +211,6 @@ export default function NewBookmarkPage() {
             <FormLabel htmlFor={fieldset.description.id}>Description</FormLabel>
             <FormControl>
               <Textarea
-                className="max-sm:w-full"
                 {...conform.textarea(fieldset.description)}
                 autoComplete="false"
                 rows={5}
@@ -224,18 +223,21 @@ export default function NewBookmarkPage() {
 
           <fieldset>
             <legend className="mb-2 flex items-center gap-2 text-sm font-medium">
-              Tags <Badge>{tagsSelected.length}</Badge>
+              Tags <Badge aria-hidden>{tagsSelected.length}</Badge>
             </legend>
             <FormControl className="flex-wrap">
               {tagsAll.map((tag) =>
                 "key" in tag ? (
-                  <Fragment key={tag.key}>
+                  <div key={tag.key}>
                     <input
                       type="hidden"
                       name={tag.name}
                       value={tag.defaultValue}
                     />
                     <Button
+                      className="max-w-[11rem]"
+                      size="sm"
+                      variant="filled"
                       {...list.remove(fieldset.tags.name, {
                         index: tagsSelected.findIndex(
                           (t) => t.defaultValue === tag.defaultValue,
@@ -243,20 +245,24 @@ export default function NewBookmarkPage() {
                       })}
                     >
                       <span className="sr-only">Remove</span>{" "}
-                      <span>{tag.defaultValue}</span>
+                      <span className="truncate">{tag.defaultValue}</span>
                       <Icon type="x" />
                     </Button>
-                  </Fragment>
+                  </div>
                 ) : (
-                  <Button
-                    key={tag.name}
-                    {...list.append(fieldset.tags.name, {
-                      defaultValue: tag.name,
-                    })}
-                  >
-                    <Icon type="plus" />
-                    <span className="sr-only">Add</span> <span>{tag.name}</span>
-                  </Button>
+                  <div key={tag.name}>
+                    <Button
+                      className="max-w-[11rem]"
+                      size="sm"
+                      {...list.append(fieldset.tags.name, {
+                        defaultValue: tag.name,
+                      })}
+                    >
+                      <Icon type="plus" />
+                      <span className="sr-only">Add</span>{" "}
+                      <span className="truncate">{tag.name}</span>
+                    </Button>
+                  </div>
                 ),
               )}
             </FormControl>
@@ -276,19 +282,27 @@ export default function NewBookmarkPage() {
               {fieldset.favorite.error}
             </FormMessage>
           </FormItem>
-
-          <FormItem className="sm:w-80" isButtonGroup>
-            <Button type="submit">
-              <Icon type="check" />
-              <span>Update</span>
-            </Button>{" "}
-            <LinkButton to=".." relative="path">
-              <Icon type="x" />
-              <span>Cancel</span>
-            </LinkButton>
-          </FormItem>
         </fieldset>
       </Form>
+
+      {/**
+       * Button group moved outside of <form>
+       * to prevent nested "delete" <form>
+       */}
+      <FormItem className="pt-6" isButtonGroup>
+        <Button
+          type="submit"
+          disabled={["submitting", "loading"].includes(navigation.state)}
+          form={form.id}
+          className="max-sm:w-full"
+          variant="filled"
+          size="lg"
+        >
+          <Icon type="check" />
+          <span>Update bookmark</span>
+        </Button>{" "}
+        <ButtonDelete singular="bookmark" className="max-sm:w-full" size="lg" />
+      </FormItem>
     </Main>
   );
 }
@@ -299,17 +313,19 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <Main>
-            <H1 className="mb-4 flex items-center gap-2">
-              <Icon type="alert-triangle" />
-              Error
-            </H1>
+            <div className="mb-4 flex items-center gap-2">
+              <H1>
+                <Icon type="alert-triangle" />
+                Error
+              </H1>
+            </div>
 
             <p className="mb-4">Bookmark not found.</p>
 
             <div>
               <LinkButton to="/bookmarks">
                 <Icon type="bookmarks" />
-                <span>View all Bookmarks</span>
+                <span>View all bookmarks</span>
               </LinkButton>
             </div>
           </Main>

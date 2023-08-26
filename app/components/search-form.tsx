@@ -3,6 +3,7 @@ import { parse } from "@conform-to/zod";
 import { Form, useNavigation } from "@remix-run/react";
 import { useId } from "react";
 import { Button } from "~/components/ui/button";
+import { ButtonGroup, ButtonGroupRadio } from "~/components/ui/button-group";
 import { FormControl } from "~/components/ui/form-control";
 import { FormItem } from "~/components/ui/form-item";
 import { FormLabel } from "~/components/ui/form-label";
@@ -48,12 +49,37 @@ export function SearchForm({
   });
 
   return (
-    <Form className={cn("", className)} method="GET" {...form.props}>
+    <Form className={cn(className)} method="GET" {...form.props}>
       <fieldset
-        className="flex flex-col gap-2 sm:flex-row sm:items-start"
+        className="flex flex-wrap gap-2"
         disabled={["submitting", "loading"].includes(navigation.state)}
       >
         <legend className="sr-only">Search database</legend>
+
+        <FormItem className="max-sm:grow">
+          <div
+            className="sr-only text-sm font-medium"
+            id={fieldset.searchKey.descriptionId}
+          >
+            Search Key
+          </div>
+          <ButtonGroup>
+            {conform
+              .collection(fieldset.searchKey, {
+                type: "radio",
+                options: searchKeys,
+                description: true,
+              })
+              .map((fieldProps, index) => (
+                <ButtonGroupRadio key={index} {...fieldProps}>
+                  {searchKeysLabelMap[fieldProps.value]}
+                </ButtonGroupRadio>
+              ))}
+          </ButtonGroup>
+          <FormMessage id={fieldset.searchKey.errorId}>
+            {fieldset.searchKey.error}
+          </FormMessage>
+        </FormItem>
 
         <FormItem className="grow">
           <FormLabel className="sr-only" htmlFor={fieldset.searchValue.id}>
@@ -72,45 +98,14 @@ export function SearchForm({
           </FormMessage>
         </FormItem>
 
-        <FormItem>
-          <div
-            className="sr-only text-sm font-medium"
-            id={fieldset.searchKey.descriptionId}
-          >
-            Search key
-          </div>
-          <div className="flex h-10 items-center gap-1 rounded-lg bg-gray-200 p-1">
-            {conform
-              .collection(fieldset.searchKey, {
-                type: "radio",
-                options: searchKeys,
-                description: true,
-              })
-              .map((props, index) => (
-                <label
-                  key={index}
-                  className="inline-flex h-full cursor-pointer items-center justify-center gap-2 rounded px-3 py-1 text-sm font-medium transition-all focus-within:border-blue-600 focus-within:outline focus-within:outline-1 focus-within:outline-blue-600 hover:bg-white/40 [&:has(:checked)]:bg-white [&:has(:checked)]:text-black"
-                  htmlFor={props.id}
-                >
-                  <input className="sr-only" {...props} />
-                  <span>{searchKeysLabelMap[props.value] ?? props.value}</span>
-                </label>
-              ))}
-          </div>
-          <FormMessage id={fieldset.searchKey.errorId}>
-            {fieldset.searchKey.error}
-          </FormMessage>
-        </FormItem>
-
-        <FormItem isButtonGroup>
-          <Button type="submit">
+        <FormItem className="flex-row-reverse">
+          <Button type="submit" size="md-icon" variant="filled">
             <Icon type="search" />
             <span className="sr-only">Submit</span>
           </Button>
-
-          <LinkButton to="." reloadDocument>
+          <LinkButton to="." reloadDocument size="md-icon">
             <Icon type="x" />
-            <span className="sr-only">Reset Filters</span>
+            <span className="sr-only">Reset filters</span>
           </LinkButton>
         </FormItem>
       </fieldset>

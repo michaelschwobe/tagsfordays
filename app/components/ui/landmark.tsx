@@ -18,7 +18,7 @@ export const Landmark = forwardRef<React.ElementRef<"a">, LandmarkProps>(
       <a
         {...props}
         className={cn(
-          "fixed -top-10 left-4 z-50 block bg-gray-300 px-3 py-2 text-sm text-white transition-all focus:top-4",
+          "fixed -top-10 left-4 z-50 rounded-md border border-slate-300 bg-slate-200 px-3 py-2 text-sm font-medium text-black transition-all focus-visible:top-4 focus-visible:border-pink-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-pink-500 disabled:cursor-not-allowed disabled:opacity-50",
           className,
         )}
         id={type === "trigger" ? `${slug}-trigger` : slug}

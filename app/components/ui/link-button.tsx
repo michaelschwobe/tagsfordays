@@ -1,8 +1,9 @@
 import { Link, type LinkProps } from "@remix-run/react";
 import { forwardRef } from "react";
+import { buttonVariants, type ButtonVariants } from "~/components/ui/button";
 import { cn } from "~/utils/misc";
 
-export interface LinkButtonProps extends LinkProps {
+export interface LinkButtonProps extends LinkProps, ButtonVariants {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */
@@ -10,14 +11,11 @@ export interface LinkButtonProps extends LinkProps {
 }
 
 export const LinkButton = forwardRef<React.ElementRef<"a">, LinkButtonProps>(
-  ({ children, className, ...props }, forwardedRef) => {
+  ({ children, className, size, variant, ...props }, forwardedRef) => {
     return (
       <Link
         {...props}
-        className={cn(
-          "inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-md border border-gray-300 px-3 py-2 font-medium text-black transition-colors disabled:pointer-events-none disabled:opacity-50",
-          className,
-        )}
+        className={cn(buttonVariants({ className, size, variant }))}
         ref={forwardedRef}
       >
         {children}

@@ -82,24 +82,10 @@ export default function BookmarkDetailPage() {
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
-        <H1 className="mr-auto flex items-center gap-2">
+        <H1>
           <Icon type="bookmark" />
           Bookmark
         </H1>
-
-        <Button type="button" onClick={async () => await asyncShare()}>
-          <Icon type="share" />
-          <span className="sr-only">Share</span>
-        </Button>
-
-        <LinkButton
-          to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}/edit`}
-        >
-          <Icon type="pencil" />
-          <span className="sr-only">Edit</span>
-        </LinkButton>
-
-        <ButtonDelete />
       </div>
 
       <div className="flex flex-col gap-4">
@@ -107,14 +93,22 @@ export default function BookmarkDetailPage() {
           <div className="text-sm font-medium">URL</div>
           <FormControl>
             <LinkButton
-              className="overflow-hidden max-sm:w-full"
+              className="justify-between overflow-hidden max-sm:w-full"
               to={loaderData.bookmark.url}
               target="_blank"
               rel="noopener noreferrer"
             >
               <span className="truncate">{loaderData.bookmark.url}</span>
               <Icon type="external-link" />
-            </LinkButton>
+            </LinkButton>{" "}
+            <Button
+              type="button"
+              onClick={async () => await asyncShare()}
+              size="md-icon"
+            >
+              <Icon type="share" />
+              <span className="sr-only">Share</span>
+            </Button>
           </FormControl>
         </FormItem>
 
@@ -146,16 +140,20 @@ export default function BookmarkDetailPage() {
 
         <FormItem>
           <div className="mb-2 mr-auto flex items-center gap-2 text-sm font-medium">
-            Tags <Badge>{loaderData.bookmark.tags.length}</Badge>
+            Tags <Badge aria-hidden>{loaderData.bookmark.tags.length}</Badge>
           </div>
           <FormControl>
             {loaderData.bookmark.tags.length > 0 ? (
               <ul className="flex flex-wrap gap-2">
                 {loaderData.bookmark.tags.map(({ tag }) => (
                   <li key={tag.id}>
-                    <LinkButton to={`/tags/${tag.id}`}>
+                    <LinkButton
+                      className="max-w-[11rem]"
+                      to={`/tags/${tag.id}`}
+                      size="sm"
+                    >
                       <Icon type="tag" />
-                      <span>{tag.name}</span>
+                      <span className="truncate">{tag.name}</span>
                     </LinkButton>
                   </li>
                 ))}
@@ -180,6 +178,23 @@ export default function BookmarkDetailPage() {
             />
           </FormControl>
         </FormItem>
+
+        <FormItem isButtonGroup>
+          <LinkButton
+            to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}/edit`}
+            className="max-sm:w-full"
+            size="lg"
+            variant="filled"
+          >
+            <Icon type="pencil" />
+            <span>Edit bookmark</span>
+          </LinkButton>{" "}
+          <ButtonDelete
+            singular="bookmark"
+            className="max-sm:w-full"
+            size="lg"
+          />
+        </FormItem>
       </div>
     </Main>
   );
@@ -191,17 +206,19 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <Main>
-            <H1 className="mb-4 flex items-center gap-2">
-              <Icon type="alert-triangle" />
-              Error
-            </H1>
+            <div className="mb-4 flex items-center gap-2">
+              <H1>
+                <Icon type="alert-triangle" />
+                Error
+              </H1>
+            </div>
 
             <p className="mb-4">Bookmark not found.</p>
 
             <div>
               <LinkButton to="/bookmarks">
                 <Icon type="bookmarks" />
-                <span>View all Bookmarks</span>
+                <span>View all bookmarks</span>
               </LinkButton>
             </div>
           </Main>

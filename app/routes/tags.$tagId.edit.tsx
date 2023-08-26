@@ -90,7 +90,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   return [{ title }];
 };
 
-export default function NewTagPage() {
+export default function EditTagPage() {
   const actionData = useActionData<typeof action>();
   const loaderData = useLoaderData<typeof loader>();
   const navigation = useNavigation();
@@ -111,12 +111,14 @@ export default function NewTagPage() {
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
-        <H1 className="mr-auto flex items-center gap-2">
-          <Icon type="pencil" />
+        <H1>
+          <Icon type="tag" />
           Edit Tag
         </H1>
-
-        <ButtonDelete />
+        <LinkButton to=".." relative="path" size="md-icon">
+          <Icon type="x" />
+          <span className="sr-only">Cancel</span>
+        </LinkButton>
       </div>
 
       <Form method="POST" {...form.props}>
@@ -136,7 +138,6 @@ export default function NewTagPage() {
             <FormLabel htmlFor={fieldset.name.id}>Name</FormLabel>
             <FormControl>
               <Input
-                className="max-sm:w-full"
                 {...conform.input(fieldset.name, {
                   type: "text",
                   description: true,
@@ -152,19 +153,27 @@ export default function NewTagPage() {
               {fieldset.name.error}
             </FormMessage>
           </FormItem>
-
-          <FormItem className="sm:w-80" isButtonGroup>
-            <Button type="submit">
-              <Icon type="check" />
-              <span>Update</span>
-            </Button>{" "}
-            <LinkButton to=".." relative="path">
-              <Icon type="x" />
-              <span>Cancel</span>
-            </LinkButton>
-          </FormItem>
         </fieldset>
       </Form>
+
+      {/**
+       * Button group moved outside of <form>
+       * to prevent nested "delete" <form>
+       */}
+      <FormItem className="pt-6" isButtonGroup>
+        <Button
+          type="submit"
+          disabled={["submitting", "loading"].includes(navigation.state)}
+          form={form.id}
+          className="max-sm:w-full"
+          variant="filled"
+          size="lg"
+        >
+          <Icon type="check" />
+          <span>Update tag</span>
+        </Button>{" "}
+        <ButtonDelete singular="tag" className="max-sm:w-full" size="lg" />
+      </FormItem>
     </Main>
   );
 }
@@ -175,17 +184,19 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <Main>
-            <H1 className="mb-4 flex items-center gap-2">
-              <Icon type="alert-triangle" />
-              Error
-            </H1>
+            <div className="mb-4 flex items-center gap-2">
+              <H1>
+                <Icon type="alert-triangle" />
+                Error
+              </H1>
+            </div>
 
             <p className="mb-4">Tag not found.</p>
 
             <div>
               <LinkButton to="/tags">
                 <Icon type="tags" />
-                <span>View all Tags</span>
+                <span>View all tags</span>
               </LinkButton>
             </div>
           </Main>

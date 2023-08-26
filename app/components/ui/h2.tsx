@@ -13,7 +13,7 @@ export const H2 = forwardRef<React.ElementRef<"h2">, H2Props>(
     return (
       <h2
         {...props}
-        className={cn("text-lg font-medium text-black", className)}
+        className={cn("text-lg font-medium leading-none text-black", className)}
         ref={forwardedRef}
       >
         {children}

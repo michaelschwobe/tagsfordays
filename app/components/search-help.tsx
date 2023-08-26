@@ -14,19 +14,19 @@ export interface SearchHelpProps
 }
 
 export const SearchHelp = forwardRef<React.ElementRef<"div">, SearchHelpProps>(
-  ({ className, count, plural, single, ...props }, forwardedRef) => {
+  ({ className, count, plural, singular, ...props }, forwardedRef) => {
     const hasItems = typeof count === "number" && count > 0;
 
     return (
       <div {...props} className={cn(className)} ref={forwardedRef}>
         <H2 className={hasItems ? "sr-only" : "mb-2"}>
-          {toTitleCase(formatItemsFoundByCount({ count, single, plural }))}
+          {toTitleCase(formatItemsFoundByCount({ count, singular, plural }))}
         </H2>
 
         {!hasItems ? (
           <>
             <p className="mb-2">Suggestions:</p>
-            <ul className="list-disc pl-4">
+            <ul className="list-disc pl-8">
               <li>Make sure all words are spelled correctly.</li>
               <li>Try different keywords.</li>
               <li>Try more general keywords.</li>

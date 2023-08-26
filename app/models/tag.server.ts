@@ -56,7 +56,7 @@ export async function getTagsOrderedByRelations() {
   });
 }
 
-export async function getLatestTags({ take = 5 }: { take?: number } = {}) {
+export async function getLatestTags({ take = 3 }: { take?: number } = {}) {
   return prisma.tag.findMany({
     select: { id: true, name: true },
     orderBy: { createdAt: "asc" },

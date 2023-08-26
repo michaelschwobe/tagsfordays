@@ -2,6 +2,7 @@ import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import type { NavLinkProps } from "@remix-run/react";
 import { Form, NavLink, useFetcher, useLocation } from "@remix-run/react";
+import { cva, type VariantProps } from "class-variance-authority";
 import { forwardRef, useId } from "react";
 import type { IconType } from "~/components/ui/icon";
 import { Icon } from "~/components/ui/icon";
@@ -16,6 +17,23 @@ import {
   useOptionalUser,
 } from "~/utils/user";
 
+export const headerNavLinkVariants = cva(
+  "inline-flex h-14 w-14 items-center justify-center gap-2 whitespace-nowrap border border-transparent font-medium transition-colors focus-visible:border-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white sm:rounded-md",
+  {
+    variants: {
+      variant: {
+        link: "hover:bg-cyan-600/50 active:bg-cyan-600 aria-[current=page]:bg-cyan-600 sm:h-10 sm:w-auto sm:px-4",
+        button:
+          "hover:bg-cyan-600/50 focus-visible:bg-transparent active:bg-cyan-600 sm:h-10 sm:w-10",
+      },
+    },
+    defaultVariants: {
+      variant: "link",
+    },
+  },
+);
+
+export type HeaderNavLinkVariants = VariantProps<typeof headerNavLinkVariants>;
 export interface HeaderNavLinkProps extends NavLinkProps {
   /** Sets the content. **Required** */
   children: React.ReactNode;
@@ -32,10 +50,7 @@ export const HeaderNavLink = forwardRef<
   return (
     <NavLink
       {...props}
-      className={cn(
-        "flex h-full items-center gap-2 px-3 font-medium aria-[current=page]:text-black aria-[current=page]:underline",
-        className,
-      )}
+      className={cn(headerNavLinkVariants({ className, variant: "link" }))}
       to={to}
       ref={forwardedRef}
     >
@@ -48,7 +63,8 @@ export const HeaderNavLink = forwardRef<
 HeaderNavLink.displayName = "HeaderNavLink";
 
 export interface HeaderButtonProps
-  extends React.ComponentPropsWithoutRef<"button"> {
+  extends React.ComponentPropsWithoutRef<"button">,
+    HeaderNavLinkVariants {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */
@@ -66,10 +82,7 @@ export const HeaderNavButton = forwardRef<
   return (
     <button
       {...props}
-      className={cn(
-        "flex h-full items-center gap-2 px-3 font-medium",
-        className,
-      )}
+      className={cn(headerNavLinkVariants({ className, variant: "button" }))}
       type={type}
       ref={forwardedRef}
     >
@@ -145,12 +158,12 @@ export const Header = forwardRef<React.ElementRef<"header">, HeaderProps>(
       <header
         {...props}
         className={cn(
-          "sticky top-0 border-b border-gray-200 bg-gray-100/90 backdrop-blur-sm sm:px-8",
+          "sticky top-0 z-40 bg-cyan-500 text-white shadow sm:px-8 sm:py-3",
           className,
         )}
         ref={forwardedRef}
       >
-        <nav className="flex h-12 items-center justify-evenly gap-2 text-sm sm:-mx-3 sm:h-14 sm:justify-start">
+        <nav className="flex items-center justify-evenly gap-2 sm:-mx-4 sm:justify-start">
           <HeaderNavLink to="/" iconType="home">
             Home
           </HeaderNavLink>
@@ -163,20 +176,20 @@ export const Header = forwardRef<React.ElementRef<"header">, HeaderProps>(
             Tags
           </HeaderNavLink>
 
-          <HeaderNavButtonTheme userTheme={userTheme} />
+          {optionalUser ? (
+            <div className="px-4 max-sm:sr-only">
+              <span className="mr-2">Logged in as</span>{" "}
+              <span className="font-medium text-white">
+                {optionalUser.username}
+              </span>
+            </div>
+          ) : null}
 
           {optionalUser ? (
             <Form
-              className="sm:flex sm:items-center"
               method="POST"
               action={`${USER_LOGOUT_ROUTE}?redirectTo=${location.pathname}`}
             >
-              <span className="max-sm:sr-only">
-                Logged in as{" "}
-                <span className="font-medium text-black">
-                  {optionalUser.username}
-                </span>
-              </span>{" "}
               <HeaderNavButton type="submit" iconType="log-out">
                 Log out
               </HeaderNavButton>
@@ -189,6 +202,8 @@ export const Header = forwardRef<React.ElementRef<"header">, HeaderProps>(
               Log in
             </HeaderNavLink>
           )}
+
+          <HeaderNavButtonTheme userTheme={userTheme} />
         </nav>
       </header>
     );

@@ -52,7 +52,7 @@ export const action = async ({ request }: ActionArgs) => {
   const {
     url,
     title = null,
-    description = null,
+    content = null,
     favorite = null,
     tags = [],
   } = submission.value;
@@ -67,7 +67,7 @@ export const action = async ({ request }: ActionArgs) => {
   const bookmark = await createBookmark({
     url,
     title,
-    description,
+    content,
     favorite,
     tags,
     userId,
@@ -164,16 +164,16 @@ export default function NewBookmarkPage() {
           </FormItem>
 
           <FormItem>
-            <FormLabel htmlFor={fieldset.description.id}>Description</FormLabel>
+            <FormLabel htmlFor={fieldset.content.id}>Content</FormLabel>
             <FormControl>
               <Textarea
-                {...conform.textarea(fieldset.description)}
+                {...conform.textarea(fieldset.content)}
                 autoComplete="false"
                 rows={5}
               />
             </FormControl>
-            <FormMessage id={fieldset.description.errorId}>
-              {fieldset.description.error}
+            <FormMessage id={fieldset.content.errorId}>
+              {fieldset.content.error}
             </FormMessage>
           </FormItem>
 

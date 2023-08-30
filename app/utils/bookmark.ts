@@ -1,7 +1,7 @@
 export const BOOKMARK_SEARCH_KEYS = [
   "url",
   "title",
-  "description",
+  "content",
   "tags",
 ] as const;
 
@@ -10,7 +10,7 @@ export type BookmarkSearchKey = (typeof BOOKMARK_SEARCH_KEYS)[number];
 export const BOOKMARK_SEARCH_KEYS_LABEL_MAP = {
   url: "URL",
   title: "Title",
-  description: "Description",
+  content: "Content",
   tags: "Tags",
 } satisfies Readonly<Record<BookmarkSearchKey, string>>;
 

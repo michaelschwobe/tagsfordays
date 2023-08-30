@@ -13,10 +13,10 @@ export const BookmarkTitleSchema = z
   .min(2, { message: "Title is too short" })
   .max(45, { message: "Title is too long" });
 
-export const BookmarkDescriptionSchema = z
+export const BookmarkContentSchema = z
   .string()
-  .min(2, { message: "Description is too short" })
-  .max(255, { message: "Description is too long" });
+  .min(2, { message: "Content is too short" })
+  .max(255, { message: "Content is too long" });
 
 export const BookmarkFavoriteSchema = CheckboxSchema;
 
@@ -25,7 +25,7 @@ export const BookmarkTagsSchema = z.array(TagNameSchema);
 export const CreateBookmarkFormSchema = z.object({
   url: BookmarkUrlSchema,
   title: BookmarkTitleSchema.optional(),
-  description: BookmarkDescriptionSchema.optional(),
+  content: BookmarkContentSchema.optional(),
   favorite: BookmarkFavoriteSchema.optional(),
   tags: BookmarkTagsSchema.optional(),
 });
@@ -34,7 +34,7 @@ export const UpdateBookmarkFormSchema = z.object({
   id: BookmarkIdSchema,
   url: BookmarkUrlSchema,
   title: BookmarkTitleSchema.optional(),
-  description: BookmarkDescriptionSchema.optional(),
+  content: BookmarkContentSchema.optional(),
   favorite: BookmarkFavoriteSchema.optional(),
   tags: BookmarkTagsSchema.optional(),
 });

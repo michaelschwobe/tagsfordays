@@ -13,31 +13,55 @@ async function seed() {
     createBookmarks: "🔖 Created bookmarks",
     username: "someuser",
     password: "somepass",
-    tags: ["tag1", "tag2", "tag3", "tag4", "tag5"],
+    tags: [
+      "tag1",
+      "tag2",
+      "tag3",
+      "tag4",
+      "tag5",
+      "tag6",
+      "tag7",
+      "tag8",
+      "tag9",
+      "tag10",
+      "some really long tag name that is longer than 45 characters",
+    ],
     bookmarks: [
+      {
+        url: "https://conform.guide",
+        title: "Conform",
+        content:
+          "A progressive enhancement first form validation library for Remix and React Router.",
+      },
       {
         url: "https://www.prisma.io",
         title: "Prisma",
-        description:
+        content:
           "Prisma is a next-generation Node.js and TypeScript ORM for PostgreSQL, MySQL, SQL Server, SQLite, MongoDB, and CockroachDB. It provides type-safety, automated migrations, and an intuitive data model.",
       },
       {
         url: "https://remix.run",
         title: "Remix",
-        description:
+        content:
           "Remix is a full stack web framework that lets you focus on the user interface and work back through web standards to deliver a fast, slick, and resilient user experience. People are gonna love using your stuff.",
       },
       {
         url: "https://tailwindcss.com",
         title: "Tailwind CSS",
-        description:
+        content:
           "Tailwind CSS is a utility-first CSS framework for rapidly building modern websites without ever leaving your HTML.",
       },
       {
         url: "https://www.typescriptlang.org",
         title: "TypeScript",
-        description:
+        content:
           "TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale.",
+      },
+      {
+        url: "https://zod.dev",
+        title: "Zod",
+        content:
+          "TypeScript-first schema validation with static type inference.",
       },
     ],
   } as const;
@@ -82,7 +106,7 @@ async function seed() {
           data: {
             url: bookmark.url,
             title: bookmark.title,
-            description: bookmark.description,
+            content: bookmark.content,
             favorite: bookmarkIdx % 2 === 0,
             tags: {
               create: tags

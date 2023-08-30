@@ -77,7 +77,7 @@ export const action = async ({ params, request }: ActionArgs) => {
   const {
     url,
     title = null,
-    description = null,
+    content = null,
     favorite = null,
     tags = [],
   } = submission.value;
@@ -93,7 +93,7 @@ export const action = async ({ params, request }: ActionArgs) => {
     id,
     url,
     title,
-    description,
+    content,
     favorite,
     tags,
     userId,
@@ -124,7 +124,7 @@ export default function EditBookmarkPage() {
       id: loaderData.bookmark.id,
       url: loaderData.bookmark.url,
       title: loaderData.bookmark.title,
-      description: loaderData.bookmark.description,
+      content: loaderData.bookmark.content,
       favorite: loaderData.bookmark.favorite === true ? "on" : undefined,
       tags: loaderData.bookmark.tags.map((el) => el.tag.name),
     },
@@ -208,16 +208,16 @@ export default function EditBookmarkPage() {
           </FormItem>
 
           <FormItem>
-            <FormLabel htmlFor={fieldset.description.id}>Description</FormLabel>
+            <FormLabel htmlFor={fieldset.content.id}>Content</FormLabel>
             <FormControl>
               <Textarea
-                {...conform.textarea(fieldset.description)}
+                {...conform.textarea(fieldset.content)}
                 autoComplete="false"
                 rows={5}
               />
             </FormControl>
-            <FormMessage id={fieldset.description.errorId}>
-              {fieldset.description.error}
+            <FormMessage id={fieldset.content.errorId}>
+              {fieldset.content.error}
             </FormMessage>
           </FormItem>
 

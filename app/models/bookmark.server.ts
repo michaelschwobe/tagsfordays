@@ -8,7 +8,7 @@ export async function getBookmark({ id }: Pick<Bookmark, "id">) {
       id: true,
       url: true,
       title: true,
-      description: true,
+      content: true,
       favorite: true,
       tags: {
         include: {
@@ -94,11 +94,11 @@ export type LatestBookmarksData = Awaited<
 export async function createBookmark({
   url,
   title,
-  description,
+  content,
   favorite,
   tags,
   userId,
-}: Pick<Bookmark, "url" | "title" | "description" | "favorite"> & {
+}: Pick<Bookmark, "url" | "title" | "content" | "favorite"> & {
   tags: Array<Tag["name"]>;
   userId: User["id"];
 }) {
@@ -106,7 +106,7 @@ export async function createBookmark({
     data: {
       url,
       title,
-      description,
+      content,
       favorite,
       tags: {
         create: tags.map((name) => ({
@@ -129,11 +129,11 @@ export async function updateBookmark({
   id,
   url,
   title,
-  description,
+  content,
   favorite,
   tags,
   userId,
-}: Pick<Bookmark, "id" | "url" | "title" | "description" | "favorite"> & {
+}: Pick<Bookmark, "id" | "url" | "title" | "content" | "favorite"> & {
   tags: Array<Tag["name"]>;
   userId: User["id"];
 }) {
@@ -141,7 +141,7 @@ export async function updateBookmark({
     data: {
       url,
       title,
-      description,
+      content,
       favorite,
       tags: {
         deleteMany: {},

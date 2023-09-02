@@ -82,6 +82,28 @@ export function formatMetaTitle(title: string) {
   return `${title} | ${APP_NAME}`;
 }
 
+export function invariant(
+  condition: any,
+  message: string | (() => string),
+): asserts condition {
+  if (!condition) {
+    throw new Error(typeof message === "function" ? message() : message);
+  }
+}
+
+export function invariantResponse(
+  condition: any,
+  message: string | (() => string),
+  responseInit?: ResponseInit,
+): asserts condition {
+  if (!condition) {
+    throw new Response(typeof message === "function" ? message() : message, {
+      status: 400,
+      ...responseInit,
+    });
+  }
+}
+
 export function safeRedirect(
   to: FormDataEntryValue | string | null | undefined,
   toFallback: string = "/",

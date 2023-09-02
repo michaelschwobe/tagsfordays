@@ -2,7 +2,6 @@ import { conform } from "@conform-to/react";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, useLocation } from "@remix-run/react";
-import invariant from "tiny-invariant";
 import { ButtonDelete } from "~/components/button-delete";
 import { ButtonFavorite } from "~/components/button-favorite";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
@@ -22,7 +21,12 @@ import {
 } from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
 import { FavoriteBookmarkFormSchema } from "~/utils/bookmark-validation";
-import { asyncShare, formatMetaTitle } from "~/utils/misc";
+import {
+  asyncShare,
+  formatMetaTitle,
+  invariant,
+  invariantResponse,
+} from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ params }: LoaderArgs) {
@@ -31,9 +35,7 @@ export async function loader({ params }: LoaderArgs) {
 
   const bookmark = await getBookmark({ id });
 
-  if (!bookmark) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  invariantResponse(bookmark, "Not Found", { status: 404 });
 
   return json({ bookmark });
 }

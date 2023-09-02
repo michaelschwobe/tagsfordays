@@ -2,7 +2,6 @@ import { conform } from "@conform-to/react";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, useLocation } from "@remix-run/react";
-import invariant from "tiny-invariant";
 import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
@@ -15,7 +14,7 @@ import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { deleteTag, getTag } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import { formatMetaTitle } from "~/utils/misc";
+import { formatMetaTitle, invariant, invariantResponse } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ params }: LoaderArgs) {
@@ -25,9 +24,7 @@ export async function loader({ params }: LoaderArgs) {
 
   const tag = await getTag({ id });
 
-  if (!tag) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  invariantResponse(tag, "Not Found", { status: 404 });
 
   return json({ tag });
 }

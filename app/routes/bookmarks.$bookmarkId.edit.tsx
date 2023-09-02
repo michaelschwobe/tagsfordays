@@ -9,7 +9,6 @@ import {
   useNavigation,
 } from "@remix-run/react";
 import { useId } from "react";
-import invariant from "tiny-invariant";
 import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
@@ -35,7 +34,7 @@ import {
 import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import { UpdateBookmarkFormSchema } from "~/utils/bookmark-validation";
-import { formatMetaTitle } from "~/utils/misc";
+import { formatMetaTitle, invariant, invariantResponse } from "~/utils/misc";
 
 export async function loader({ params, request }: LoaderArgs) {
   await requireUserId(request);
@@ -45,9 +44,7 @@ export async function loader({ params, request }: LoaderArgs) {
 
   const bookmark = await getBookmark({ id });
 
-  if (!bookmark) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  invariantResponse(bookmark, "Not Found", { status: 404 });
 
   const tags = await getTags();
 

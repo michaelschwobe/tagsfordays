@@ -9,7 +9,6 @@ import {
   useNavigation,
 } from "@remix-run/react";
 import { useId } from "react";
-import invariant from "tiny-invariant";
 import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
@@ -30,7 +29,7 @@ import {
   updateTag,
 } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import { formatMetaTitle } from "~/utils/misc";
+import { formatMetaTitle, invariant, invariantResponse } from "~/utils/misc";
 import { UpdateTagFormSchema } from "~/utils/tag-validation";
 
 export async function loader({ params, request }: LoaderArgs) {
@@ -41,9 +40,7 @@ export async function loader({ params, request }: LoaderArgs) {
 
   const tag = await getTag({ id });
 
-  if (!tag) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  invariantResponse(tag, "Not Found", { status: 404 });
 
   return json({ tag });
 }

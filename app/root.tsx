@@ -19,7 +19,7 @@ import tailwindStylesheetUrl from "~/tailwind.css";
 import { getUser } from "~/utils/auth.server";
 import { ClientHintCheck, getClientHints } from "~/utils/client-hints";
 import { getEnv } from "~/utils/env.server";
-import { getDomainUrl } from "~/utils/misc";
+import { getDomainUrl, invariantResponse } from "~/utils/misc";
 import { useTheme } from "~/utils/theme";
 import { UpdateThemeFormSchema } from "~/utils/theme-validation";
 import type { Theme } from "~/utils/theme.server";
@@ -44,9 +44,7 @@ export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get(conform.INTENT);
 
-  if (intent !== "update-theme") {
-    throw new Response("Invalid intent", { status: 400 });
-  }
+  invariantResponse(intent === "update-theme", "Invalid intent");
 
   const submission = parse(formData, { schema: UpdateThemeFormSchema });
 

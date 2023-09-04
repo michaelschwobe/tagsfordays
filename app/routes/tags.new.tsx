@@ -18,7 +18,7 @@ import { Input } from "~/components/ui/input";
 import { LinkButton } from "~/components/ui/link-button";
 import { createTag, getTagByName } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import { formatMetaTitle } from "~/utils/misc";
+import { formatMetaTitle, getFieldError } from "~/utils/misc";
 import { CreateTagFormSchema } from "~/utils/tag-validation";
 
 export async function loader({ request }: LoaderArgs) {
@@ -105,7 +105,7 @@ export default function NewTagPage() {
               <code className="text-black">t1,t2,t3</code>
             </FormDescription>
             <FormMessage id={fieldset.name.errorId}>
-              {fieldset.name.error}
+              {getFieldError(fieldset.name)}
             </FormMessage>
           </FormItem>
 

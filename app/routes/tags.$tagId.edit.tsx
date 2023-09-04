@@ -29,7 +29,12 @@ import {
   updateTag,
 } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import { formatMetaTitle, invariant, invariantResponse } from "~/utils/misc";
+import {
+  formatMetaTitle,
+  getFieldError,
+  invariant,
+  invariantResponse,
+} from "~/utils/misc";
 import { UpdateTagFormSchema } from "~/utils/tag-validation";
 
 export async function loader({ params, request }: LoaderArgs) {
@@ -147,7 +152,7 @@ export default function EditTagPage() {
               <code className="text-black">t1,t2,t3</code>
             </FormDescription>
             <FormMessage id={fieldset.name.errorId}>
-              {fieldset.name.error}
+              {getFieldError(fieldset.name)}
             </FormMessage>
           </FormItem>
         </fieldset>

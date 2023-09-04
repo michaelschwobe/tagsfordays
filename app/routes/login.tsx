@@ -23,7 +23,7 @@ import { Label } from "~/components/ui/label";
 import { LinkButton } from "~/components/ui/link-button";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/utils/auth.server";
-import { formatMetaTitle, safeRedirect } from "~/utils/misc";
+import { formatMetaTitle, getFieldError, safeRedirect } from "~/utils/misc";
 import { LoginUserFormSchema } from "~/utils/user-validation";
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -122,7 +122,7 @@ export default function LoginPage() {
               />
             </FormControl>
             <FormMessage id={fieldset.username.errorId}>
-              {fieldset.username.error}
+              {getFieldError(fieldset.username)}
             </FormMessage>
           </FormItem>
 
@@ -135,7 +135,7 @@ export default function LoginPage() {
               />
             </FormControl>
             <FormMessage id={fieldset.password.errorId}>
-              {fieldset.password.error}
+              {getFieldError(fieldset.password)}
             </FormMessage>
           </FormItem>
 
@@ -147,7 +147,7 @@ export default function LoginPage() {
               <Label htmlFor={fieldset.remember.id}>Remember me</Label>
             </FormControl>
             <FormMessage id={fieldset.remember.errorId}>
-              {fieldset.remember.error}
+              {getFieldError(fieldset.remember)}
             </FormMessage>
           </FormItem>
 

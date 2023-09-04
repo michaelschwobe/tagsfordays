@@ -34,7 +34,12 @@ import {
 import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import { UpdateBookmarkFormSchema } from "~/utils/bookmark-validation";
-import { formatMetaTitle, invariant, invariantResponse } from "~/utils/misc";
+import {
+  formatMetaTitle,
+  getFieldError,
+  invariant,
+  invariantResponse,
+} from "~/utils/misc";
 
 export async function loader({ params, request }: LoaderArgs) {
   await requireUserId(request);
@@ -187,7 +192,7 @@ export default function EditBookmarkPage() {
               Use secure URLs, ex: <code className="text-black">https://</code>
             </FormDescription>
             <FormMessage id={fieldset.url.errorId}>
-              {fieldset.url.error}
+              {getFieldError(fieldset.url)}
             </FormMessage>
           </FormItem>
 
@@ -200,7 +205,7 @@ export default function EditBookmarkPage() {
               />
             </FormControl>
             <FormMessage id={fieldset.title.errorId}>
-              {fieldset.title.error}
+              {getFieldError(fieldset.title)}
             </FormMessage>
           </FormItem>
 
@@ -214,7 +219,7 @@ export default function EditBookmarkPage() {
               />
             </FormControl>
             <FormMessage id={fieldset.content.errorId}>
-              {fieldset.content.error}
+              {getFieldError(fieldset.content)}
             </FormMessage>
           </FormItem>
 
@@ -264,7 +269,7 @@ export default function EditBookmarkPage() {
               )}
             </FormControl>
             <FormMessage id={fieldset.tags.errorId}>
-              {fieldset.tags.error}
+              {getFieldError(fieldset.tags)}
             </FormMessage>
           </fieldset>
 
@@ -276,7 +281,7 @@ export default function EditBookmarkPage() {
               <Label htmlFor={fieldset.favorite.id}>Favorite</Label>
             </FormControl>
             <FormMessage id={fieldset.favorite.errorId}>
-              {fieldset.favorite.error}
+              {getFieldError(fieldset.favorite)}
             </FormMessage>
           </FormItem>
         </fieldset>

@@ -11,7 +11,7 @@ import { FormMessage } from "~/components/ui/form-message";
 import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { LinkButton } from "~/components/ui/link-button";
-import { cn } from "~/utils/misc";
+import { cn, getFieldError } from "~/utils/misc";
 import { toSearchFormSchema } from "~/utils/misc-validation";
 
 export interface SearchFormProps {
@@ -77,7 +77,7 @@ export function SearchForm({
               ))}
           </ButtonGroup>
           <FormMessage id={fieldset.searchKey.errorId}>
-            {fieldset.searchKey.error}
+            {getFieldError(fieldset.searchKey)}
           </FormMessage>
         </FormItem>
 
@@ -94,7 +94,7 @@ export function SearchForm({
             />
           </FormControl>
           <FormMessage id={fieldset.searchValue.errorId}>
-            {fieldset.searchValue.error}
+            {getFieldError(fieldset.searchValue)}
           </FormMessage>
         </FormItem>
 

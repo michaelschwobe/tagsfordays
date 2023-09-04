@@ -28,7 +28,7 @@ import { createBookmark, getBookmarkByUrl } from "~/models/bookmark.server";
 import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import { CreateBookmarkFormSchema } from "~/utils/bookmark-validation";
-import { formatMetaTitle } from "~/utils/misc";
+import { formatMetaTitle, getFieldError } from "~/utils/misc";
 
 export async function loader({ request }: LoaderArgs) {
   await requireUserId(request);
@@ -146,7 +146,7 @@ export default function NewBookmarkPage() {
               Use secure URLs, ex: <code className="text-black">https://</code>
             </FormDescription>
             <FormMessage id={fieldset.url.errorId}>
-              {fieldset.url.error}
+              {getFieldError(fieldset.url)}
             </FormMessage>
           </FormItem>
 
@@ -159,7 +159,7 @@ export default function NewBookmarkPage() {
               />
             </FormControl>
             <FormMessage id={fieldset.title.errorId}>
-              {fieldset.title.error}
+              {getFieldError(fieldset.title)}
             </FormMessage>
           </FormItem>
 
@@ -173,7 +173,7 @@ export default function NewBookmarkPage() {
               />
             </FormControl>
             <FormMessage id={fieldset.content.errorId}>
-              {fieldset.content.error}
+              {getFieldError(fieldset.content)}
             </FormMessage>
           </FormItem>
 
@@ -223,7 +223,7 @@ export default function NewBookmarkPage() {
               )}
             </FormControl>
             <FormMessage id={fieldset.tags.errorId}>
-              {fieldset.tags.error}
+              {getFieldError(fieldset.tags)}
             </FormMessage>
           </fieldset>
 
@@ -235,7 +235,7 @@ export default function NewBookmarkPage() {
               <Label htmlFor={fieldset.favorite.id}>Favorite</Label>
             </FormControl>
             <FormMessage id={fieldset.favorite.errorId}>
-              {fieldset.favorite.error}
+              {getFieldError(fieldset.favorite)}
             </FormMessage>
           </FormItem>
 

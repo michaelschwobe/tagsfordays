@@ -1,3 +1,4 @@
+import type { FieldConfig } from "@conform-to/react";
 import { clsx, type ClassValue } from "clsx";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -58,6 +59,10 @@ export function getErrorMessage(error: unknown) {
   }
   console.error("Unable to get error message for error", error);
   return "Unknown Error";
+}
+
+export function getFieldError(field: FieldConfig<unknown>) {
+  return field.initialError?.[""]?.[0] ?? field.error;
 }
 
 export function formatItemsFoundByCount({

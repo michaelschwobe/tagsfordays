@@ -61,7 +61,7 @@ export default function NewTagPage() {
   const navigation = useNavigation();
 
   const id = useId();
-  const [form, fieldset] = useForm({
+  const [form, fields] = useForm({
     id,
     lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
     onValidate({ formData }) {
@@ -90,22 +90,22 @@ export default function NewTagPage() {
           <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
           <FormItem>
-            <FormLabel htmlFor={fieldset.name.id}>Name</FormLabel>
+            <FormLabel htmlFor={fields.name.id}>Name</FormLabel>
             <FormControl>
               <Input
-                {...conform.input(fieldset.name, {
+                {...conform.input(fields.name, {
                   type: "text",
                   description: true,
                 })}
                 autoComplete="false"
               />
             </FormControl>
-            <FormDescription id={fieldset.name.descriptionId}>
+            <FormDescription id={fields.name.descriptionId}>
               Comma separate names, ex:{" "}
               <code className="text-black">t1,t2,t3</code>
             </FormDescription>
-            <FormMessage id={fieldset.name.errorId}>
-              {getFieldError(fieldset.name)}
+            <FormMessage id={fields.name.errorId}>
+              {getFieldError(fields.name)}
             </FormMessage>
           </FormItem>
 

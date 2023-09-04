@@ -81,7 +81,7 @@ export default function LoginPage() {
   const navigation = useNavigation();
 
   const id = useId();
-  const [form, fieldset] = useForm({
+  const [form, fields] = useForm({
     id,
     defaultValue: { redirectTo: loaderData.redirectTo },
     lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
@@ -114,44 +114,44 @@ export default function LoginPage() {
           <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
           <FormItem>
-            <FormLabel htmlFor={fieldset.username.id}>Username</FormLabel>
+            <FormLabel htmlFor={fields.username.id}>Username</FormLabel>
             <FormControl>
               <Input
-                {...conform.input(fieldset.username, { type: "text" })}
+                {...conform.input(fields.username, { type: "text" })}
                 autoComplete="username"
               />
             </FormControl>
-            <FormMessage id={fieldset.username.errorId}>
-              {getFieldError(fieldset.username)}
+            <FormMessage id={fields.username.errorId}>
+              {getFieldError(fields.username)}
             </FormMessage>
           </FormItem>
 
           <FormItem>
-            <FormLabel htmlFor={fieldset.password.id}>Password</FormLabel>
+            <FormLabel htmlFor={fields.password.id}>Password</FormLabel>
             <FormControl>
               <Input
-                {...conform.input(fieldset.password, { type: "password" })}
+                {...conform.input(fields.password, { type: "password" })}
                 autoComplete="current-password"
               />
             </FormControl>
-            <FormMessage id={fieldset.password.errorId}>
-              {getFieldError(fieldset.password)}
+            <FormMessage id={fields.password.errorId}>
+              {getFieldError(fields.password)}
             </FormMessage>
           </FormItem>
 
           <FormItem>
             <FormControl>
               <input
-                {...conform.input(fieldset.remember, { type: "checkbox" })}
+                {...conform.input(fields.remember, { type: "checkbox" })}
               />
-              <Label htmlFor={fieldset.remember.id}>Remember me</Label>
+              <Label htmlFor={fields.remember.id}>Remember me</Label>
             </FormControl>
-            <FormMessage id={fieldset.remember.errorId}>
-              {getFieldError(fieldset.remember)}
+            <FormMessage id={fields.remember.errorId}>
+              {getFieldError(fields.remember)}
             </FormMessage>
           </FormItem>
 
-          <input {...conform.input(fieldset.redirectTo, { type: "hidden" })} />
+          <input {...conform.input(fields.redirectTo, { type: "hidden" })} />
 
           <FormItem isButtonGroup>
             <Button

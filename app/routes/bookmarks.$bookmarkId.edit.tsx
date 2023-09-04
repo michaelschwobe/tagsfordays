@@ -120,7 +120,7 @@ export default function EditBookmarkPage() {
   const navigation = useNavigation();
 
   const id = useId();
-  const [form, fieldset] = useForm({
+  const [form, fields] = useForm({
     id,
     defaultValue: {
       id: loaderData.bookmark.id,
@@ -135,7 +135,7 @@ export default function EditBookmarkPage() {
       return parse(formData, { schema: UpdateBookmarkFormSchema });
     },
   });
-  const tagsList = useFieldList(form.ref, fieldset.tags);
+  const tagsList = useFieldList(form.ref, fields.tags);
 
   const tagsSelected = tagsList
     .filter((t) => t.defaultValue != null)
@@ -173,53 +173,53 @@ export default function EditBookmarkPage() {
 
           <input
             type="hidden"
-            name={fieldset.id.name}
-            value={fieldset.id.defaultValue}
+            name={fields.id.name}
+            value={fields.id.defaultValue}
           />
 
           <FormItem>
-            <FormLabel htmlFor={fieldset.url.id}>URL</FormLabel>
+            <FormLabel htmlFor={fields.url.id}>URL</FormLabel>
             <FormControl>
               <Input
-                {...conform.input(fieldset.url, {
+                {...conform.input(fields.url, {
                   type: "url",
                   description: true,
                 })}
                 autoComplete="false"
               />
             </FormControl>
-            <FormDescription id={fieldset.url.descriptionId}>
+            <FormDescription id={fields.url.descriptionId}>
               Use secure URLs, ex: <code className="text-black">https://</code>
             </FormDescription>
-            <FormMessage id={fieldset.url.errorId}>
-              {getFieldError(fieldset.url)}
+            <FormMessage id={fields.url.errorId}>
+              {getFieldError(fields.url)}
             </FormMessage>
           </FormItem>
 
           <FormItem>
-            <FormLabel htmlFor={fieldset.title.id}>Title</FormLabel>
+            <FormLabel htmlFor={fields.title.id}>Title</FormLabel>
             <FormControl>
               <Input
-                {...conform.input(fieldset.title, { type: "text" })}
+                {...conform.input(fields.title, { type: "text" })}
                 autoComplete="false"
               />
             </FormControl>
-            <FormMessage id={fieldset.title.errorId}>
-              {getFieldError(fieldset.title)}
+            <FormMessage id={fields.title.errorId}>
+              {getFieldError(fields.title)}
             </FormMessage>
           </FormItem>
 
           <FormItem>
-            <FormLabel htmlFor={fieldset.content.id}>Content</FormLabel>
+            <FormLabel htmlFor={fields.content.id}>Content</FormLabel>
             <FormControl>
               <Textarea
-                {...conform.textarea(fieldset.content)}
+                {...conform.textarea(fields.content)}
                 autoComplete="false"
                 rows={5}
               />
             </FormControl>
-            <FormMessage id={fieldset.content.errorId}>
-              {getFieldError(fieldset.content)}
+            <FormMessage id={fields.content.errorId}>
+              {getFieldError(fields.content)}
             </FormMessage>
           </FormItem>
 
@@ -240,7 +240,7 @@ export default function EditBookmarkPage() {
                       className="max-w-[11rem]"
                       size="sm"
                       variant="filled"
-                      {...list.remove(fieldset.tags.name, {
+                      {...list.remove(fields.tags.name, {
                         index: tagsSelected.findIndex(
                           (t) => t.defaultValue === tag.defaultValue,
                         ),
@@ -256,7 +256,7 @@ export default function EditBookmarkPage() {
                     <Button
                       className="max-w-[11rem]"
                       size="sm"
-                      {...list.append(fieldset.tags.name, {
+                      {...list.append(fields.tags.name, {
                         defaultValue: tag.name,
                       })}
                     >
@@ -268,20 +268,20 @@ export default function EditBookmarkPage() {
                 ),
               )}
             </FormControl>
-            <FormMessage id={fieldset.tags.errorId}>
-              {getFieldError(fieldset.tags)}
+            <FormMessage id={fields.tags.errorId}>
+              {getFieldError(fields.tags)}
             </FormMessage>
           </fieldset>
 
           <FormItem>
             <FormControl>
               <input
-                {...conform.input(fieldset.favorite, { type: "checkbox" })}
+                {...conform.input(fields.favorite, { type: "checkbox" })}
               />
-              <Label htmlFor={fieldset.favorite.id}>Favorite</Label>
+              <Label htmlFor={fields.favorite.id}>Favorite</Label>
             </FormControl>
-            <FormMessage id={fieldset.favorite.errorId}>
-              {getFieldError(fieldset.favorite)}
+            <FormMessage id={fields.favorite.errorId}>
+              {getFieldError(fields.favorite)}
             </FormMessage>
           </FormItem>
         </fieldset>

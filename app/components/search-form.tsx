@@ -37,7 +37,7 @@ export function SearchForm({
   const navigation = useNavigation();
 
   const id = useId();
-  const [form, fieldset] = useForm({
+  const [form, fields] = useForm({
     id,
     defaultValue: {
       searchValue: searchValue ?? undefined,
@@ -59,13 +59,13 @@ export function SearchForm({
         <FormItem className="max-sm:grow">
           <div
             className="sr-only text-sm font-medium"
-            id={fieldset.searchKey.descriptionId}
+            id={fields.searchKey.descriptionId}
           >
             Search Key
           </div>
           <ButtonGroup>
             {conform
-              .collection(fieldset.searchKey, {
+              .collection(fields.searchKey, {
                 type: "radio",
                 options: searchKeys,
                 description: true,
@@ -76,25 +76,25 @@ export function SearchForm({
                 </ButtonGroupRadio>
               ))}
           </ButtonGroup>
-          <FormMessage id={fieldset.searchKey.errorId}>
-            {getFieldError(fieldset.searchKey)}
+          <FormMessage id={fields.searchKey.errorId}>
+            {getFieldError(fields.searchKey)}
           </FormMessage>
         </FormItem>
 
         <FormItem className="grow">
-          <FormLabel className="sr-only" htmlFor={fieldset.searchValue.id}>
+          <FormLabel className="sr-only" htmlFor={fields.searchValue.id}>
             Search Term
           </FormLabel>
           <FormControl>
             <Input
               className="w-full"
-              {...conform.input(fieldset.searchValue, { type: "text" })}
+              {...conform.input(fields.searchValue, { type: "text" })}
               placeholder="Search for…"
               autoComplete="false"
             />
           </FormControl>
-          <FormMessage id={fieldset.searchValue.errorId}>
-            {getFieldError(fieldset.searchValue)}
+          <FormMessage id={fields.searchValue.errorId}>
+            {getFieldError(fields.searchValue)}
           </FormMessage>
         </FormItem>
 

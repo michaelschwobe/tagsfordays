@@ -98,7 +98,7 @@ export default function EditTagPage() {
   const navigation = useNavigation();
 
   const id = useId();
-  const [form, fieldset] = useForm({
+  const [form, fields] = useForm({
     id,
     defaultValue: {
       id: loaderData.tag.id,
@@ -132,27 +132,27 @@ export default function EditTagPage() {
 
           <input
             type="hidden"
-            name={fieldset.id.name}
-            value={fieldset.id.defaultValue}
+            name={fields.id.name}
+            value={fields.id.defaultValue}
           />
 
           <FormItem>
-            <FormLabel htmlFor={fieldset.name.id}>Name</FormLabel>
+            <FormLabel htmlFor={fields.name.id}>Name</FormLabel>
             <FormControl>
               <Input
-                {...conform.input(fieldset.name, {
+                {...conform.input(fields.name, {
                   type: "text",
                   description: true,
                 })}
                 autoComplete="false"
               />
             </FormControl>
-            <FormDescription id={fieldset.name.descriptionId}>
+            <FormDescription id={fields.name.descriptionId}>
               Comma separate names, ex:{" "}
               <code className="text-black">t1,t2,t3</code>
             </FormDescription>
-            <FormMessage id={fieldset.name.errorId}>
-              {getFieldError(fieldset.name)}
+            <FormMessage id={fields.name.errorId}>
+              {getFieldError(fields.name)}
             </FormMessage>
           </FormItem>
         </fieldset>

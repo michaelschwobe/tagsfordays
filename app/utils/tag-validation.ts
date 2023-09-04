@@ -1,3 +1,4 @@
+import { refine } from "@conform-to/zod";
 import * as z from "zod";
 import { IdSchema } from "~/utils/misc-validation";
 
@@ -7,16 +8,46 @@ export const TagNameSchema = z
   .string({ required_error: "Name is required" })
   .min(2, { message: "Name is too short" })
   .max(45, { message: "Name is too long" })
-  .regex(/^[a-zA-Z0-9-]+$/, {
-    message: "Name can only include letters, numbers, and hyphens",
+  .regex(/^[a-zA-Z0-9-.\s]+$/, {
+    message: "Name can only include letters, numbers, hyphens, and periods",
   })
-  .transform((value) => value.toLowerCase());
+  .transform((val) => val.replaceAll(/  +/g, " ").trim());
 
-export const CreateTagFormSchema = z.object({
-  name: TagNameSchema,
-});
+export function toCreateTagFormSchema(
+  intent: string,
+  constraints?: {
+    isTagNameUnique?: (name: string) => Promise<boolean>;
+  },
+) {
+  return z.object({
+    name: TagNameSchema.pipe(
+      z.string().superRefine((val, ctx) =>
+        refine(ctx, {
+          validate: () => constraints?.isTagNameUnique?.(val),
+          when: intent === "submit" || intent === "validate/name",
+          message: "Name must be unique",
+        }),
+      ),
+    ),
+  });
+}
 
-export const UpdateTagFormSchema = z.object({
-  id: TagIdSchema,
-  name: TagNameSchema,
-});
+export function toUpdateTagFormSchema(
+  intent: string,
+  constraints?: {
+    isTagNameUnique?: (name: string) => Promise<boolean>;
+  },
+) {
+  return z.object({
+    id: TagIdSchema,
+    name: TagNameSchema.pipe(
+      z.string().superRefine((val, ctx) =>
+        refine(ctx, {
+          validate: () => constraints?.isTagNameUnique?.(val),
+          when: intent === "submit" || intent === "validate/name",
+          message: "Name must be unique",
+        }),
+      ),
+    ),
+  });
+}

@@ -33,7 +33,7 @@ import {
 } from "~/models/bookmark.server";
 import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import { UpdateBookmarkFormSchema } from "~/utils/bookmark-validation";
+import { toUpdateBookmarkFormSchema } from "~/utils/bookmark-validation";
 import {
   formatMetaTitle,
   getFieldError,
@@ -70,34 +70,28 @@ export const action = async ({ params, request }: ActionArgs) => {
     return redirect("/bookmarks");
   }
 
-  const submission = parse(formData, { schema: UpdateBookmarkFormSchema });
+  const submission = await parse(formData, {
+    async: true,
+    schema: (intent) =>
+      toUpdateBookmarkFormSchema(intent, {
+        async isBookmarkUrlUnique(url) {
+          const result = await getBookmarkByUrl({ url });
+          return result === null;
+        },
+      }),
+  });
 
   if (!submission.value || submission.intent !== "submit") {
     return json(submission);
   }
 
-  const {
-    url,
-    title = null,
-    content = null,
-    favorite = null,
-    tags = [],
-  } = submission.value;
-
-  const bookmarkWithSameUrl = await getBookmarkByUrl({ url });
-
-  if (bookmarkWithSameUrl && bookmarkWithSameUrl.id !== id) {
-    const error = { ...submission.error, "": ["URL already exists"] };
-    return json({ ...submission, error }, { status: 400 });
-  }
-
   const bookmark = await updateBookmark({
     id,
-    url,
-    title,
-    content,
-    favorite,
-    tags,
+    url: submission.value.url,
+    title: submission.value.title ?? null,
+    content: submission.value.content ?? null,
+    favorite: submission.value.favorite ?? null,
+    tags: submission.value.tags ?? [],
     userId,
   });
 
@@ -132,7 +126,9 @@ export default function EditBookmarkPage() {
     },
     lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
     onValidate({ formData }) {
-      return parse(formData, { schema: UpdateBookmarkFormSchema });
+      return parse(formData, {
+        schema: (intent) => toUpdateBookmarkFormSchema(intent),
+      });
     },
   });
   const tagsList = useFieldList(form.ref, fields.tags);

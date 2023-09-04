@@ -1,3 +1,4 @@
+import { refine } from "@conform-to/zod";
 import * as z from "zod";
 import { CheckboxSchema, IdSchema, UrlSchema } from "~/utils/misc-validation";
 import { TagNameSchema } from "~/utils/tag-validation";
@@ -22,22 +23,52 @@ export const BookmarkFavoriteSchema = CheckboxSchema;
 
 export const BookmarkTagsSchema = z.array(TagNameSchema);
 
-export const CreateBookmarkFormSchema = z.object({
-  url: BookmarkUrlSchema,
-  title: BookmarkTitleSchema.optional(),
-  content: BookmarkContentSchema.optional(),
-  favorite: BookmarkFavoriteSchema.optional(),
-  tags: BookmarkTagsSchema.optional(),
-});
+export function toCreateBookmarkFormSchema(
+  intent: string,
+  constraints?: {
+    isBookmarkUrlUnique?: (url: string) => Promise<boolean>;
+  },
+) {
+  return z.object({
+    url: BookmarkUrlSchema.pipe(
+      z.string().superRefine((val, ctx) =>
+        refine(ctx, {
+          validate: () => constraints?.isBookmarkUrlUnique?.(val),
+          when: intent === "submit" || intent === "validate/url",
+          message: "URL must be unique",
+        }),
+      ),
+    ),
+    title: BookmarkTitleSchema.optional(),
+    content: BookmarkContentSchema.optional(),
+    favorite: BookmarkFavoriteSchema.optional(),
+    tags: BookmarkTagsSchema.optional(),
+  });
+}
 
-export const UpdateBookmarkFormSchema = z.object({
-  id: BookmarkIdSchema,
-  url: BookmarkUrlSchema,
-  title: BookmarkTitleSchema.optional(),
-  content: BookmarkContentSchema.optional(),
-  favorite: BookmarkFavoriteSchema.optional(),
-  tags: BookmarkTagsSchema.optional(),
-});
+export function toUpdateBookmarkFormSchema(
+  intent: string,
+  constraints?: {
+    isBookmarkUrlUnique?: (url: string) => Promise<boolean>;
+  },
+) {
+  return z.object({
+    id: BookmarkIdSchema,
+    url: BookmarkUrlSchema.pipe(
+      z.string().superRefine((val, ctx) =>
+        refine(ctx, {
+          validate: () => constraints?.isBookmarkUrlUnique?.(val),
+          when: intent === "submit" || intent === "validate/url",
+          message: "URL must be unique",
+        }),
+      ),
+    ),
+    title: BookmarkTitleSchema.optional(),
+    content: BookmarkContentSchema.optional(),
+    favorite: BookmarkFavoriteSchema.optional(),
+    tags: BookmarkTagsSchema.optional(),
+  });
+}
 
 export const FavoriteBookmarkFormSchema = z.object({
   id: BookmarkIdSchema,

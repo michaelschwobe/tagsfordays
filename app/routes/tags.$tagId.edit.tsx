@@ -35,7 +35,7 @@ import {
   invariant,
   invariantResponse,
 } from "~/utils/misc";
-import { UpdateTagFormSchema } from "~/utils/tag-validation";
+import { toUpdateTagFormSchema } from "~/utils/tag-validation";
 
 export async function loader({ params, request }: LoaderArgs) {
   await requireUserId(request);
@@ -64,17 +64,19 @@ export const action = async ({ params, request }: ActionArgs) => {
     return redirect("/tags");
   }
 
-  const submission = parse(formData, { schema: UpdateTagFormSchema });
+  const submission = await parse(formData, {
+    async: true,
+    schema: (intent) =>
+      toUpdateTagFormSchema(intent, {
+        async isTagNameUnique(name) {
+          const result = await getTagByName({ name });
+          return result === null;
+        },
+      }),
+  });
 
   if (!submission.value || submission.intent !== "submit") {
     return json(submission);
-  }
-
-  const tagWithSameName = await getTagByName({ name: submission.value.name });
-
-  if (tagWithSameName && tagWithSameName.id !== id) {
-    const error = { ...submission.error, "": ["Name already exists"] };
-    return json({ ...submission, error }, { status: 400 });
   }
 
   const tag = await updateTag({ id, name: submission.value.name, userId });
@@ -106,7 +108,9 @@ export default function EditTagPage() {
     },
     lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
     onValidate({ formData }) {
-      return parse(formData, { schema: UpdateTagFormSchema });
+      return parse(formData, {
+        schema: (intent) => toUpdateTagFormSchema(intent),
+      });
     },
   });
 

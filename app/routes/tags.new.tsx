@@ -19,7 +19,7 @@ import { LinkButton } from "~/components/ui/link-button";
 import { createTag, getTagByName } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import { formatMetaTitle, getFieldError } from "~/utils/misc";
-import { CreateTagFormSchema } from "~/utils/tag-validation";
+import { toCreateTagFormSchema } from "~/utils/tag-validation";
 
 export async function loader({ request }: LoaderArgs) {
   await requireUserId(request);
@@ -32,17 +32,19 @@ export const action = async ({ request }: ActionArgs) => {
 
   const formData = await request.formData();
 
-  const submission = parse(formData, { schema: CreateTagFormSchema });
+  const submission = await parse(formData, {
+    async: true,
+    schema: (intent) =>
+      toCreateTagFormSchema(intent, {
+        async isTagNameUnique(name) {
+          const result = await getTagByName({ name });
+          return result === null;
+        },
+      }),
+  });
 
   if (!submission.value || submission.intent !== "submit") {
     return json(submission);
-  }
-
-  const tagWithSameName = await getTagByName({ name: submission.value.name });
-
-  if (tagWithSameName) {
-    const error = { ...submission.error, "": ["Name already exists"] };
-    return json({ ...submission, error }, { status: 400 });
   }
 
   const tag = await createTag({ name: submission.value.name, userId });
@@ -65,7 +67,9 @@ export default function NewTagPage() {
     id,
     lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
     onValidate({ formData }) {
-      return parse(formData, { schema: CreateTagFormSchema });
+      return parse(formData, {
+        schema: (intent) => toCreateTagFormSchema(intent),
+      });
     },
   });
 

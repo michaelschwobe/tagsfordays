@@ -27,7 +27,7 @@ import { Textarea } from "~/components/ui/textarea";
 import { createBookmark, getBookmarkByUrl } from "~/models/bookmark.server";
 import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import { CreateBookmarkFormSchema } from "~/utils/bookmark-validation";
+import { toCreateBookmarkFormSchema } from "~/utils/bookmark-validation";
 import { formatMetaTitle, getFieldError } from "~/utils/misc";
 
 export async function loader({ request }: LoaderArgs) {
@@ -43,33 +43,27 @@ export const action = async ({ request }: ActionArgs) => {
 
   const formData = await request.formData();
 
-  const submission = parse(formData, { schema: CreateBookmarkFormSchema });
+  const submission = await parse(formData, {
+    async: true,
+    schema: (intent) =>
+      toCreateBookmarkFormSchema(intent, {
+        async isBookmarkUrlUnique(url) {
+          const result = await getBookmarkByUrl({ url });
+          return result === null;
+        },
+      }),
+  });
 
   if (!submission.value || submission.intent !== "submit") {
     return json(submission);
   }
 
-  const {
-    url,
-    title = null,
-    content = null,
-    favorite = null,
-    tags = [],
-  } = submission.value;
-
-  const bookmarkWithSameUrl = await getBookmarkByUrl({ url });
-
-  if (bookmarkWithSameUrl) {
-    const error = { ...submission.error, "": ["URL already exists"] };
-    return json({ ...submission, error }, { status: 400 });
-  }
-
   const bookmark = await createBookmark({
-    url,
-    title,
-    content,
-    favorite,
-    tags,
+    url: submission.value.url,
+    title: submission.value.title ?? null,
+    content: submission.value.content ?? null,
+    favorite: submission.value.favorite ?? null,
+    tags: submission.value.tags ?? [],
     userId,
   });
 
@@ -92,7 +86,9 @@ export default function NewBookmarkPage() {
     id,
     lastSubmission: actionData!, // Lie! exactOptionalPropertyTypes mismatch
     onValidate({ formData }) {
-      return parse(formData, { schema: CreateBookmarkFormSchema });
+      return parse(formData, {
+        schema: (intent) => toCreateBookmarkFormSchema(intent),
+      });
     },
   });
   const tagsList = useFieldList(form.ref, fields.tags);

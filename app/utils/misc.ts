@@ -109,6 +109,18 @@ export function invariantResponse(
   }
 }
 
+export function isFulfilled<T>(
+  p: PromiseSettledResult<T>,
+): p is PromiseFulfilledResult<T> {
+  return p.status === "fulfilled";
+}
+
+export function isRejected<T>(
+  p: PromiseSettledResult<T>,
+): p is PromiseRejectedResult {
+  return p.status === "rejected";
+}
+
 export function safeRedirect(
   to: FormDataEntryValue | string | null | undefined,
   toFallback: string = "/",

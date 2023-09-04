@@ -18,7 +18,12 @@ import { Input } from "~/components/ui/input";
 import { LinkButton } from "~/components/ui/link-button";
 import { createTag, getTagByName } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import { formatMetaTitle, getFieldError } from "~/utils/misc";
+import {
+  formatMetaTitle,
+  getFieldError,
+  isFulfilled,
+  isRejected,
+} from "~/utils/misc";
 import { toCreateTagFormSchema } from "~/utils/tag-validation";
 
 export async function loader({ request }: LoaderArgs) {
@@ -36,9 +41,13 @@ export const action = async ({ request }: ActionArgs) => {
     async: true,
     schema: (intent) =>
       toCreateTagFormSchema(intent, {
-        async isTagNameUnique(name) {
-          const result = await getTagByName({ name });
-          return result === null;
+        async isTagNameUnique(names) {
+          const tagsByNameResults = await Promise.allSettled(
+            names.split(",").map((name) => getTagByName({ name })),
+          );
+          return tagsByNameResults.every(
+            (result) => result.status === "fulfilled" && result.value === null,
+          );
         },
       }),
   });
@@ -47,9 +56,35 @@ export const action = async ({ request }: ActionArgs) => {
     return json(submission);
   }
 
-  const tag = await createTag({ name: submission.value.name, userId });
+  const names = submission.value.name.split(",");
 
-  return redirect(`/tags/${tag.id}`);
+  const tagsResults = await Promise.allSettled(
+    names.map((name) => createTag({ name, userId })),
+  );
+
+  const tagsFulfilled = tagsResults
+    .filter(isFulfilled)
+    .map((result) => result.value);
+
+  const tagsRejected = tagsResults
+    .filter(isRejected)
+    .map((result) => result.reason);
+
+  if (tagsRejected.length > 0) {
+    const error = { "": tagsRejected };
+    return json({ ...submission, error }, { status: 422 });
+  }
+
+  const isSingleTag = names.length === 1;
+  const singleTagId = tagsFulfilled.at(0)?.id;
+  if (isSingleTag && singleTagId) {
+    return redirect(`/tags/${singleTagId}`);
+  }
+
+  // TODO: show success message/toast
+  // console.log("🟢", tagsFulfilled.length, "tags added");
+
+  return redirect("/tags");
 };
 
 export const meta: V2_MetaFunction = () => {

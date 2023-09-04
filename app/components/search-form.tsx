@@ -46,6 +46,7 @@ export function SearchForm({
     onValidate({ formData }) {
       return parse(formData, { schema: toSearchFormSchema(searchKeys) });
     },
+    shouldRevalidate: "onBlur",
   });
 
   return (

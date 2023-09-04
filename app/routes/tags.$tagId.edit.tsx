@@ -112,6 +112,7 @@ export default function EditTagPage() {
         schema: (intent) => toUpdateTagFormSchema(intent),
       });
     },
+    shouldRevalidate: "onBlur",
   });
 
   return (
@@ -149,11 +150,12 @@ export default function EditTagPage() {
                   description: true,
                 })}
                 autoComplete="false"
+                autoFocus
               />
             </FormControl>
             <FormDescription id={fields.name.descriptionId}>
-              Comma separate names, ex:{" "}
-              <code className="text-black">t1,t2,t3</code>
+              Originally:{" "}
+              <code className="text-black">{loaderData.tag.name}</code>
             </FormDescription>
             <FormMessage id={fields.name.errorId}>
               {getFieldError(fields.name)}

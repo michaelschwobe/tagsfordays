@@ -88,6 +88,7 @@ export default function LoginPage() {
     onValidate({ formData }) {
       return parse(formData, { schema: LoginUserFormSchema });
     },
+    shouldRevalidate: "onBlur",
   });
 
   return (
@@ -119,6 +120,7 @@ export default function LoginPage() {
               <Input
                 {...conform.input(fields.username, { type: "text" })}
                 autoComplete="username"
+                autoFocus
               />
             </FormControl>
             <FormMessage id={fields.username.errorId}>

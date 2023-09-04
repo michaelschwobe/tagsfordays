@@ -130,6 +130,7 @@ export default function EditBookmarkPage() {
         schema: (intent) => toUpdateBookmarkFormSchema(intent),
       });
     },
+    shouldRevalidate: "onBlur",
   });
   const tagsList = useFieldList(form.ref, fields.tags);
 
@@ -182,6 +183,7 @@ export default function EditBookmarkPage() {
                   description: true,
                 })}
                 autoComplete="false"
+                autoFocus
               />
             </FormControl>
             <FormDescription id={fields.url.descriptionId}>

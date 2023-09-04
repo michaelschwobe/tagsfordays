@@ -106,6 +106,7 @@ export default function NewTagPage() {
         schema: (intent) => toCreateTagFormSchema(intent),
       });
     },
+    shouldRevalidate: "onBlur",
   });
 
   return (
@@ -137,6 +138,7 @@ export default function NewTagPage() {
                   description: true,
                 })}
                 autoComplete="false"
+                autoFocus
               />
             </FormControl>
             <FormDescription id={fields.name.descriptionId}>

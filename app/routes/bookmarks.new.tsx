@@ -90,6 +90,7 @@ export default function NewBookmarkPage() {
         schema: (intent) => toCreateBookmarkFormSchema(intent),
       });
     },
+    shouldRevalidate: "onBlur",
   });
   const tagsList = useFieldList(form.ref, fields.tags);
 
@@ -136,6 +137,7 @@ export default function NewBookmarkPage() {
                   description: true,
                 })}
                 autoComplete="false"
+                autoFocus
               />
             </FormControl>
             <FormDescription id={fields.url.descriptionId}>

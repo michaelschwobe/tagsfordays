@@ -23,7 +23,10 @@ export const FormMessage = forwardRef<
   return (
     <div
       {...props}
-      className={cn("flex items-baseline gap-1 text-sm", className)}
+      className={cn(
+        "flex items-baseline gap-1 text-sm text-pink-600",
+        className,
+      )}
       id={id}
       ref={forwardedRef}
     >

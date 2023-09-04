@@ -24,7 +24,7 @@ async function seed() {
       "tag8",
       "tag9",
       "tag10",
-      "some really long tag name that is longer than 45 characters",
+      "taaaaaaaaaaaaag that is exactly 45 characters",
     ],
     bookmarks: [
       {

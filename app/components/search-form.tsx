@@ -104,7 +104,7 @@ export function SearchForm({
             <Icon type="search" />
             <span className="sr-only">Submit</span>
           </Button>
-          <LinkButton to="." reloadDocument size="md-icon">
+          <LinkButton to="." relative="path" reloadDocument size="md-icon">
             <Icon type="x" />
             <span className="sr-only">Reset filters</span>
           </LinkButton>

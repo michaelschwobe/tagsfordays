@@ -88,6 +88,14 @@ export default function BookmarkDetailPage() {
           <Icon type="bookmark" />
           Bookmark
         </H1>
+        <LinkButton
+          to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
+          variant="filled"
+        >
+          <Icon type="plus" />
+          <Icon type="bookmark" />
+          <span className="sr-only">Add bookmark</span>
+        </LinkButton>
       </div>
 
       <div className="flex flex-col gap-4">

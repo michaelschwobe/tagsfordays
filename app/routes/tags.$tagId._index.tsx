@@ -67,6 +67,14 @@ export default function TagDetailPage() {
           <Icon type="tag" />
           Tag
         </H1>
+        <LinkButton
+          to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}
+          variant="filled"
+        >
+          <Icon type="plus" />
+          <Icon type="tag" />
+          <span className="sr-only">Add tag</span>
+        </LinkButton>
       </div>
 
       <div className="flex flex-col gap-4">

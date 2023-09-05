@@ -150,6 +150,7 @@ export default function BookmarksIndexPage() {
             </LinkButton>{" "}
             <LinkButton
               to="."
+              relative="path"
               reloadDocument
               className="max-sm:w-full"
               size="lg"

@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { H2 } from "~/components/ui/h2";
 import { cn, formatItemsFoundByCount, toTitleCase } from "~/utils/misc";
 
@@ -16,15 +17,20 @@ export interface SearchHelpProps
 export const SearchHelp = forwardRef<React.ElementRef<"div">, SearchHelpProps>(
   ({ className, count, plural, singular, ...props }, forwardedRef) => {
     const hasItems = typeof count === "number" && count > 0;
-
     return (
-      <div {...props} className={cn(className)} ref={forwardedRef}>
-        <H2 className={hasItems ? "sr-only" : "mb-2"}>
-          {toTitleCase(formatItemsFoundByCount({ count, singular, plural }))}
-        </H2>
+      <Card
+        {...props}
+        className={cn(className, hasItems ? "sr-only" : "mb-2")}
+        ref={forwardedRef}
+      >
+        <CardHeader>
+          <H2>
+            {toTitleCase(formatItemsFoundByCount({ count, singular, plural }))}
+          </H2>
+        </CardHeader>
 
         {!hasItems ? (
-          <>
+          <CardContent>
             <p className="mb-2">Suggestions:</p>
             <ul className="list-disc pl-8">
               <li>Make sure all words are spelled correctly.</li>
@@ -32,9 +38,9 @@ export const SearchHelp = forwardRef<React.ElementRef<"div">, SearchHelpProps>(
               <li>Try more general keywords.</li>
               <li>Try fewer keywords.</li>
             </ul>
-          </>
+          </CardContent>
         ) : null}
-      </div>
+      </Card>
     );
   },
 );

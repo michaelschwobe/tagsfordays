@@ -1,6 +1,6 @@
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
@@ -94,12 +94,12 @@ export default function TagsIndexPage() {
         <>
           <H2 className="mb-2">No Tags Found</H2>
           <div>
-            <Link
-              className="text-black underline hover:underline-offset-2"
+            <LinkButton
               to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}
+              variant="link"
             >
               Add tag
-            </Link>
+            </LinkButton>
           </div>
         </>
       )}

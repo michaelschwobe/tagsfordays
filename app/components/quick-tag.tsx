@@ -7,6 +7,7 @@ import {
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
+import { Code } from "~/components/ui/code";
 import { FormControl } from "~/components/ui/form-control";
 import { FormDescription } from "~/components/ui/form-description";
 import { FormItem } from "~/components/ui/form-item";
@@ -58,8 +59,7 @@ export const QuickTag = forwardRef<React.ElementRef<"div">, QuickTagProps>(
                   </Button>
                 </FormControl>
                 <FormDescription id={`${id}-name-description`}>
-                  Comma separate names, ex:{" "}
-                  <code className="text-black">t1,t2,t3</code>
+                  Comma separate names, ex: <Code>t1,t2,t3</Code>
                 </FormDescription>
               </FormItem>
             </Form>

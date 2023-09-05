@@ -130,7 +130,7 @@ export default function BookmarkDetailPage() {
         <FormItem>
           <div className="text-sm font-medium">Content</div>
           <FormControl className="py-2">
-            <p className="text-black">
+            <p className="text-black dark:text-white">
               {loaderData.bookmark.content ? (
                 <span>{loaderData.bookmark.content}</span>
               ) : (

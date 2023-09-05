@@ -1,17 +1,17 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-export interface BadgeProps extends React.ComponentPropsWithoutRef<"span"> {
+export interface CodeProps extends React.ComponentPropsWithoutRef<"code"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */
   className?: string | undefined;
 }
 
-export const Badge = forwardRef<React.ElementRef<"span">, BadgeProps>(
+export const Code = forwardRef<React.ElementRef<"code">, CodeProps>(
   ({ children, className, ...props }, forwardedRef) => {
     return (
-      <span
+      <code
         {...props}
         className={cn(
           "rounded bg-slate-200 px-1 py-0.5 text-xs font-medium leading-none text-black dark:bg-slate-700 dark:text-slate-300",
@@ -19,12 +19,10 @@ export const Badge = forwardRef<React.ElementRef<"span">, BadgeProps>(
         )}
         ref={forwardedRef}
       >
-        <span className="sr-only">(</span>
         {children}
-        <span className="sr-only">)</span>
-      </span>
+      </code>
     );
   },
 );
 
-Badge.displayName = "Badge";
+Code.displayName = "Code";

@@ -7,6 +7,7 @@ import { useId } from "react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Button } from "~/components/ui/button";
+import { Code } from "~/components/ui/code";
 import { FormControl } from "~/components/ui/form-control";
 import { FormDescription } from "~/components/ui/form-description";
 import { FormItem } from "~/components/ui/form-item";
@@ -142,8 +143,7 @@ export default function NewTagPage() {
               />
             </FormControl>
             <FormDescription id={fields.name.descriptionId}>
-              Comma separate names, ex:{" "}
-              <code className="text-black">t1,t2,t3</code>
+              Comma separate names, ex: <Code>t1,t2,t3</Code>
             </FormDescription>
             <FormMessage id={fields.name.errorId}>
               {getFieldError(fields.name)}

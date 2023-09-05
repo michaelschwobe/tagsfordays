@@ -3,14 +3,14 @@ import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
 export const buttonGroupItemVariants = cva(
-  "inline-flex h-full cursor-pointer items-center justify-center gap-2 rounded border border-transparent px-3 py-1 text-sm font-medium text-black transition-all hover:bg-slate-100",
+  "inline-flex h-full cursor-pointer items-center justify-center gap-2 rounded border border-transparent px-3 py-1 text-sm font-medium text-black transition-all hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-600",
   {
     variants: {
       variant: {
         button:
-          "focus-visible:border-pink-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-pink-500 aria-[pressed=true]:bg-white aria-[pressed=true]:text-black",
+          "focus-visible:border-pink-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-pink-500 aria-[pressed=true]:bg-white aria-[pressed=true]:text-black dark:focus-visible:border-pink-500 dark:focus-visible:ring-pink-500 dark:aria-[pressed=true]:bg-slate-800 dark:aria-[pressed=true]:text-white",
         radio:
-          "focus-within:border-pink-500 focus-within:outline-none focus-within:ring-1 focus-within:ring-pink-500 disabled:cursor-not-allowed disabled:opacity-50 [&:has(:checked)]:bg-white [&:has(:checked)]:text-black",
+          "focus-within:border-pink-500 focus-within:outline-none focus-within:ring-1 focus-within:ring-pink-500 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-visible:border-pink-500 dark:focus-visible:ring-pink-500 [&:has(:checked)]:bg-white [&:has(:checked)]:text-black dark:[&:has(:checked)]:bg-slate-800 dark:[&:has(:checked)]:text-white",
       },
     },
   },
@@ -93,7 +93,7 @@ export const ButtonGroup = forwardRef<
     <div
       {...props}
       className={cn(
-        "inline-flex h-10 items-center gap-1 rounded-lg bg-slate-200 p-1 max-sm:w-full",
+        "inline-flex h-10 items-center gap-1 rounded-lg bg-slate-200 p-1 dark:bg-slate-700 max-sm:w-full",
         className,
       )}
       ref={forwardedRef}

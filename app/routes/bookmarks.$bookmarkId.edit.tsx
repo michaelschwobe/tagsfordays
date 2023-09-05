@@ -14,6 +14,7 @@ import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { Code } from "~/components/ui/code";
 import { FormControl } from "~/components/ui/form-control";
 import { FormDescription } from "~/components/ui/form-description";
 import { FormItem } from "~/components/ui/form-item";
@@ -187,7 +188,7 @@ export default function EditBookmarkPage() {
               />
             </FormControl>
             <FormDescription id={fields.url.descriptionId}>
-              Use secure URLs, ex: <code className="text-black">https://</code>
+              Use secure URLs, ex: <Code>https://</Code>
             </FormDescription>
             <FormMessage id={fields.url.errorId}>
               {getFieldError(fields.url)}

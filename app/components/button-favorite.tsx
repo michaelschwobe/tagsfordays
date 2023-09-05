@@ -53,7 +53,10 @@ export const ButtonFavorite = forwardRef<
             variant={variant}
             ref={forwardedRef}
           >
-            <Icon className={isFav ? "text-pink-600" : ""} type="heart" />
+            <Icon
+              className={isFav ? "text-pink-600 dark:text-pink-500" : ""}
+              type="heart"
+            />
             <span className="sr-only">{isFav ? "Unfavorite" : "Favorite"}</span>
           </Button>
         </Form>
@@ -66,7 +69,10 @@ export const ButtonFavorite = forwardRef<
         size={size}
         variant={variant}
       >
-        <Icon className={isFav ? "text-pink-600" : ""} type="heart" />
+        <Icon
+          className={isFav ? "text-pink-600 dark:text-pink-500" : ""}
+          type="heart"
+        />
         <span className="sr-only">{isFav ? "Unfavorite" : "Favorite"}</span>
       </LinkButton>
     );

@@ -7,6 +7,7 @@ import {
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
+import { Code } from "~/components/ui/code";
 import { FormControl } from "~/components/ui/form-control";
 import { FormDescription } from "~/components/ui/form-description";
 import { FormItem } from "~/components/ui/form-item";
@@ -59,8 +60,7 @@ export const QuickBookmark = forwardRef<
                 </Button>
               </FormControl>
               <FormDescription id={`${id}-url-description`}>
-                Use secure URLs, ex:{" "}
-                <code className="text-black">https://</code>
+                Use secure URLs, ex: <Code>https://</Code>
               </FormDescription>
             </FormItem>
           </Form>

@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 async function seed() {
   const CONSTANTS = {
-    initialize: "🌱 Seeding database...",
+    initialize: "🌱 Seeding database…",
     createData: "🌱 Seeded database",
     deleteData: "🧹 Cleaned up the database",
     createUser: "👤 Created user",

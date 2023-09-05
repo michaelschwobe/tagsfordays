@@ -17,7 +17,7 @@ export const FormItem = forwardRef<React.ElementRef<"div">, FormItemProps>(
         {...props}
         className={cn(
           isButtonGroup
-            ? "flex flex-col gap-2 pt-2 sm:flex-row sm:items-center sm:justify-between"
+            ? "flex flex-col gap-2 pt-2 sm:flex-row sm:items-center"
             : "flex flex-col gap-2",
           className,
         )}

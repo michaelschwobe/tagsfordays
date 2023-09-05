@@ -13,6 +13,7 @@ import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Button } from "~/components/ui/button";
+import { Code } from "~/components/ui/code";
 import { FormControl } from "~/components/ui/form-control";
 import { FormDescription } from "~/components/ui/form-description";
 import { FormItem } from "~/components/ui/form-item";
@@ -154,8 +155,7 @@ export default function EditTagPage() {
               />
             </FormControl>
             <FormDescription id={fields.name.descriptionId}>
-              Originally:{" "}
-              <code className="text-black">{loaderData.tag.name}</code>
+              Originally: <Code>{loaderData.tag.name}</Code>
             </FormDescription>
             <FormMessage id={fields.name.errorId}>
               {getFieldError(fields.name)}

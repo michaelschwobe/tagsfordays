@@ -57,7 +57,7 @@ export function SearchForm({
       >
         <legend className="sr-only">Search database</legend>
 
-        <FormItem className="max-sm:grow">
+        <FormItem className="max-sm:w-full max-sm:grow">
           <div
             className="sr-only text-sm font-medium"
             id={fields.searchKey.descriptionId}
@@ -88,7 +88,7 @@ export function SearchForm({
           </FormLabel>
           <FormControl>
             <Input
-              className="w-full"
+              className="max-w-none"
               {...conform.input(fields.searchValue, { type: "text" })}
               placeholder="Search for…"
               autoComplete="false"

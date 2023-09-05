@@ -2,6 +2,7 @@ import type { V2_MetaFunction } from "@remix-run/node";
 import { useLocation } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
+import { Code } from "~/components/ui/code";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
@@ -37,8 +38,7 @@ export function ErrorBoundary() {
             </div>
 
             <p className="mb-4">
-              We can&rsquo;t find this page:{" "}
-              <code className="text-black">{location.pathname}</code>
+              We can&rsquo;t find this page: <Code>{location.pathname}</Code>
             </p>
 
             <div>

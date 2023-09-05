@@ -18,13 +18,13 @@ import {
 } from "~/utils/user";
 
 export const headerNavLinkVariants = cva(
-  "inline-flex h-14 w-14 items-center justify-center gap-2 whitespace-nowrap border border-transparent font-medium transition-colors focus-visible:border-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white sm:rounded-md",
+  "inline-flex h-14 w-14 items-center justify-center gap-2 whitespace-nowrap border border-transparent font-medium transition-colors focus-visible:border-pink-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-pink-400 dark:focus-visible:border-pink-500 dark:focus-visible:ring-pink-500 sm:rounded-md",
   {
     variants: {
       variant: {
-        link: "hover:bg-cyan-600/50 active:bg-cyan-600 aria-[current=page]:bg-cyan-600 sm:h-10 sm:w-auto sm:px-4",
+        link: "hover:bg-cyan-600/50 active:bg-cyan-600 aria-[current=page]:bg-cyan-600 dark:hover:bg-cyan-800/50 dark:active:bg-cyan-800 dark:aria-[current=page]:bg-cyan-800 sm:h-10 sm:w-auto sm:px-4",
         button:
-          "hover:bg-cyan-600/50 focus-visible:bg-transparent active:bg-cyan-600 sm:h-10 sm:w-10",
+          "hover:bg-cyan-600/50 focus-visible:bg-transparent active:bg-cyan-600 dark:hover:bg-cyan-800/50 dark:active:bg-cyan-800 sm:h-10 sm:w-10",
       },
     },
     defaultVariants: {
@@ -158,7 +158,7 @@ export const Header = forwardRef<React.ElementRef<"header">, HeaderProps>(
       <header
         {...props}
         className={cn(
-          "sticky top-0 z-40 bg-cyan-500 text-white shadow sm:px-8 sm:py-3",
+          "sticky top-0 z-40 bg-cyan-500 text-white shadow dark:bg-cyan-700 sm:px-8 sm:py-3",
           className,
         )}
         ref={forwardedRef}

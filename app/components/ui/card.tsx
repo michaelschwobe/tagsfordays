@@ -77,7 +77,7 @@ export const Card = forwardRef<React.ElementRef<"div">, CardProps>(
       <div
         {...props}
         className={cn(
-          "flex flex-col gap-3 rounded-xl border border-slate-100 bg-slate-50 p-4 sm:gap-4 sm:p-6",
+          "flex flex-col gap-3 rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900 sm:gap-4 sm:p-6",
           className,
         )}
         ref={forwardedRef}

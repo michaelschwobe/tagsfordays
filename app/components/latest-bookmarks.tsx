@@ -32,7 +32,7 @@ export const LatestBookmarks = forwardRef<
       {data.length > 0 ? (
         <>
           <CardContent>
-            <ul className="divide-y divide-slate-300 rounded-md border border-slate-300 bg-white">
+            <ul className="divide-y divide-slate-300 rounded-md border border-slate-300 bg-white dark:divide-slate-600 dark:border-slate-600 dark:bg-slate-800">
               {data.map((bookmark) => (
                 <li key={bookmark.id} className="flex gap-1 p-1">
                   <LinkButton

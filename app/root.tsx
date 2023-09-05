@@ -89,7 +89,7 @@ function Document({
         <Meta />
         <Links />
       </head>
-      <body className="h-full bg-white text-slate-600">
+      <body className="h-full bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-400">
         {children}
         <script
           dangerouslySetInnerHTML={{

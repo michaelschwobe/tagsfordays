@@ -46,11 +46,10 @@ export const ButtonDelete = forwardRef<
         <Form method="POST">
           <input type="hidden" name={conform.INTENT} value="delete" />
           <Button
-            {...props}
+            {...doubleCheck.getButtonProps({ ...props, type: "submit" })}
             className={cn(className)}
             size={size}
             variant={isClick1 ? "filled-danger" : variant}
-            {...doubleCheck.getButtonProps({ type: "submit" })}
             ref={forwardedRef}
           >
             {isIdle ? (

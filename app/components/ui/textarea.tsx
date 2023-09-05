@@ -20,7 +20,7 @@ export const Textarea = forwardRef<React.ElementRef<"textarea">, TextareaProps>(
         {...props}
         className={cn(
           inputVariants({
-            className: clsx("h-20 min-h-[5rem] max-w-3xl", className),
+            className: clsx("h-20 min-h-[5rem] max-w-4xl", className),
             size,
           }),
         )}

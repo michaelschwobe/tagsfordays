@@ -133,7 +133,7 @@ export default function LoginPage() {
             <FormControl>
               <Input
                 {...conform.input(fields.password, { type: "password" })}
-                autoComplete="current-password"
+                autoComplete="password"
               />
             </FormControl>
             <FormMessage id={fields.password.errorId}>

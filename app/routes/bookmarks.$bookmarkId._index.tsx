@@ -1,6 +1,6 @@
 import { conform } from "@conform-to/react";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { useLoaderData, useLocation } from "@remix-run/react";
 import { ButtonDelete } from "~/components/button-delete";
 import { ButtonFavorite } from "~/components/button-favorite";
@@ -27,6 +27,7 @@ import {
   invariant,
   invariantResponse,
 } from "~/utils/misc";
+import { redirectWithToast } from "~/utils/toast.server";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ params }: LoaderArgs) {
@@ -60,7 +61,10 @@ export async function action({ params, request }: ActionArgs) {
 
   if (intent === "delete") {
     await deleteBookmark({ id, userId });
-    return redirect("/bookmarks");
+    return redirectWithToast("/bookmarks", {
+      type: "success",
+      description: "Bookmark deleted.",
+    });
   }
 
   return null;

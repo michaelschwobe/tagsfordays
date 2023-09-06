@@ -37,6 +37,7 @@ import {
   invariantResponse,
 } from "~/utils/misc";
 import { toUpdateTagFormSchema } from "~/utils/tag-validation";
+import { redirectWithToast } from "~/utils/toast.server";
 
 export async function loader({ params, request }: LoaderArgs) {
   await requireUserId(request);
@@ -62,7 +63,10 @@ export const action = async ({ params, request }: ActionArgs) => {
 
   if (intent === "delete") {
     await deleteTag({ id, userId });
-    return redirect("/tags");
+    return redirectWithToast("/tags", {
+      type: "success",
+      description: "Tag deleted.",
+    });
   }
 
   const submission = await parse(formData, {

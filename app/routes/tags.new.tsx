@@ -26,6 +26,7 @@ import {
   isRejected,
 } from "~/utils/misc";
 import { toCreateTagFormSchema } from "~/utils/tag-validation";
+import { createToastHeaders, redirectWithToast } from "~/utils/toast.server";
 
 export async function loader({ request }: LoaderArgs) {
   await requireUserId(request);
@@ -71,9 +72,17 @@ export const action = async ({ request }: ActionArgs) => {
     .filter(isRejected)
     .map((result) => result.reason);
 
+  const namesFulfilled = tagsFulfilled.map((tag) => tag.name);
+  const namesRejected = names.filter((name) => !namesFulfilled.includes(name));
+
   if (tagsRejected.length > 0) {
-    const error = { "": tagsRejected };
-    return json({ ...submission, error }, { status: 422 });
+    const error = { "": [`Tags not added: ${namesRejected.join(", ")}`] };
+    const headers = await createToastHeaders({
+      type: "error",
+      title: "Tags not added:",
+      description: namesRejected.join(", "),
+    });
+    return json({ ...submission, error }, { status: 422, headers });
   }
 
   const isSingleTag = names.length === 1;
@@ -82,10 +91,11 @@ export const action = async ({ request }: ActionArgs) => {
     return redirect(`/tags/${singleTagId}`);
   }
 
-  // TODO: show success message/toast
-  // console.log("🟢", tagsFulfilled.length, "tags added");
-
-  return redirect("/tags");
+  return redirectWithToast("/tags", {
+    type: "success",
+    title: "Tags added:",
+    description: namesFulfilled.join(", "),
+  });
 };
 
 export const meta: V2_MetaFunction = () => {

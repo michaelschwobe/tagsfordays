@@ -15,15 +15,17 @@ import {
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Header } from "~/components/header";
 import { Landmark } from "~/components/ui/landmark";
+import { Toaster } from "~/components/ui/toast";
 import tailwindStylesheetUrl from "~/tailwind.css";
 import { getUser } from "~/utils/auth.server";
 import { ClientHintCheck, getClientHints } from "~/utils/client-hints";
 import { getEnv } from "~/utils/env.server";
-import { getDomainUrl, invariantResponse } from "~/utils/misc";
+import { combineHeaders, getDomainUrl, invariantResponse } from "~/utils/misc";
 import { useTheme } from "~/utils/theme";
 import { UpdateThemeFormSchema } from "~/utils/theme-validation";
 import type { Theme } from "~/utils/theme.server";
 import { getThemeCookie, setThemeCookie } from "~/utils/theme.server";
+import { getToast } from "~/utils/toast.server";
 
 export async function loader({ request }: LoaderArgs) {
   const ENV = getEnv();
@@ -37,7 +39,12 @@ export async function loader({ request }: LoaderArgs) {
     userPrefs: { theme: getThemeCookie(request) },
   };
 
-  return json({ ENV, requestInfo, user });
+  const { toast, headers: toastHeaders } = await getToast(request);
+
+  return json(
+    { ENV, requestInfo, toast, user },
+    { headers: combineHeaders(toastHeaders) },
+  );
 }
 
 export async function action({ request }: ActionArgs) {
@@ -116,6 +123,8 @@ export default function App() {
 
       <Landmark type="target" slug="main" label="main content" />
       <Outlet />
+
+      <Toaster toast={loaderData.toast} />
     </Document>
   );
 }

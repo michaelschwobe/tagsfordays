@@ -41,6 +41,7 @@ import {
   invariant,
   invariantResponse,
 } from "~/utils/misc";
+import { redirectWithToast } from "~/utils/toast.server";
 
 export async function loader({ params, request }: LoaderArgs) {
   await requireUserId(request);
@@ -68,7 +69,10 @@ export const action = async ({ params, request }: ActionArgs) => {
 
   if (intent === "delete") {
     await deleteBookmark({ id, userId });
-    return redirect("/bookmarks");
+    return redirectWithToast("/bookmarks", {
+      type: "success",
+      description: "Bookmark deleted.",
+    });
   }
 
   const submission = await parse(formData, {

@@ -6,6 +6,7 @@ import {
   Form,
   useActionData,
   useLoaderData,
+  useNavigate,
   useNavigation,
 } from "@remix-run/react";
 import { useId } from "react";
@@ -20,7 +21,6 @@ import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { LinkButton } from "~/components/ui/link-button";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/utils/auth.server";
 import { formatMetaTitle, getFieldError, safeRedirect } from "~/utils/misc";
@@ -78,6 +78,7 @@ export const meta: V2_MetaFunction = () => {
 export default function LoginPage() {
   const actionData = useActionData<typeof action>();
   const loaderData = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
   const navigation = useNavigation();
 
   const id = useId();
@@ -98,13 +99,10 @@ export default function LoginPage() {
           <Icon type="log-in" />
           Login
         </H1>
-        <LinkButton
-          to={loaderData.redirectTo.replace(/\/edit|\/new/, "")}
-          size="md-icon"
-        >
+        <Button type="button" onClick={() => navigate(-1)} size="md-icon">
           <Icon type="x" />
           <span className="sr-only">Cancel</span>
-        </LinkButton>
+        </Button>
       </div>
 
       <Form method="POST" {...form.props}>

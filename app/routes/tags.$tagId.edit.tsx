@@ -6,6 +6,7 @@ import {
   Form,
   useActionData,
   useLoaderData,
+  useNavigate,
   useNavigation,
 } from "@remix-run/react";
 import { useId } from "react";
@@ -102,6 +103,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 export default function EditTagPage() {
   const actionData = useActionData<typeof action>();
   const loaderData = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
   const navigation = useNavigation();
 
   const id = useId();
@@ -127,10 +129,10 @@ export default function EditTagPage() {
           <Icon type="tag" />
           Edit Tag
         </H1>
-        <LinkButton to=".." relative="path" size="md-icon">
+        <Button type="button" onClick={() => navigate(-1)} size="md-icon">
           <Icon type="x" />
           <span className="sr-only">Cancel</span>
-        </LinkButton>
+        </Button>
       </div>
 
       <Form method="POST" {...form.props}>

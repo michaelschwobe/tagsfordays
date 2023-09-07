@@ -6,6 +6,7 @@ import {
   Form,
   useActionData,
   useLoaderData,
+  useNavigate,
   useNavigation,
 } from "@remix-run/react";
 import { useId } from "react";
@@ -23,7 +24,6 @@ import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { LinkButton } from "~/components/ui/link-button";
 import { Textarea } from "~/components/ui/textarea";
 import { createBookmark, getBookmarkByUrl } from "~/models/bookmark.server";
 import { getTags } from "~/models/tag.server";
@@ -80,6 +80,7 @@ export const meta: V2_MetaFunction = () => {
 export default function NewBookmarkPage() {
   const actionData = useActionData<typeof action>();
   const loaderData = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
   const navigation = useNavigation();
 
   const id = useId();
@@ -116,10 +117,10 @@ export default function NewBookmarkPage() {
           <Icon type="bookmark" />
           New Bookmark
         </H1>
-        <LinkButton to=".." relative="path" size="md-icon">
+        <Button type="button" onClick={() => navigate(-1)} size="md-icon">
           <Icon type="x" />
           <span className="sr-only">Cancel</span>
-        </LinkButton>
+        </Button>
       </div>
 
       <Form method="POST" {...form.props}>

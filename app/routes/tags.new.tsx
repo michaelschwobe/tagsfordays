@@ -2,7 +2,12 @@ import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData, useNavigation } from "@remix-run/react";
+import {
+  Form,
+  useActionData,
+  useNavigate,
+  useNavigation,
+} from "@remix-run/react";
 import { useId } from "react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
@@ -16,7 +21,6 @@ import { FormMessage } from "~/components/ui/form-message";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
-import { LinkButton } from "~/components/ui/link-button";
 import { createTag, getTagByName } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import {
@@ -106,6 +110,7 @@ export const meta: V2_MetaFunction = () => {
 
 export default function NewTagPage() {
   const actionData = useActionData<typeof action>();
+  const navigate = useNavigate();
   const navigation = useNavigation();
 
   const id = useId();
@@ -127,10 +132,10 @@ export default function NewTagPage() {
           <Icon type="tag" />
           New Tag
         </H1>
-        <LinkButton to=".." relative="path" size="md-icon">
+        <Button type="button" onClick={() => navigate(-1)} size="md-icon">
           <Icon type="x" />
           <span className="sr-only">Cancel</span>
-        </LinkButton>
+        </Button>
       </div>
 
       <Form method="POST" {...form.props}>

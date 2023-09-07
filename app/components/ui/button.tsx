@@ -63,13 +63,16 @@ export interface ButtonProps
   children: React.ReactNode;
   /** Sets the `class` attribute. */
   className?: string | undefined;
+  /** Sets the `type` attribute. **Required** */
+  type: "button" | "submit";
 }
 
 export const Button = forwardRef<React.ElementRef<"button">, ButtonProps>(
-  ({ children, className, size, variant, ...props }, forwardedRef) => {
+  ({ children, className, size, type, variant, ...props }, forwardedRef) => {
     return (
       <button
         {...props}
+        type={type}
         className={cn(buttonVariants({ className, size, variant }))}
         ref={forwardedRef}
       >

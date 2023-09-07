@@ -190,6 +190,7 @@ export default function NewBookmarkPage() {
                       value={tag.defaultValue}
                     />
                     <Button
+                      type="submit"
                       className="max-w-[11rem]"
                       size="sm"
                       variant="filled"
@@ -207,6 +208,7 @@ export default function NewBookmarkPage() {
                 ) : (
                   <div key={tag.name}>
                     <Button
+                      type="submit"
                       className="max-w-[11rem]"
                       size="sm"
                       {...list.append(fields.tags.name, {

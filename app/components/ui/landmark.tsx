@@ -3,7 +3,7 @@ import { cn } from "~/utils/misc";
 
 export interface LandmarkProps {
   /** Sets the `class` attribute. */
-  className?: string;
+  className?: string | undefined;
   /** Sets the content. **Required** */
   label: string;
   /** Sets the `id` and `href` attributes. **Required** */

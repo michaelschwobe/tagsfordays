@@ -16,7 +16,7 @@ import { toSearchFormSchema } from "~/utils/misc-validation";
 
 export interface SearchFormProps {
   /** Sets the `class` attribute. */
-  className?: string;
+  className?: string | undefined;
   /** Sets the default checked radio. **Required** */
   searchKey: string;
   /** Sets the radio option values. **Required** */
@@ -106,7 +106,7 @@ export function SearchForm({
           </Button>
           <LinkButton to="." relative="path" reloadDocument size="md-icon">
             <Icon type="x" />
-            <span className="sr-only">Reset filters</span>
+            <span className="sr-only">Reset</span>
           </LinkButton>
         </FormItem>
       </fieldset>

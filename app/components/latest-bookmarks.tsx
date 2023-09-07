@@ -15,8 +15,8 @@ import { USER_LOGIN_ROUTE } from "~/utils/user";
 export interface LatestBookmarksProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
   /** Sets the `class` attribute. */
-  className?: string;
-  /** Sets the "found" content. */
+  className?: string | undefined;
+  /** Sets the "found" content. **Required** */
   data: LatestBookmarksData;
 }
 
@@ -36,8 +36,8 @@ export const LatestBookmarks = forwardRef<
               {data.map((bookmark) => (
                 <li key={bookmark.id} className="flex gap-1 p-1">
                   <LinkButton
-                    className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
                     to={`/bookmarks/${bookmark.id}`}
+                    className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
                     variant="ghost"
                   >
                     <Icon type="bookmark" />
@@ -51,10 +51,10 @@ export const LatestBookmarks = forwardRef<
                   </LinkButton>
 
                   <LinkButton
-                    className="grow justify-between overflow-hidden font-normal"
                     to={bookmark.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="grow justify-between overflow-hidden font-normal"
                     variant="ghost"
                   >
                     <span className="truncate text-xs font-normal">

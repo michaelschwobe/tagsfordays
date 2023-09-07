@@ -13,7 +13,7 @@ export interface ButtonFavoriteProps
     ButtonVariants {
   /** Sets the `class` attribute. */
   className?: string | undefined;
-  /** Sets the input[name=id] `value` attribute. */
+  /** Sets the input[name=id] `value` attribute. **Required** */
   entityId: string | undefined;
   /** Sets the input[name=favorite] `value` attribute. **Required** */
   entityValue: boolean | null;

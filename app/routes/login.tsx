@@ -96,7 +96,7 @@ export default function LoginPage() {
     <Main>
       <div className="mb-4 flex items-center gap-2">
         <H1>
-          <Icon type="log-in" />
+          <Icon type="user" />
           Login
         </H1>
         <Button type="button" onClick={() => navigate(-1)} size="md-icon">

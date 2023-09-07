@@ -82,9 +82,9 @@ export default function TagsIndexPage() {
         <ul className="flex flex-wrap gap-2">
           {loaderData.tags.map((tag) => (
             <li key={tag.id}>
-              <LinkButton className="max-w-[11rem]" to={tag.id} size="sm">
+              <LinkButton to={tag.id} className="max-w-[11rem]" size="sm">
                 <Icon type="tag" />
-                <span className="truncate">{tag.name}</span>
+                <span className="truncate">{tag.name}</span>{" "}
                 <Badge>{tag._count.bookmarks}</Badge>
               </LinkButton>
             </li>

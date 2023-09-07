@@ -107,10 +107,10 @@ export default function BookmarkDetailPage() {
           <div className="text-sm font-medium">URL</div>
           <FormControl>
             <LinkButton
-              className="justify-between overflow-hidden max-sm:w-full"
               to={loaderData.bookmark.url}
               target="_blank"
               rel="noopener noreferrer"
+              className="justify-between overflow-hidden max-sm:w-full"
             >
               <span className="truncate">{loaderData.bookmark.url}</span>
               <Icon type="external-link" />
@@ -162,8 +162,8 @@ export default function BookmarkDetailPage() {
                 {loaderData.bookmark.tags.map(({ tag }) => (
                   <li key={tag.id}>
                     <LinkButton
-                      className="max-w-[11rem]"
                       to={`/tags/${tag.id}`}
+                      className="max-w-[11rem]"
                       size="sm"
                     >
                       <Icon type="tag" />

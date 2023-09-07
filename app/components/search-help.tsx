@@ -11,7 +11,7 @@ export interface SearchHelpProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children">,
     FormatItemsFoundByCountProps {
   /** Sets the `class` attribute. */
-  className?: string;
+  className?: string | undefined;
 }
 
 export const SearchHelp = forwardRef<React.ElementRef<"div">, SearchHelpProps>(

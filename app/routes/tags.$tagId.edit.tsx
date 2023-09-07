@@ -161,7 +161,7 @@ export default function EditTagPage() {
               />
             </FormControl>
             <FormDescription id={fields.name.descriptionId}>
-              Originally: <Code>{loaderData.tag.name}</Code>
+              Original: <Code>{loaderData.tag.name}</Code>
             </FormDescription>
             <FormMessage id={fields.name.errorId}>
               {getFieldError(fields.name)}

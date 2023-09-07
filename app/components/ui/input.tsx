@@ -26,7 +26,7 @@ export interface InputProps
   extends Omit<React.ComponentPropsWithoutRef<"input">, "size">,
     InputVariants {
   /** Sets the `class` attribute. */
-  className?: string;
+  className?: string | undefined;
   /** Sets the `name` attribute. **Required** */
   name: string;
 }

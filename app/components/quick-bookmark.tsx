@@ -68,8 +68,8 @@ export const QuickBookmark = forwardRef<
       ) : (
         <CardFooter>
           <LinkButton
-            className="max-sm:w-full"
             to={`${USER_LOGIN_ROUTE}?redirectTo=${redirectTo}`}
+            className="max-sm:w-full"
           >
             <Icon type="log-in" />
             <span>Login to use this feature</span>

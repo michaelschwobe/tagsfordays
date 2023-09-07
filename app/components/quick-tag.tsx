@@ -67,8 +67,8 @@ export const QuickTag = forwardRef<React.ElementRef<"div">, QuickTagProps>(
         ) : (
           <CardFooter>
             <LinkButton
-              className="max-sm:w-full"
               to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}
+              className="max-sm:w-full"
             >
               <Icon type="log-in" />
               <span>Login to use this feature</span>

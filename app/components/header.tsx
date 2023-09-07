@@ -34,11 +34,12 @@ export const headerNavLinkVariants = cva(
 );
 
 export type HeaderNavLinkVariants = VariantProps<typeof headerNavLinkVariants>;
-export interface HeaderNavLinkProps extends NavLinkProps {
+
+export interface HeaderNavLinkProps extends Omit<NavLinkProps, "className"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */
-  className?: string;
+  className?: string | undefined;
   /** Sets the icon type. **Required** */
   iconType: IconType;
 }
@@ -68,7 +69,7 @@ export interface HeaderButtonProps
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */
-  className?: string;
+  className?: string | undefined;
   /** Sets the button svg content. **Required** */
   iconType: IconType;
   /** Sets the button `type` attribute. **Required** */
@@ -146,7 +147,7 @@ export interface HeaderProps
   extends Omit<React.ComponentPropsWithoutRef<"header">, "children">,
     Pick<HeaderNavButtonThemeProps, "userTheme"> {
   /** Sets the `class` attribute. */
-  className?: string;
+  className?: string | undefined;
 }
 
 export const Header = forwardRef<React.ElementRef<"header">, HeaderProps>(
@@ -177,8 +178,9 @@ export const Header = forwardRef<React.ElementRef<"header">, HeaderProps>(
           </HeaderNavLink>
 
           {optionalUser ? (
-            <div className="px-4 max-sm:sr-only">
-              <span className="mr-2">Logged in as</span>{" "}
+            <div className="flex items-center gap-2 pr-3 max-sm:sr-only">
+              <Icon type="user" />
+              <span className="sr-only">Logged in as </span>
               <span className="font-medium text-white">
                 {optionalUser.username}
               </span>

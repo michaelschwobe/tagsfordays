@@ -101,8 +101,8 @@ export default function BookmarksIndexPage() {
           {loaderData.bookmarks.map((bookmark) => (
             <li key={bookmark.id} className="flex gap-1 p-1">
               <LinkButton
-                className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
                 to={`/bookmarks/${bookmark.id}`}
+                className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
                 variant="ghost"
               >
                 <Icon type="bookmark" />
@@ -113,21 +113,19 @@ export default function BookmarksIndexPage() {
                     <span aria-label="Untitled">--</span>
                   )}
                 </span>
-              </LinkButton>
-
+              </LinkButton>{" "}
               <LinkButton
-                className="grow justify-between overflow-hidden font-normal"
                 to={bookmark.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="grow justify-between overflow-hidden font-normal"
                 variant="ghost"
               >
                 <span className="truncate text-xs font-normal">
                   {bookmark.url}
                 </span>
                 <Icon type="external-link" />
-              </LinkButton>
-
+              </LinkButton>{" "}
               <ButtonFavorite
                 entityId={bookmark.id}
                 entityValue={bookmark.favorite}

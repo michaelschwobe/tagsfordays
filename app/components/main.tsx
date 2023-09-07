@@ -5,7 +5,7 @@ export interface MainProps extends React.ComponentPropsWithoutRef<"main"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */
-  className?: string;
+  className?: string | undefined;
 }
 
 export const Main = forwardRef<React.ElementRef<"main">, MainProps>(

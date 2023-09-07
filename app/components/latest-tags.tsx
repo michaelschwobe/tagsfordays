@@ -15,8 +15,8 @@ import { USER_LOGIN_ROUTE } from "~/utils/user";
 export interface LatestTagsProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
   /** Sets the `class` attribute. */
-  className?: string;
-  /** Sets the "found" content. */
+  className?: string | undefined;
+  /** Sets the "found" content. **Required** */
   data: LatestTagsData;
 }
 
@@ -34,8 +34,8 @@ export const LatestTags = forwardRef<React.ElementRef<"div">, LatestTagsProps>(
                 {data.map((tag) => (
                   <li key={tag.id}>
                     <LinkButton
-                      className="max-w-[11rem]"
                       to={`/tags/${tag.id}`}
+                      className="max-w-[11rem]"
                       size="sm"
                     >
                       <Icon type="tag" />

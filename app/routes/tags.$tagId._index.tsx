@@ -97,7 +97,7 @@ export default function TagDetailPage() {
             >
               <Icon type="bookmarks" />
               <span>Bookmarks</span>
-              <Badge aria-hidden>{loaderData.tag.bookmarks.length}</Badge>
+              <Badge aria-hidden>{loaderData.tag._count.bookmarks}</Badge>
             </LinkButton>
           </div>
         </FormItem>

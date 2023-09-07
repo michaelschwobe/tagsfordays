@@ -191,15 +191,15 @@ export default function NewBookmarkPage() {
                       value={tag.defaultValue}
                     />
                     <Button
-                      type="submit"
-                      className="max-w-[11rem]"
-                      size="sm"
-                      variant="filled"
                       {...list.remove(fields.tags.name, {
                         index: tagsSelected.findIndex(
                           (t) => t.defaultValue === tag.defaultValue,
                         ),
                       })}
+                      type="submit"
+                      className="max-w-[11rem]"
+                      size="sm"
+                      variant="filled"
                     >
                       <span className="sr-only">Remove</span>{" "}
                       <span className="truncate">{tag.defaultValue}</span>
@@ -209,12 +209,12 @@ export default function NewBookmarkPage() {
                 ) : (
                   <div key={tag.name}>
                     <Button
-                      type="submit"
-                      className="max-w-[11rem]"
-                      size="sm"
                       {...list.append(fields.tags.name, {
                         defaultValue: tag.name,
                       })}
+                      type="submit"
+                      className="max-w-[11rem]"
+                      size="sm"
                     >
                       <Icon type="plus" />
                       <span className="sr-only">Add</span>{" "}

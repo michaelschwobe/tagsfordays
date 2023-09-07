@@ -25,6 +25,7 @@ export const ICON_TYPES = [
   "tag",
   "tags",
   "trash-2",
+  "user",
   "x",
 ] as const;
 
@@ -34,7 +35,7 @@ export const DEFAULT_ICON_TYPE = "alert-triangle" satisfies IconType;
 
 export interface IconProps extends React.ComponentPropsWithoutRef<"svg"> {
   /** Sets the `class` attribute. */
-  className?: string;
+  className?: string | undefined;
   /** Sets the sprite `id` anchor. */
   type: IconType;
 }

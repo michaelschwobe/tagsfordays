@@ -6,22 +6,7 @@ export async function getTag({ id }: Pick<Tag, "id">) {
     select: {
       id: true,
       name: true,
-      bookmarks: {
-        include: {
-          bookmark: {
-            select: {
-              id: true,
-              title: true,
-              url: true,
-            },
-          },
-        },
-        orderBy: [
-          { bookmark: { createdAt: "desc" } },
-          { bookmark: { title: "asc" } },
-        ],
-        take: 5,
-      },
+      _count: { select: { bookmarks: true } },
     },
     where: { id },
   });

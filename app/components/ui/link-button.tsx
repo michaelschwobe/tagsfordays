@@ -7,7 +7,7 @@ export interface LinkButtonProps extends LinkProps, ButtonVariants {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */
-  className?: string;
+  className?: string | undefined;
 }
 
 export const LinkButton = forwardRef<React.ElementRef<"a">, LinkButtonProps>(

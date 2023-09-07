@@ -8,7 +8,7 @@ export interface TextareaProps
   extends Omit<React.ComponentPropsWithoutRef<"textarea">, "size">,
     InputVariants {
   /** Sets the `class` attribute. */
-  className?: string;
+  className?: string | undefined;
   /** Sets the `name` attribute. **Required** */
   name: string;
 }

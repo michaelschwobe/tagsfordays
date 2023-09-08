@@ -3,8 +3,8 @@ import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useLocation } from "@remix-run/react";
 import { ButtonDelete } from "~/components/button-delete";
-import { ButtonFavorite } from "~/components/button-favorite";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Favorite } from "~/components/favorite";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -54,7 +54,7 @@ export async function action({ params, request }: ActionArgs) {
     const formFields = Object.fromEntries(formData.entries());
     const submission = FavoriteBookmarkFormSchema.safeParse(formFields);
     if (submission.success) {
-      const { id, favorite = null } = submission.data;
+      const { favorite = null } = submission.data;
       await favoriteBookmark({ id, favorite, userId });
     }
   }
@@ -186,9 +186,9 @@ export default function BookmarkDetailPage() {
         <FormItem>
           <div className="text-sm font-medium">Favorite</div>
           <FormControl>
-            <ButtonFavorite
-              entityId={loaderData.bookmark.id}
-              entityValue={loaderData.bookmark.favorite}
+            <Favorite
+              formAction={`/bookmarks/${loaderData.bookmark.id}`}
+              defaultValue={loaderData.bookmark.favorite}
             />
           </FormControl>
         </FormItem>

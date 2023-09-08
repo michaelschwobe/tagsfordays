@@ -1,9 +1,8 @@
-import { conform } from "@conform-to/react";
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { ButtonFavorite } from "~/components/button-favorite";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { Favorite } from "~/components/favorite";
 import { Main } from "~/components/main";
 import { SearchForm } from "~/components/search-form";
 import { SearchHelp } from "~/components/search-help";
@@ -12,14 +11,12 @@ import { FormItem } from "~/components/ui/form-item";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
-import { favoriteBookmark, getBookmarks } from "~/models/bookmark.server";
-import { requireUserId } from "~/utils/auth.server";
+import { getBookmarks } from "~/models/bookmark.server";
 import {
   BOOKMARK_SEARCH_KEYS,
   BOOKMARK_SEARCH_KEYS_LABEL_MAP,
   getBookmarkSearchKey,
 } from "~/utils/bookmark";
-import { FavoriteBookmarkFormSchema } from "~/utils/bookmark-validation";
 import { formatMetaTitle } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
@@ -31,24 +28,6 @@ export async function loader({ request }: LoaderArgs) {
   const bookmarks = await getBookmarks({ searchKey, searchValue });
 
   return json({ bookmarks, searchKey, searchValue });
-}
-
-export async function action({ request }: ActionArgs) {
-  const userId = await requireUserId(request);
-
-  const formData = await request.formData();
-  const intent = formData.get(conform.INTENT);
-
-  if (intent === "favorite") {
-    const formFields = Object.fromEntries(formData.entries());
-    const submission = FavoriteBookmarkFormSchema.safeParse(formFields);
-    if (submission.success) {
-      const { id, favorite = null } = submission.data;
-      await favoriteBookmark({ id, favorite, userId });
-    }
-  }
-
-  return null;
 }
 
 export const meta: V2_MetaFunction = () => {
@@ -126,9 +105,9 @@ export default function BookmarksIndexPage() {
                 </span>
                 <Icon type="external-link" />
               </LinkButton>{" "}
-              <ButtonFavorite
-                entityId={bookmark.id}
-                entityValue={bookmark.favorite}
+              <Favorite
+                formAction={`/bookmarks/${bookmark.id}`}
+                defaultValue={bookmark.favorite}
                 variant="ghost"
               />
             </li>

@@ -71,6 +71,5 @@ export function toUpdateBookmarkFormSchema(
 }
 
 export const FavoriteBookmarkFormSchema = z.object({
-  id: BookmarkIdSchema,
   favorite: BookmarkFavoriteSchema.optional(),
 });

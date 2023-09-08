@@ -15,14 +15,14 @@ import { getBookmarks } from "~/models/bookmark.server";
 import {
   BOOKMARK_SEARCH_KEYS,
   BOOKMARK_SEARCH_KEYS_LABEL_MAP,
-  getBookmarkSearchKey,
+  parseBookmarkSearchKey,
 } from "~/utils/bookmark";
 import { formatMetaTitle } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ request }: LoaderArgs) {
   const url = new URL(request.url);
-  const searchKey = getBookmarkSearchKey(url.searchParams.get("searchKey"));
+  const searchKey = parseBookmarkSearchKey(url.searchParams.get("searchKey"));
   const searchValue = url.searchParams.get("searchValue");
 
   const bookmarks = await getBookmarks({ searchKey, searchValue });

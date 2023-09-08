@@ -7,6 +7,8 @@ export const BOOKMARK_SEARCH_KEYS = [
 
 export type BookmarkSearchKey = (typeof BOOKMARK_SEARCH_KEYS)[number];
 
+export const DEFAULT_BOOKMARK_SEARCH_KEY = "url" as BookmarkSearchKey;
+
 export const BOOKMARK_SEARCH_KEYS_LABEL_MAP = {
   url: "URL",
   title: "Title",
@@ -14,8 +16,8 @@ export const BOOKMARK_SEARCH_KEYS_LABEL_MAP = {
   tags: "Tags",
 } satisfies Readonly<Record<BookmarkSearchKey, string>>;
 
-export function getBookmarkSearchKey(key: string | null) {
+export function parseBookmarkSearchKey(key: string | null): BookmarkSearchKey {
   return BOOKMARK_SEARCH_KEYS.includes(key ?? "")
     ? (key as BookmarkSearchKey)
-    : "url";
+    : DEFAULT_BOOKMARK_SEARCH_KEY;
 }

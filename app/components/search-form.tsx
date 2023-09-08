@@ -1,7 +1,7 @@
 import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import { Form, useNavigation } from "@remix-run/react";
-import { useId } from "react";
+import { useEffect, useId } from "react";
 import { Button } from "~/components/ui/button";
 import { ButtonGroup, ButtonGroupRadio } from "~/components/ui/button-group";
 import { FormControl } from "~/components/ui/form-control";
@@ -40,14 +40,31 @@ export function SearchForm({
   const [form, fields] = useForm({
     id,
     defaultValue: {
-      searchValue: searchValue ?? undefined,
       searchKey: searchKey,
+      searchValue: searchValue ?? undefined,
     },
     onValidate({ formData }) {
       return parse(formData, { schema: toSearchFormSchema(searchKeys) });
     },
     shouldRevalidate: "onBlur",
   });
+
+  useEffect(() => {
+    const $searchKeys = document.getElementsByName(fields.searchKey.name);
+    if ($searchKeys.length > 0) {
+      for (const $searchKey of $searchKeys as NodeListOf<HTMLInputElement>) {
+        $searchKey.checked = $searchKey.value === fields.searchKey.defaultValue;
+      }
+    }
+  }, [fields.searchKey.defaultValue, fields.searchKey.name]);
+
+  useEffect(() => {
+    const $searchValue = document.getElementById(fields.searchValue.id!);
+    if ($searchValue instanceof HTMLInputElement) {
+      console.count("🟢 searchValue");
+      $searchValue.value = fields.searchValue.defaultValue || "";
+    }
+  }, [fields.searchValue.defaultValue, fields.searchValue.id]);
 
   return (
     <Form className={cn(className)} method="GET" {...form.props}>

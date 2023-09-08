@@ -19,7 +19,7 @@ export async function loader() {
   return json({ latestBookmarks, latestTags });
 }
 
-export const meta: V2_MetaFunction = () => {
+export const meta: V2_MetaFunction<typeof loader> = () => {
   const title = `${APP_NAME} - ${APP_DESCRIPTION_SHORT}`;
   const description = APP_DESCRIPTION;
 

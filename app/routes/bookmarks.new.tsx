@@ -71,7 +71,7 @@ export const action = async ({ request }: ActionArgs) => {
   return redirect(`/bookmarks/${bookmark.id}`);
 };
 
-export const meta: V2_MetaFunction = () => {
+export const meta: V2_MetaFunction<typeof loader> = () => {
   const title = formatMetaTitle("New Bookmark");
 
   return [{ title }];

@@ -31,7 +31,8 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   }
 
   const title = formatMetaTitle("Tags");
-  const description = "Tags"; // TODO: Add better tags description
+  const description =
+    "Browse and sort all of your tags by 'name' or 'relationship count'.";
 
   return [{ title }, { name: "description", content: description }];
 };

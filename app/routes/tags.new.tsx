@@ -102,7 +102,7 @@ export const action = async ({ request }: ActionArgs) => {
   });
 };
 
-export const meta: V2_MetaFunction = () => {
+export const meta: V2_MetaFunction<typeof loader> = () => {
   const title = formatMetaTitle("New Tag");
 
   return [{ title }];

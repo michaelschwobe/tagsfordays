@@ -3,9 +3,11 @@ import { clsx, type ClassValue } from "clsx";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
+// If changing these, also change the same values in the package.json
 export const APP_NAME = "TagsForDays";
-export const APP_DESCRIPTION_SHORT = "Relational bookmarking";
-export const APP_DESCRIPTION = "Relational bookmarking for the modern web";
+export const APP_DESCRIPTION_SHORT = "Enhance and organize your bookmarks";
+export const APP_DESCRIPTION =
+  "TagsForDays extends traditional bookmarking with advanced organization and search capabilities.";
 
 export async function asyncShare() {
   try {

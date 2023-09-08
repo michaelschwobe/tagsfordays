@@ -23,7 +23,12 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/utils/auth.server";
-import { formatMetaTitle, getFieldError, safeRedirect } from "~/utils/misc";
+import {
+  APP_NAME,
+  formatMetaTitle,
+  getFieldError,
+  safeRedirect,
+} from "~/utils/misc";
 import { LoginUserFormSchema } from "~/utils/user-validation";
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -68,9 +73,9 @@ export const action = async ({ request }: ActionArgs) => {
   });
 };
 
-export const meta: V2_MetaFunction = () => {
+export const meta: V2_MetaFunction<typeof loader> = () => {
   const title = formatMetaTitle("Login");
-  const description = "Login"; // TODO: Add description
+  const description = `Welcome to ${APP_NAME}. Log in to add, edit, or delete bookmarks and tags.`;
 
   return [{ title }, { name: "description", content: description }];
 };

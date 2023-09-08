@@ -76,7 +76,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   }
 
   const title = formatMetaTitle(data.bookmark.title ?? "Untitled bookmark");
-  const description = data?.bookmark.content ?? data?.bookmark.url;
+  const description = `View and edit bookmark '${data.bookmark.url}'.`;
 
   return [{ title }, { name: "description", content: description }];
 };

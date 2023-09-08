@@ -17,7 +17,7 @@ import {
   BOOKMARK_SEARCH_KEYS_LABEL_MAP,
   parseBookmarkSearchKey,
 } from "~/utils/bookmark";
-import { formatMetaTitle } from "~/utils/misc";
+import { formatItemsFoundByCount, formatMetaTitle } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ request }: LoaderArgs) {
@@ -30,9 +30,19 @@ export async function loader({ request }: LoaderArgs) {
   return json({ bookmarks, searchKey, searchValue });
 }
 
-export const meta: V2_MetaFunction = () => {
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   const title = formatMetaTitle("Bookmarks");
-  const description = "Bookmarks"; // TODO: Add better bookmarks description
+
+  const description =
+    data?.searchKey && data?.searchValue
+      ? `${formatItemsFoundByCount({
+          count: data?.bookmarks.length ?? 0,
+          singular: "bookmark",
+          plural: "bookmarks",
+        })} within '${
+          BOOKMARK_SEARCH_KEYS_LABEL_MAP[data.searchKey]
+        }' containing '${data.searchValue}'.`
+      : `Browse and search all your bookmarks.`;
 
   return [{ title }, { name: "description", content: description }];
 };

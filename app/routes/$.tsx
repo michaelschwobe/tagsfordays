@@ -12,7 +12,7 @@ export async function loader() {
   throw new Response("Not found", { status: 404 });
 }
 
-export const meta: V2_MetaFunction = () => {
+export const meta: V2_MetaFunction<typeof loader> = () => {
   const title = formatMetaTitle("Error");
 
   return [{ title }];

@@ -55,7 +55,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   }
 
   const title = formatMetaTitle(data.tag.name);
-  const description = "Tag"; // TODO: Add better tag description
+  const description = `View and edit tag '${data.tag.name}'.`;
 
   return [{ title }, { name: "description", content: description }];
 };

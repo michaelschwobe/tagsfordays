@@ -1,4 +1,10 @@
 {
+  "name": "tagsfordays",
+  "description": "TagsForDays extends traditional bookmarking with advanced organization and search capabilities.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Michael Schwobe <mschwobe@gmail.com> (https://schwobe.dev)",
+  "repository": "github:michaelschwobe/tagsfordays",
   "private": true,
   "sideEffects": false,
   "prisma": {
@@ -13,8 +19,7 @@
     "setup": "prisma generate && prisma migrate deploy && prisma db seed",
     "start": "remix-serve build",
     "studio": "prisma studio",
-    "typecheck": "tsc",
-    "reset": "pnpm run clean && pnpm install && pnpm dlx prisma migrate dev --name init && pnpm run setup"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@conform-to/react": "^0.8.1",

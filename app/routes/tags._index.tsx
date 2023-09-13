@@ -10,6 +10,7 @@ import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { getTags, getTagsOrderedByRelations } from "~/models/tag.server";
+import { generateSocialMeta } from "~/utils/meta";
 import { formatMetaTitle } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
@@ -34,7 +35,11 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   const description =
     "Browse and sort all of your tags by 'name' or 'relationship count'.";
 
-  return [{ title }, { name: "description", content: description }];
+  return [
+    { title },
+    { name: "description", content: description },
+    ...generateSocialMeta({ title, description }),
+  ];
 };
 
 export default function TagsIndexPage() {

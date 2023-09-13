@@ -4,8 +4,6 @@
 
 ⚠️ **WIP: This project is still in development.** ⚠️
 
-- TODO: Add favicons, robots.txt, site.webmanifest, etc.
-- TODO: Add OpenGraph metadata
 - TODO: Add more bookmarks and tags
 - TODO: Add E2E tests via Playwright
 - TODO: Add unit tests via Vitest

@@ -72,9 +72,7 @@ export const action = async ({ request }: ActionArgs) => {
 };
 
 export const meta: V2_MetaFunction<typeof loader> = () => {
-  const title = formatMetaTitle("New Bookmark");
-
-  return [{ title }];
+  return [{ title: formatMetaTitle("New Bookmark") }];
 };
 
 export default function NewBookmarkPage() {

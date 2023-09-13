@@ -8,7 +8,12 @@ import { QuickBookmark } from "~/components/quick-bookmark";
 import { QuickTag } from "~/components/quick-tag";
 import { getLatestBookmarks } from "~/models/bookmark.server";
 import { getLatestTags } from "~/models/tag.server";
-import { APP_DESCRIPTION, APP_DESCRIPTION_SHORT, APP_NAME } from "~/utils/misc";
+import { generateSocialMeta } from "~/utils/meta";
+import {
+  APP_DESCRIPTION_LONG,
+  APP_DESCRIPTION_SHORT,
+  APP_NAME,
+} from "~/utils/misc";
 
 export async function loader() {
   const [latestBookmarks, latestTags] = await Promise.all([
@@ -21,9 +26,13 @@ export async function loader() {
 
 export const meta: V2_MetaFunction<typeof loader> = () => {
   const title = `${APP_NAME} - ${APP_DESCRIPTION_SHORT}`;
-  const description = APP_DESCRIPTION;
+  const description = APP_DESCRIPTION_LONG;
 
-  return [{ title }, { name: "description", content: description }];
+  return [
+    { title },
+    { name: "description", content: description },
+    ...generateSocialMeta({ title, description }),
+  ];
 };
 
 export default function HomePage() {
@@ -34,7 +43,7 @@ export default function HomePage() {
       <div className="grid gap-2 sm:grid-cols-2 sm:gap-8">
         <div className="sr-only">
           <h1>{APP_NAME}</h1>
-          <p>{APP_DESCRIPTION}</p>
+          <p>{APP_DESCRIPTION_LONG}</p>
         </div>
 
         <QuickBookmark redirectTo="/" />

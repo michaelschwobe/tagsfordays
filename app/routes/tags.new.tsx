@@ -103,9 +103,7 @@ export const action = async ({ request }: ActionArgs) => {
 };
 
 export const meta: V2_MetaFunction<typeof loader> = () => {
-  const title = formatMetaTitle("New Tag");
-
-  return [{ title }];
+  return [{ title: formatMetaTitle("New Tag") }];
 };
 
 export default function NewTagPage() {

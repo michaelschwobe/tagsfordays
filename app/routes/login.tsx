@@ -23,6 +23,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/utils/auth.server";
+import { generateSocialMeta } from "~/utils/meta";
 import {
   APP_NAME,
   formatMetaTitle,
@@ -77,7 +78,11 @@ export const meta: V2_MetaFunction<typeof loader> = () => {
   const title = formatMetaTitle("Login");
   const description = `Welcome to ${APP_NAME}. Log in to add, edit, or delete bookmarks and tags.`;
 
-  return [{ title }, { name: "description", content: description }];
+  return [
+    { title },
+    { name: "description", content: description },
+    ...generateSocialMeta({ title, description }),
+  ];
 };
 
 export default function LoginPage() {

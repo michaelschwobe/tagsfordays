@@ -95,9 +95,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: "404: Tag Not Found" }];
   }
 
-  const title = formatMetaTitle("Editing Tag…");
-
-  return [{ title }];
+  return [{ title: formatMetaTitle("Editing Tag…") }];
 };
 
 export default function EditTagPage() {

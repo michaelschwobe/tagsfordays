@@ -109,9 +109,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: "404: Bookmark Not Found" }];
   }
 
-  const title = formatMetaTitle("Editing Bookmark…");
-
-  return [{ title }];
+  return [{ title: formatMetaTitle("Editing Bookmark…") }];
 };
 
 export default function EditBookmarkPage() {

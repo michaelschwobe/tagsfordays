@@ -17,6 +17,7 @@ import {
   BOOKMARK_SEARCH_KEYS_LABEL_MAP,
   parseBookmarkSearchKey,
 } from "~/utils/bookmark";
+import { generateSocialMeta } from "~/utils/meta";
 import { formatItemsFoundByCount, formatMetaTitle } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
@@ -44,7 +45,11 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
         }' containing '${data.searchValue}'.`
       : `Browse and search all your bookmarks.`;
 
-  return [{ title }, { name: "description", content: description }];
+  return [
+    { title },
+    { name: "description", content: description },
+    ...generateSocialMeta({ title, description }),
+  ];
 };
 
 export default function BookmarksIndexPage() {

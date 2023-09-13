@@ -21,6 +21,7 @@ import {
 } from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
 import { FavoriteBookmarkFormSchema } from "~/utils/bookmark-validation";
+import { generateSocialMeta } from "~/utils/meta";
 import {
   asyncShare,
   formatMetaTitle,
@@ -78,7 +79,11 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   const title = formatMetaTitle(data.bookmark.title ?? "Untitled bookmark");
   const description = `View and edit bookmark '${data.bookmark.url}'.`;
 
-  return [{ title }, { name: "description", content: description }];
+  return [
+    { title },
+    { name: "description", content: description },
+    ...generateSocialMeta({ title, description }),
+  ];
 };
 
 export default function BookmarkDetailPage() {

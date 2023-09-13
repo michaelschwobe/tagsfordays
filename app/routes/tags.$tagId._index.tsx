@@ -14,6 +14,7 @@ import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { deleteTag, getTag } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
+import { generateSocialMeta } from "~/utils/meta";
 import { formatMetaTitle, invariant, invariantResponse } from "~/utils/misc";
 import { redirectWithToast } from "~/utils/toast.server";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
@@ -57,7 +58,11 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   const title = formatMetaTitle(data.tag.name);
   const description = `View and edit tag '${data.tag.name}'.`;
 
-  return [{ title }, { name: "description", content: description }];
+  return [
+    { title },
+    { name: "description", content: description },
+    ...generateSocialMeta({ title, description }),
+  ];
 };
 
 export default function TagDetailPage() {

@@ -13,9 +13,7 @@ export async function loader() {
 }
 
 export const meta: V2_MetaFunction<typeof loader> = () => {
-  const title = formatMetaTitle("Error");
-
-  return [{ title }];
+  return [{ title: formatMetaTitle("Error") }];
 };
 
 export default function NotFoundPage() {

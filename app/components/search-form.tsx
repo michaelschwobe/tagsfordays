@@ -61,7 +61,6 @@ export function SearchForm({
   useEffect(() => {
     const $searchValue = document.getElementById(fields.searchValue.id!);
     if ($searchValue instanceof HTMLInputElement) {
-      console.count("🟢 searchValue");
       $searchValue.value = fields.searchValue.defaultValue || "";
     }
   }, [fields.searchValue.defaultValue, fields.searchValue.id]);

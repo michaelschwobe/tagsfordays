@@ -3,7 +3,7 @@
  * are needed by the server, but are only known by the browser.
  */
 import { useRevalidator } from "@remix-run/react";
-import * as React from "react";
+import { useEffect } from "react";
 import { useRequestInfo } from "~/utils/request-info";
 
 export const clientHints = {
@@ -90,7 +90,7 @@ export function useClientHints() {
  */
 export function ClientHintCheck() {
   const { revalidate } = useRevalidator();
-  React.useEffect(() => {
+  useEffect(() => {
     const themeQuery = window.matchMedia("(prefers-color-scheme: dark)");
     function handleThemeChange() {
       document.cookie = `${clientHints.theme.cookieName}=${

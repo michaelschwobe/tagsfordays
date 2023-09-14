@@ -4,7 +4,22 @@ import {
   useRouteError,
 } from "@remix-run/react";
 import type { ErrorResponse } from "@remix-run/router";
+import { Main } from "~/components/main";
+import { H1 } from "~/components/ui/h1";
+import { Icon } from "~/components/ui/icon";
 import { getErrorMessage } from "~/utils/misc";
+
+export function MainError({ children }: { children: React.ReactNode }) {
+  return (
+    <Main>
+      <H1 className="mb-4">
+        <Icon type="alert-triangle" />
+        Error
+      </H1>
+      {children}
+    </Main>
+  );
+}
 
 export type StatusHandler = (info: {
   error: ErrorResponse;
@@ -19,12 +34,18 @@ export interface GeneralErrorBoundaryProps {
 
 export function GeneralErrorBoundary({
   defaultStatusHandler = ({ error }) => (
-    <p>
-      {error.status} {error.data}
-    </p>
+    <MainError>
+      <p>
+        {error.status} {error.data}
+      </p>
+    </MainError>
   ),
   statusHandlers,
-  unexpectedErrorHandler = (error) => <p>{getErrorMessage(error)}</p>,
+  unexpectedErrorHandler = (error) => (
+    <MainError>
+      <p>{getErrorMessage(error)}</p>
+    </MainError>
+  ),
 }: GeneralErrorBoundaryProps) {
   const error = useRouteError();
   const params = useParams();

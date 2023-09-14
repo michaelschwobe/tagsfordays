@@ -3,7 +3,7 @@ import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useLocation } from "@remix-run/react";
 import { ButtonDelete } from "~/components/button-delete";
-import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { GeneralErrorBoundary, MainError } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
 import { FormControl } from "~/components/ui/form-control";
@@ -129,23 +129,15 @@ export function ErrorBoundary() {
     <GeneralErrorBoundary
       statusHandlers={{
         404: () => (
-          <Main>
-            <div className="mb-4 flex items-center gap-2">
-              <H1>
-                <Icon type="alert-triangle" />
-                Error
-              </H1>
-            </div>
-
+          <MainError>
             <p className="mb-4">Tag not found.</p>
-
             <div>
               <LinkButton to="/tags">
                 <Icon type="tags" />
                 <span>View all tags</span>
               </LinkButton>
             </div>
-          </Main>
+          </MainError>
         ),
       }}
     />

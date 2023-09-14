@@ -11,7 +11,7 @@ import {
 } from "@remix-run/react";
 import { useId } from "react";
 import { ButtonDelete } from "~/components/button-delete";
-import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { GeneralErrorBoundary, MainError } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -319,23 +319,15 @@ export function ErrorBoundary() {
     <GeneralErrorBoundary
       statusHandlers={{
         404: () => (
-          <Main>
-            <div className="mb-4 flex items-center gap-2">
-              <H1>
-                <Icon type="alert-triangle" />
-                Error
-              </H1>
-            </div>
-
+          <MainError>
             <p className="mb-4">Bookmark not found.</p>
-
             <div>
               <LinkButton to="/bookmarks">
                 <Icon type="bookmarks" />
                 <span>View all bookmarks</span>
               </LinkButton>
             </div>
-          </Main>
+          </MainError>
         ),
       }}
     />

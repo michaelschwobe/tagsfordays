@@ -53,7 +53,10 @@ export const CardFooter = forwardRef<React.ElementRef<"div">, CardFooterProps>(
     return (
       <div
         {...props}
-        className={cn("mt-auto flex items-center gap-2", className)}
+        className={cn(
+          "mt-auto flex flex-col gap-2 pt-1 sm:flex-row sm:items-center",
+          className,
+        )}
         ref={forwardedRef}
       >
         {children}

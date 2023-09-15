@@ -83,7 +83,11 @@ export const LatestBookmarks = forwardRef<
             <p>None found.</p>
           </CardContent>
           <CardFooter className="mt-auto">
-            <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}>
+            <LinkButton
+              to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
+              className="max-sm:w-full"
+              variant="filled"
+            >
               <Icon type="plus" />
               <span>Add bookmark</span>
             </LinkButton>

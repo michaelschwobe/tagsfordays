@@ -58,7 +58,11 @@ export const LatestTags = forwardRef<React.ElementRef<"div">, LatestTagsProps>(
               <p>None found.</p>
             </CardContent>
             <CardFooter className="mt-auto">
-              <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}>
+              <LinkButton
+                to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}
+                className="max-sm:w-full"
+                variant="filled"
+              >
                 <Icon type="plus" />
                 <span>Add tag</span>
               </LinkButton>

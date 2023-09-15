@@ -7,7 +7,6 @@ import { Main } from "~/components/main";
 import { SearchForm } from "~/components/search-form";
 import { SearchHelp } from "~/components/search-help";
 import { Badge } from "~/components/ui/badge";
-import { FormItem } from "~/components/ui/form-item";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
@@ -88,7 +87,27 @@ export default function BookmarksIndexPage() {
         count={loaderData.bookmarks.length}
         singular="bookmark"
         plural="bookmarks"
-      />
+      >
+        <LinkButton
+          to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
+          className="max-sm:w-full"
+          size="lg"
+          variant="filled"
+        >
+          <Icon type="plus" />
+          <span>Add bookmark</span>
+        </LinkButton>{" "}
+        <LinkButton
+          to="."
+          relative="path"
+          reloadDocument
+          className="max-sm:w-full"
+          size="lg"
+        >
+          <Icon type="bookmarks" />
+          <span>View all bookmarks</span>
+        </LinkButton>
+      </SearchHelp>
 
       {hasBookmarks ? (
         <ul className="divide-y divide-slate-300 rounded-md border border-slate-300 bg-white dark:divide-slate-600 dark:border-slate-600 dark:bg-slate-800">
@@ -128,32 +147,7 @@ export default function BookmarksIndexPage() {
             </li>
           ))}
         </ul>
-      ) : (
-        <>
-          <FormItem isButtonGroup>
-            <LinkButton
-              to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
-              className="max-sm:w-full"
-              size="lg"
-              variant="filled"
-            >
-              <Icon type="plus" />
-              <span>Add bookmark</span>
-            </LinkButton>{" "}
-            <LinkButton
-              to="."
-              relative="path"
-              reloadDocument
-              className="max-sm:w-full"
-              size="lg"
-            >
-              <Icon type="bookmarks" />
-              <span>View all bookmarks</span>
-            </LinkButton>
-          </FormItem>
-          <div></div>
-        </>
-      )}
+      ) : null}
     </Main>
   );
 }

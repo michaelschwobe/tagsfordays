@@ -5,6 +5,12 @@ import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
 import { ButtonGroup, ButtonGroupButton } from "~/components/ui/button-group";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "~/components/ui/card";
 import { H1 } from "~/components/ui/h1";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
@@ -97,17 +103,27 @@ export default function TagsIndexPage() {
           ))}
         </ul>
       ) : (
-        <>
-          <H2 className="mb-2">No Tags Found</H2>
-          <div>
+        <Card className="mb-4">
+          <CardHeader>
+            <H2>No Tags Found</H2>
+          </CardHeader>
+          <CardContent>
+            <p>
+              This app isn&rsquo;t very useful without tags, try adding some.
+            </p>
+          </CardContent>
+          <CardFooter>
             <LinkButton
               to={`${USER_LOGIN_ROUTE}?redirectTo=/tags/new`}
-              variant="link"
+              className="max-sm:w-full"
+              size="lg"
+              variant="filled"
             >
-              Add tag
+              <Icon type="plus" />
+              <span>Add tag</span>
             </LinkButton>
-          </div>
-        </>
+          </CardFooter>
+        </Card>
       )}
     </Main>
   );

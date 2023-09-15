@@ -1,5 +1,10 @@
 import { forwardRef } from "react";
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "~/components/ui/card";
 import { H2 } from "~/components/ui/h2";
 import { cn, formatItemsFoundByCount, toTitleCase } from "~/utils/misc";
 
@@ -8,14 +13,19 @@ type FormatItemsFoundByCountProps = Parameters<
 >[0];
 
 export interface SearchHelpProps
-  extends Omit<React.ComponentPropsWithoutRef<"div">, "children">,
+  extends React.ComponentPropsWithoutRef<"div">,
     FormatItemsFoundByCountProps {
+  /** Sets the content. */
+  children?: React.ReactNode;
   /** Sets the `class` attribute. */
   className?: string | undefined;
 }
 
 export const SearchHelp = forwardRef<React.ElementRef<"div">, SearchHelpProps>(
-  ({ className, count, plural, singular, ...props }, forwardedRef) => {
+  (
+    { children, className, count, plural, singular, ...props },
+    forwardedRef,
+  ) => {
     const hasItems = typeof count === "number" && count > 0;
     return (
       <Card
@@ -30,15 +40,18 @@ export const SearchHelp = forwardRef<React.ElementRef<"div">, SearchHelpProps>(
         </CardHeader>
 
         {!hasItems ? (
-          <CardContent>
-            <p className="mb-2">Suggestions:</p>
-            <ul className="list-disc pl-8">
-              <li>Make sure all words are spelled correctly.</li>
-              <li>Try different keywords.</li>
-              <li>Try more general keywords.</li>
-              <li>Try fewer keywords.</li>
-            </ul>
-          </CardContent>
+          <>
+            <CardContent>
+              <p className="mb-2">Suggestions:</p>
+              <ul className="list-disc pl-8">
+                <li>Make sure all words are spelled correctly.</li>
+                <li>Try different keywords.</li>
+                <li>Try more general keywords.</li>
+                <li>Try fewer keywords.</li>
+              </ul>
+            </CardContent>
+            {children ? <CardFooter>{children}</CardFooter> : null}
+          </>
         ) : null}
       </Card>
     );

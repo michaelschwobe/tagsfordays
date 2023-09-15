@@ -1,14 +1,18 @@
 # dependencies
-node_modules
-pnpm-*.yaml
+/node_modules
 
 # testing
-coverage
+/coverage
 
 # production
-build
-public/build
-prisma/migrations
+/build
+/public/build
 
 # cache
-.cache
+/.cache
+
+# lockfiles
+pnpm-*.yaml
+
+# prisma
+/prisma/migrations

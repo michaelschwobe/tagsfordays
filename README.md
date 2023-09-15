@@ -14,4 +14,7 @@
 - TODO: Add feature: merge tag
 - TODO: Add feature: collections
 - TODO: Add feature: multitenancy
+- TODO: Add feature: bookmark data resouce route
+- TODO: Add feature: tag data resouce route
+- TODO: Add feature: app data resouce route
 - TBD

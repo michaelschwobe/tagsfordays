@@ -1,5 +1,5 @@
 import type { MetaDescriptor } from "@remix-run/node";
-import { APP_AUTHOR_HANDLE, APP_URL } from "./misc";
+import { APP_AUTHOR_HANDLE, APP_URL } from "~/utils/misc";
 
 export function generateSocialImageMeta(props: {
   vendor: "twitter" | "og";

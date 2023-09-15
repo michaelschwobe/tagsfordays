@@ -25,11 +25,6 @@ import tailwindStylesheetUrl from "~/tailwind.css";
 import { getUser } from "~/utils/auth.server";
 import { ClientHintCheck, getClientHints } from "~/utils/client-hints";
 import { getEnv } from "~/utils/env.server";
-import { useTheme } from "~/utils/theme";
-import { UpdateThemeFormSchema } from "~/utils/theme-validation";
-import type { Theme } from "~/utils/theme.server";
-import { getThemeCookie, setThemeCookie } from "~/utils/theme.server";
-import { getToast } from "~/utils/toast.server";
 import {
   APP_AUTHOR_FULLNAME,
   APP_NAME,
@@ -41,7 +36,12 @@ import {
   formatMetaTitle,
   getDomainUrl,
   invariantResponse,
-} from "./utils/misc";
+} from "~/utils/misc";
+import { useTheme } from "~/utils/theme";
+import { UpdateThemeFormSchema } from "~/utils/theme-validation";
+import type { Theme } from "~/utils/theme.server";
+import { getThemeCookie, setThemeCookie } from "~/utils/theme.server";
+import { getToast } from "~/utils/toast.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const ENV = getEnv();

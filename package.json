@@ -44,6 +44,7 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.4.9",
     "@remix-run/dev": "^2.0.0",
     "@remix-run/eslint-config": "^2.0.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",

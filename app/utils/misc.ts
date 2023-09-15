@@ -23,8 +23,10 @@ export const APP_DESCRIPTION_SHORT = "Enhance and organize your bookmarks";
 
 /**
  * Do not include a trailing slash.
+ * If changing this, also change the same value in:
+ * - `/README.md`
  */
-export const APP_URL = "https://tagsfordays.com";
+export const APP_URL = "https://tagsfordays.fly.dev";
 
 /**
  * If changing this, also change the same value in:

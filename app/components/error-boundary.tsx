@@ -58,6 +58,7 @@ export function GeneralErrorBoundary({
     <>
       {isRouteErrorResponse(error)
         ? (statusHandlers?.[error.status] ?? defaultStatusHandler)({
+            // @ts-expect-error, pretty sure this is a bug in Remix
             error,
             params,
           })

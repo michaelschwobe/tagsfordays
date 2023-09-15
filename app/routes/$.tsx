@@ -1,4 +1,4 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node";
 import { useLocation } from "@remix-run/react";
 import { GeneralErrorBoundary, MainError } from "~/components/error-boundary";
 import { Code } from "~/components/ui/code";
@@ -10,7 +10,7 @@ export async function loader() {
   throw new Response("Not found", { status: 404 });
 }
 
-export const meta: V2_MetaFunction<typeof loader> = () => {
+export const meta: MetaFunction<typeof loader> = () => {
   return [{ title: formatMetaTitle("Error") }];
 };
 

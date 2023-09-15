@@ -1,6 +1,10 @@
 import { conform, list, useFieldList, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
@@ -31,7 +35,7 @@ import { requireUserId } from "~/utils/auth.server";
 import { toCreateBookmarkFormSchema } from "~/utils/bookmark-validation";
 import { formatMetaTitle, getFieldError } from "~/utils/misc";
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   await requireUserId(request);
 
   const tags = await getTags();
@@ -39,7 +43,7 @@ export async function loader({ request }: LoaderArgs) {
   return json({ tags });
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
 
   const formData = await request.formData();
@@ -71,7 +75,7 @@ export const action = async ({ request }: ActionArgs) => {
   return redirect(`/bookmarks/${bookmark.id}`);
 };
 
-export const meta: V2_MetaFunction<typeof loader> = () => {
+export const meta: MetaFunction<typeof loader> = () => {
   return [{ title: formatMetaTitle("New Bookmark") }];
 };
 

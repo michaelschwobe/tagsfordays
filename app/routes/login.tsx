@@ -1,6 +1,10 @@
 import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
@@ -32,7 +36,7 @@ import {
 } from "~/utils/misc";
 import { LoginUserFormSchema } from "~/utils/user-validation";
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const safeRedirectTo = safeRedirect(url.searchParams.get("redirectTo"));
 
@@ -45,7 +49,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   return json({ redirectTo: safeRedirectTo });
 };
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
 
   const submission = parse(formData, { schema: LoginUserFormSchema });
@@ -74,7 +78,7 @@ export const action = async ({ request }: ActionArgs) => {
   });
 };
 
-export const meta: V2_MetaFunction<typeof loader> = () => {
+export const meta: MetaFunction<typeof loader> = () => {
   const title = formatMetaTitle("Login");
   const description = `Welcome to ${APP_NAME}. Log in to add, edit, or delete bookmarks and tags.`;
 

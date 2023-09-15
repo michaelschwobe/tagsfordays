@@ -2,8 +2,8 @@
  * @type {import("prettier").Config}
  * @type {import("prettier-plugin-tailwindcss").PluginOptions}
  */
-module.exports = {
+export default {
   plugins: ["prettier-plugin-tailwindcss"],
   tailwindConfig: "./tailwind.config.ts",
-  tailwindFunctions: ["clsx", "cva"],
+  tailwindFunctions: ["clsx", "cn", "cva"],
 };

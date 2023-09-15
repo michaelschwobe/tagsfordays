@@ -1,4 +1,4 @@
-import type { V2_HtmlMetaDescriptor } from "@remix-run/node";
+import type { MetaDescriptor } from "@remix-run/node";
 import { APP_AUTHOR_HANDLE, APP_URL } from "./misc";
 
 export function generateSocialImageMeta(props: {
@@ -8,7 +8,7 @@ export function generateSocialImageMeta(props: {
   mimeType?: "image/gif" | "image/jpeg" | "image/png" | undefined;
   width?: number | undefined;
   height?: number | undefined;
-}): V2_HtmlMetaDescriptor[] {
+}): MetaDescriptor[] {
   const metaKey = props.vendor === "twitter" ? "name" : "property";
   const metaPrefix = `${props.vendor}:image` as const;
 
@@ -43,14 +43,14 @@ export function generateSocialImageMeta(props: {
     });
   }
 
-  return output satisfies V2_HtmlMetaDescriptor[];
+  return output satisfies MetaDescriptor[];
 }
 
 export function generateSocialMeta(props: {
   title: string;
   description: string;
   image?: Omit<Parameters<typeof generateSocialImageMeta>[0], "vendor">;
-}): V2_HtmlMetaDescriptor[] {
+}): MetaDescriptor[] {
   const { title, description } = props;
   const image = {
     src: "/favicons/opengraph-image.png",
@@ -72,5 +72,5 @@ export function generateSocialMeta(props: {
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     ...generateSocialImageMeta({ ...image, vendor: "twitter", src: image.src }),
-  ] satisfies V2_HtmlMetaDescriptor[];
+  ] satisfies MetaDescriptor[];
 }

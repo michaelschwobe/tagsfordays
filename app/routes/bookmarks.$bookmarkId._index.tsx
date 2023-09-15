@@ -1,5 +1,9 @@
 import { conform } from "@conform-to/react";
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useLocation } from "@remix-run/react";
 import { ButtonDelete } from "~/components/button-delete";
@@ -31,7 +35,7 @@ import {
 import { redirectWithToast } from "~/utils/toast.server";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   invariant(params["bookmarkId"], "bookmarkId not found");
   const { bookmarkId: id } = params;
 
@@ -42,7 +46,7 @@ export async function loader({ params }: LoaderArgs) {
   return json({ bookmark });
 }
 
-export async function action({ params, request }: ActionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
   const userId = await requireUserId(request);
 
   invariant(params["bookmarkId"], "bookmarkId not found");
@@ -71,7 +75,7 @@ export async function action({ params, request }: ActionArgs) {
   return null;
 }
 
-export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   if (!data?.bookmark.url) {
     return [{ title: "404: Bookmark Not Found" }];
   }

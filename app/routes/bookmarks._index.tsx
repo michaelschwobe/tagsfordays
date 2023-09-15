@@ -1,4 +1,4 @@
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
@@ -21,7 +21,7 @@ import { generateSocialMeta } from "~/utils/meta";
 import { formatItemsFoundByCount, formatMetaTitle } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const searchKey = parseBookmarkSearchKey(url.searchParams.get("searchKey"));
   const searchValue = url.searchParams.get("searchValue");
@@ -31,7 +31,7 @@ export async function loader({ request }: LoaderArgs) {
   return json({ bookmarks, searchKey, searchValue });
 }
 
-export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   const title = formatMetaTitle("Bookmarks");
 
   const description =

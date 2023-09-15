@@ -1,4 +1,4 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { LatestBookmarks } from "~/components/latest-bookmarks";
@@ -24,7 +24,7 @@ export async function loader() {
   return json({ latestBookmarks, latestTags });
 }
 
-export const meta: V2_MetaFunction<typeof loader> = () => {
+export const meta: MetaFunction<typeof loader> = () => {
   const title = `${APP_NAME} - ${APP_DESCRIPTION_SHORT}`;
   const description = APP_DESCRIPTION_LONG;
 

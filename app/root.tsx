@@ -2,10 +2,10 @@ import { conform } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type {
-  ActionArgs,
+  ActionFunctionArgs,
   LinksFunction,
-  LoaderArgs,
-  V2_MetaFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
@@ -43,7 +43,7 @@ import {
   invariantResponse,
 } from "./utils/misc";
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const ENV = getEnv();
 
   const user = await getUser(request);
@@ -63,7 +63,7 @@ export async function loader({ request }: LoaderArgs) {
   );
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get(conform.INTENT);
 
@@ -127,7 +127,7 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   if (!data) {
     const title = formatMetaTitle("Error");
     return [{ title }];

@@ -1,4 +1,4 @@
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
@@ -14,7 +14,7 @@ import { generateSocialMeta } from "~/utils/meta";
 import { formatMetaTitle } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const orderBy = url.searchParams.get("orderBy");
 
@@ -26,7 +26,7 @@ export async function loader({ request }: LoaderArgs) {
   return json({ orderBy, tags });
 }
 
-export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   if (!data?.tags) {
     return [{ title: "404: Tags Not Found" }];
   }

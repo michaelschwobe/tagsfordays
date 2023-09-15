@@ -1,6 +1,10 @@
 import { conform, list, useFieldList, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
@@ -44,7 +48,7 @@ import {
 } from "~/utils/misc";
 import { redirectWithToast } from "~/utils/toast.server";
 
-export async function loader({ params, request }: LoaderArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   await requireUserId(request);
 
   invariant(params["bookmarkId"], "bookmarkId not found");
@@ -59,7 +63,7 @@ export async function loader({ params, request }: LoaderArgs) {
   return json({ bookmark, tags });
 }
 
-export const action = async ({ params, request }: ActionArgs) => {
+export const action = async ({ params, request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
 
   invariant(params["bookmarkId"], "bookmarkId not found");
@@ -104,7 +108,7 @@ export const action = async ({ params, request }: ActionArgs) => {
   return redirect(`/bookmarks/${bookmark.id}`);
 };
 
-export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   if (!data?.bookmark.url) {
     return [{ title: "404: Bookmark Not Found" }];
   }

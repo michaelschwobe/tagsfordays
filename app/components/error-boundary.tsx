@@ -1,9 +1,9 @@
+import type { ErrorResponse } from "@remix-run/react";
 import {
   isRouteErrorResponse,
   useParams,
   useRouteError,
 } from "@remix-run/react";
-import type { ErrorResponse } from "@remix-run/router";
 import { Main } from "~/components/main";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
@@ -58,7 +58,6 @@ export function GeneralErrorBoundary({
     <>
       {isRouteErrorResponse(error)
         ? (statusHandlers?.[error.status] ?? defaultStatusHandler)({
-            // @ts-expect-error, pretty sure this is a bug in Remix
             error,
             params,
           })

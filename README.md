@@ -6,6 +6,10 @@
 
 [https://tagsfordays.fly.dev](https://tagsfordays.fly.dev)
 
+![Screenshot of the homepage](./public/favicons/opengraph-image.png)
+
+## Roadmap
+
 - TODO: Add more bookmarks and tags
 - TODO: Add E2E tests via Playwright
 - TODO: Add unit tests via Vitest

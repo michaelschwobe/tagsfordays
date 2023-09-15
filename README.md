@@ -13,7 +13,6 @@
 - TODO: Add more bookmarks and tags
 - TODO: Add E2E tests via Playwright
 - TODO: Add unit tests via Vitest
-- TODO: Add CI/CD
 - TODO: Add feature: import/selection
 - TODO: Add feature: export/selection (text, csv, json, html)
 - TODO: Add feature: split tag

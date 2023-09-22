@@ -21,6 +21,7 @@ export const ICON_TYPES = [
   "plus",
   "search",
   "share",
+  "split",
   "sun",
   "tag",
   "tags",

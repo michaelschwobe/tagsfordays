@@ -82,6 +82,12 @@
       <polyline points="16 6 12 2 8 6" />
       <line x1="12" x2="12" y1="2" y2="15" />
     </symbol>
+    <symbol id="split" viewBox="0 0 24 24">
+       <path d="M16 3h5v5" />
+       <path d="M8 3H3v5" />
+       <path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3" />
+       <path d="m15 9 6-6" />
+    </symbol>
     <symbol id="sun" viewBox="0 0 24 24">
       <circle cx="12" cy="12" r="4" />
       <path d="M12 2v2" />

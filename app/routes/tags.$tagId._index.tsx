@@ -121,6 +121,14 @@ export default function TagDetailPage() {
             <Icon type="pencil" />
             <span>Edit tag</span>
           </LinkButton>{" "}
+          <LinkButton
+            to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}/split`}
+            className="max-sm:w-full"
+            size="lg"
+          >
+            <Icon type="split" />
+            <span>Split tag</span>
+          </LinkButton>{" "}
           <ButtonDelete singular="tag" className="max-sm:w-full" size="lg" />
         </FormItem>
       </div>

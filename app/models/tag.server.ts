@@ -1,4 +1,4 @@
-import type { Tag, User } from "@prisma/client";
+import type { Bookmark, Tag, User } from "@prisma/client";
 import { prisma } from "~/utils/db.server";
 
 export async function getTag({ id }: Pick<Tag, "id">) {
@@ -7,6 +7,11 @@ export async function getTag({ id }: Pick<Tag, "id">) {
       id: true,
       name: true,
       _count: { select: { bookmarks: true } },
+      bookmarks: {
+        select: {
+          bookmarkId: true,
+        },
+      },
     },
     where: { id },
   });
@@ -59,6 +64,37 @@ export async function createTag({
   return prisma.tag.create({
     data: {
       name,
+      user: {
+        connect: { id: userId },
+      },
+    },
+  });
+}
+
+export async function createAndConnectTag({
+  name,
+  bookmarkIds,
+  userId,
+}: Pick<Tag, "name"> & {
+  bookmarkIds?: Array<Bookmark["id"]> | undefined;
+  userId: User["id"];
+}) {
+  return await prisma.tag.create({
+    data: {
+      name,
+      ...(bookmarkIds
+        ? {
+            bookmarks: {
+              create: bookmarkIds.map((bookmarkId) => ({
+                bookmark: {
+                  connect: {
+                    id: bookmarkId,
+                  },
+                },
+              })),
+            },
+          }
+        : {}),
       user: {
         connect: { id: userId },
       },

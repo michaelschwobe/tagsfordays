@@ -16,6 +16,7 @@ export const ICON_TYPES = [
   "loader",
   "log-in",
   "log-out",
+  "merge",
   "moon",
   "pencil",
   "plus",

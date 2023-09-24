@@ -130,3 +130,16 @@ export async function deleteTagByName({
     where: { name, userId },
   });
 }
+
+export async function mergeTag({
+  sourceTagId,
+  targetTagId,
+}: {
+  sourceTagId: Tag["id"];
+  targetTagId: Tag["id"];
+}) {
+  return prisma.tagOnBookmark.updateMany({
+    where: { tagId: sourceTagId },
+    data: { tagId: targetTagId },
+  });
+}

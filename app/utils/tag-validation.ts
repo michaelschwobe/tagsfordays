@@ -111,3 +111,7 @@ export function toUpdateTagFormSchema(
     ),
   });
 }
+
+export const MergeTagFormSchema = z.object({
+  name: TagNameSchema,
+});

@@ -15,8 +15,6 @@
 - TODO: Add unit tests via Vitest
 - TODO: Add feature: import/selection
 - TODO: Add feature: export/selection (text, csv, json, html)
-- TODO: Add feature: split tag
-- TODO: Add feature: merge tag
 - TODO: Add feature: collections
 - TODO: Add feature: multitenancy
 - TODO: Add feature: bookmark data resouce route

@@ -129,6 +129,14 @@ export default function TagDetailPage() {
             <Icon type="split" />
             <span>Split tag</span>
           </LinkButton>{" "}
+          <LinkButton
+            to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}/merge`}
+            className="max-sm:w-full"
+            size="lg"
+          >
+            <Icon type="merge" />
+            <span>Merge tag</span>
+          </LinkButton>{" "}
           <ButtonDelete singular="tag" className="max-sm:w-full" size="lg" />
         </FormItem>
       </div>

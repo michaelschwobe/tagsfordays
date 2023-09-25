@@ -12,6 +12,7 @@ import { Favorite } from "~/components/favorite";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { Favicon } from "~/components/ui/favicon";
 import { FormControl } from "~/components/ui/form-control";
 import { FormItem } from "~/components/ui/form-item";
 import { H1 } from "~/components/ui/h1";
@@ -23,6 +24,7 @@ import {
   favoriteBookmark,
   getBookmark,
 } from "~/models/bookmark.server";
+import { mapBookmarksWithFavicon } from "~/models/favicon.server";
 import { requireUserId } from "~/utils/auth.server";
 import { FavoriteBookmarkFormSchema } from "~/utils/bookmark-validation";
 import { generateSocialMeta } from "~/utils/meta";
@@ -40,10 +42,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const { bookmarkId: id } = params;
 
   const bookmark = await getBookmark({ id });
-
   invariantResponse(bookmark, "Not Found", { status: 404 });
 
-  return json({ bookmark });
+  const [bookmarkWithFavicon] = await mapBookmarksWithFavicon([bookmark]);
+  invariant(bookmarkWithFavicon, "bookmarkWithFavicon not found");
+
+  return json({ bookmark: bookmarkWithFavicon });
 }
 
 export async function action({ params, request }: ActionFunctionArgs) {
@@ -121,6 +125,7 @@ export default function BookmarkDetailPage() {
               rel="noopener noreferrer"
               className="justify-between overflow-hidden max-sm:w-full"
             >
+              <Favicon src={loaderData.bookmark.favicon} />
               <span className="truncate">{loaderData.bookmark.url}</span>
               <Icon type="external-link" />
             </LinkButton>{" "}

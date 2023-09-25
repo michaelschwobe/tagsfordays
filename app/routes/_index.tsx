@@ -7,6 +7,7 @@ import { Main } from "~/components/main";
 import { QuickBookmark } from "~/components/quick-bookmark";
 import { QuickTag } from "~/components/quick-tag";
 import { getLatestBookmarks } from "~/models/bookmark.server";
+import { mapBookmarksWithFavicon } from "~/models/favicon.server";
 import { getLatestTags } from "~/models/tag.server";
 import { generateSocialMeta } from "~/utils/meta";
 import {
@@ -20,8 +21,10 @@ export async function loader() {
     getLatestBookmarks(),
     getLatestTags({ take: 9 }),
   ]);
+  const latestBookmarksWithFavicon =
+    await mapBookmarksWithFavicon(latestBookmarks);
 
-  return json({ latestBookmarks, latestTags });
+  return json({ latestBookmarks: latestBookmarksWithFavicon, latestTags });
 }
 
 export const meta: MetaFunction<typeof loader> = () => {

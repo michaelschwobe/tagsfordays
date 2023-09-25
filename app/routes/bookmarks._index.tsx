@@ -7,10 +7,12 @@ import { Main } from "~/components/main";
 import { SearchForm } from "~/components/search-form";
 import { SearchHelp } from "~/components/search-help";
 import { Badge } from "~/components/ui/badge";
+import { Favicon } from "~/components/ui/favicon";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { getBookmarks } from "~/models/bookmark.server";
+import { mapBookmarksWithFavicon } from "~/models/favicon.server";
 import {
   BOOKMARK_SEARCH_KEYS,
   BOOKMARK_SEARCH_KEYS_LABEL_MAP,
@@ -26,8 +28,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const searchValue = url.searchParams.get("searchValue");
 
   const bookmarks = await getBookmarks({ searchKey, searchValue });
+  const bookmarksWithFavicon = await mapBookmarksWithFavicon(bookmarks);
 
-  return json({ bookmarks, searchKey, searchValue });
+  return json({ bookmarks: bookmarksWithFavicon, searchKey, searchValue });
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -118,7 +121,7 @@ export default function BookmarksIndexPage() {
                 className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
                 variant="ghost"
               >
-                <Icon type="bookmark" />
+                <Favicon src={bookmark.favicon} />
                 <span className="truncate text-sm">
                   {bookmark.title ? (
                     <span>{bookmark.title}</span>

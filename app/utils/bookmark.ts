@@ -21,3 +21,10 @@ export function parseBookmarkSearchKey(key: string | null): BookmarkSearchKey {
     ? (key as BookmarkSearchKey)
     : DEFAULT_BOOKMARK_SEARCH_KEY;
 }
+
+export function toFaviconServiceUrl(url: string) {
+  const { hostname } = new URL(url);
+  const faviconServiceUrl = new URL("https://icons.duckduckgo.com/ip3");
+  faviconServiceUrl.pathname += `/${hostname}.ico`;
+  return faviconServiceUrl.href;
+}

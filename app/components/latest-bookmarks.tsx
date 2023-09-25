@@ -5,10 +5,12 @@ import {
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
+import { Favicon } from "~/components/ui/favicon";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import type { LatestBookmarksData } from "~/models/bookmark.server";
+import type { BookmarksWithFaviconData } from "~/models/favicon.server";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
@@ -17,7 +19,7 @@ export interface LatestBookmarksProps
   /** Sets the `class` attribute. */
   className?: string | undefined;
   /** Sets the "found" content. **Required** */
-  data: LatestBookmarksData;
+  data: BookmarksWithFaviconData<LatestBookmarksData>;
 }
 
 export const LatestBookmarks = forwardRef<
@@ -40,7 +42,7 @@ export const LatestBookmarks = forwardRef<
                     className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
                     variant="ghost"
                   >
-                    <Icon type="bookmark" />
+                    <Favicon src={bookmark.favicon} />
                     <span className="truncate text-sm">
                       {bookmark.title ? (
                         <span>{bookmark.title}</span>

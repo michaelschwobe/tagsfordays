@@ -80,7 +80,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
       toUpdateTagFormSchema(intent, {
         async isTagNameUnique(name) {
           const result = await getTagByName({ name });
-          return result === null;
+          return result === null || result.id === id;
         },
       }),
   });

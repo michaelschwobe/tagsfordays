@@ -86,7 +86,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
       toUpdateBookmarkFormSchema(intent, {
         async isBookmarkUrlUnique(url) {
           const result = await getBookmarkByUrl({ url });
-          return result === null;
+          return result === null || result.id === id;
         },
       }),
   });

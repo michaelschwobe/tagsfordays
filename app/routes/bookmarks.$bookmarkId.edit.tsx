@@ -262,7 +262,7 @@ export default function EditBookmarkPage() {
                 ) : (
                   <div key={tag.name}>
                     <Button
-                      {...list.append(fields.tags.name, {
+                      {...list.insert(fields.tags.name, {
                         defaultValue: tag.name,
                       })}
                       type="submit"

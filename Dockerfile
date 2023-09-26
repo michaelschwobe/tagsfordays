@@ -1,6 +1,9 @@
 # syntax = docker/dockerfile:1
 
-# Adjust NODE_VERSION as desired
+# Set node version
+# If changing this, also change the same value in:
+# - `/.github/workflows/deploy.yml`
+# - `/package.json`
 ARG NODE_VERSION=20.7.0
 FROM node:${NODE_VERSION}-slim as base
 
@@ -13,7 +16,10 @@ WORKDIR /app
 ENV NODE_ENV="production"
 
 # Install pnpm
-ARG PNPM_VERSION=8.7.5
+# If changing this, also change the same value in:
+# - `/.github/workflows/deploy.yml`
+# - `/package.json`
+ARG PNPM_VERSION=8.8.0
 RUN npm install -g pnpm@$PNPM_VERSION
 
 

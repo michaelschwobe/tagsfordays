@@ -13,18 +13,18 @@ on:
       # - `/package.json`
       node-version:
         type: string
-        default: 20.7.0
+        default: "20.7.0"
       # If changing this, also change the same value in:
       # - `/.github/workflows/deploy.yml`
       # - `/package.json`
       pnpm-version:
         type: string
-        default: 8.8.0
+        default: "8.8.0"
       # If changing this, match the same value from:
       # - Running `flyctl version` on your local machine
       flyctl-version:
         type: string
-        default: 0.1.101
+        default: "0.1.101"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

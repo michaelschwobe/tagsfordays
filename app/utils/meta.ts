@@ -1,5 +1,4 @@
 import type { MetaDescriptor } from "@remix-run/node";
-import { APP_AUTHOR_HANDLE, APP_URL } from "~/utils/misc";
 
 export function generateSocialImageMeta(props: {
   vendor: "twitter" | "og";
@@ -15,7 +14,7 @@ export function generateSocialImageMeta(props: {
   const output = [
     {
       [metaKey]: metaPrefix,
-      content: `${APP_URL}/${props.src.replace(/^\//, "")}`,
+      content: `${ENV.APP_URL}/${props.src.replace(/^\//, "")}`,
     },
   ];
   if (props.alt) {
@@ -60,15 +59,15 @@ export function generateSocialMeta(props: {
   return [
     /* OpenGraph */
     { property: "og:type", content: "website" },
-    { property: "og:url", content: APP_URL },
+    { property: "og:url", content: ENV.APP_URL },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
     ...generateSocialImageMeta({ ...image, vendor: "og", src: image.src }),
 
     /* Twitter / X */
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:site", content: `@${APP_AUTHOR_HANDLE}` },
-    { name: "twitter:creator", content: `@${APP_AUTHOR_HANDLE}` },
+    { name: "twitter:site", content: `@${ENV.APP_AUTHOR_HANDLE}` },
+    { name: "twitter:creator", content: `@${ENV.APP_AUTHOR_HANDLE}` },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     ...generateSocialImageMeta({ ...image, vendor: "twitter", src: image.src }),

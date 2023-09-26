@@ -11,11 +11,6 @@ import { getLatestBookmarks } from "~/models/bookmark.server";
 import { mapBookmarksWithFavicon } from "~/models/favicon.server";
 import { getLatestTags } from "~/models/tag.server";
 import { generateSocialMeta } from "~/utils/meta";
-import {
-  APP_DESCRIPTION_LONG,
-  APP_DESCRIPTION_SHORT,
-  APP_NAME,
-} from "~/utils/misc";
 
 export async function loader() {
   const [latestBookmarks, latestTags] = await Promise.all([
@@ -29,8 +24,8 @@ export async function loader() {
 }
 
 export const meta: MetaFunction<typeof loader> = () => {
-  const title = `${APP_NAME} - ${APP_DESCRIPTION_SHORT}`;
-  const description = APP_DESCRIPTION_LONG;
+  const title = `${ENV.APP_NAME} - ${ENV.APP_DESCRIPTION_SHORT}`;
+  const description = ENV.APP_DESCRIPTION_LONG;
 
   return [
     { title },

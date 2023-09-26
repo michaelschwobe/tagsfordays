@@ -26,11 +26,6 @@ import { getUser } from "~/utils/auth.server";
 import { ClientHintCheck, getClientHints } from "~/utils/client-hints";
 import { getEnv } from "~/utils/env.server";
 import {
-  APP_AUTHOR_FULLNAME,
-  APP_NAME,
-  APP_THEME_COLOR_DARK,
-  APP_THEME_COLOR_LIGHT,
-  APP_URL,
   cn,
   combineHeaders,
   formatMetaTitle,
@@ -117,7 +112,7 @@ export const links: LinksFunction = () => {
     {
       rel: "mask-icon",
       href: "/favicons/mask-icon.svg",
-      color: APP_THEME_COLOR_LIGHT,
+      color: ENV.APP_THEME_COLOR_LIGHT,
     },
     { rel: "icon", href: "/favicons/favicon.svg", type: "image/svg+xml" },
 
@@ -155,18 +150,21 @@ function Document({
         <meta
           name="theme-color"
           media="(prefers-color-scheme: light)"
-          content={APP_THEME_COLOR_LIGHT}
+          content={ENV.APP_THEME_COLOR_LIGHT}
         />
         <meta
           name="theme-color"
           media="(prefers-color-scheme: dark)"
-          content={APP_THEME_COLOR_DARK}
+          content={ENV.APP_THEME_COLOR_DARK}
         />
-        <meta name="msapplication-TileColor" content={APP_THEME_COLOR_LIGHT} />
-        <meta name="apple-mobile-web-app-title" content={APP_NAME} />
-        <meta name="application-name" content={APP_NAME} />
-        <meta name="author" content={APP_AUTHOR_FULLNAME} />
-        <link rel="canonical" href={APP_URL} />
+        <meta
+          name="msapplication-TileColor"
+          content={ENV.APP_THEME_COLOR_LIGHT}
+        />
+        <meta name="apple-mobile-web-app-title" content={ENV.APP_NAME} />
+        <meta name="application-name" content={ENV.APP_NAME} />
+        <meta name="author" content={ENV.APP_AUTHOR_FULLNAME} />
+        <link rel="canonical" href={ENV.APP_URL} />
         <Links />
       </head>
       <body className="h-full bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-400">
@@ -205,11 +203,6 @@ export default function App() {
 export function ErrorBoundary() {
   return (
     <Document>
-      <Landmark type="trigger" slug="main" label="main content" />
-
-      <Header />
-
-      <Landmark type="target" slug="main" label="main content" />
       <GeneralErrorBoundary />
     </Document>
   );

@@ -3,67 +3,6 @@ import { clsx, type ClassValue } from "clsx";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-/**
- * If changing this, also change the same value in:
- * - `/package.json`
- */
-export const APP_VERSION = "0.1.0";
-
-/**
- * If changing this, also change the same value in:
- * - `/package.json`
- * - `/README.md`
- */
-export const APP_NAME = "TagsForDays";
-
-/**
- * If changing this, also change the same value in:
- * - `/package.json`
- * - `/README.md`
- */
-export const APP_DESCRIPTION_LONG =
-  "TagsForDays extends traditional bookmarking with advanced organization and search capabilities.";
-
-/**
- * Do not include a period.
- */
-export const APP_DESCRIPTION_SHORT = "Enhance and organize your bookmarks";
-
-/**
- * Do not include a trailing slash.
- * If changing this, also change the same value in:
- * - `/README.md`
- */
-export const APP_URL = "https://tagsfordays.fly.dev";
-
-/**
- * If changing this, also change the same value in:
- * - `/package.json`
- */
-export const APP_AUTHOR_FULLNAME = "Michael Schwobe";
-
-/**
- * Do not include the `@` symbol.
- */
-export const APP_AUTHOR_HANDLE = "michael_schwobe";
-
-/**
- * If changing this, also change the same value in:
- * - `/public/browserconfig.xml`
- * - `/public/site.webmanifest`
- * - `/public/favicons/favicon.svg`
- *
- * See also:
- * - `/public/favicons/mask-icon.svg`
- * - APP_THEME_COLOR_DARK
- */
-export const APP_THEME_COLOR_LIGHT = "#06b6d4";
-
-/**
- * See also `APP_THEME_COLOR_LIGHT`.
- */
-export const APP_THEME_COLOR_DARK = "#0891b2";
-
 export async function asyncShare() {
   try {
     if (typeof document === "undefined" || !navigator.share) {
@@ -157,7 +96,7 @@ export function formatItemsFoundByCount({
 }
 
 export function formatMetaTitle(title: string) {
-  return `${title} | ${APP_NAME}`;
+  return `${title} | ${ENV.APP_NAME}`;
 }
 
 export function invariant(

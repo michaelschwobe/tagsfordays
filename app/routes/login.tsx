@@ -28,12 +28,7 @@ import { Label } from "~/components/ui/label";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/utils/auth.server";
 import { generateSocialMeta } from "~/utils/meta";
-import {
-  APP_NAME,
-  formatMetaTitle,
-  getFieldError,
-  safeRedirect,
-} from "~/utils/misc";
+import { formatMetaTitle, getFieldError, safeRedirect } from "~/utils/misc";
 import { LoginUserFormSchema } from "~/utils/user-validation";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -80,7 +75,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export const meta: MetaFunction<typeof loader> = () => {
   const title = formatMetaTitle("Login");
-  const description = `Welcome to ${APP_NAME}. Log in to add, edit, or delete bookmarks and tags.`;
+  const description = `Welcome to ${ENV.APP_NAME}. Log in to add, edit, or delete bookmarks and tags.`;
 
   return [
     { title },

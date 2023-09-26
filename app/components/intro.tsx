@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { Badge } from "~/components/ui/badge";
-import { APP_NAME, APP_DESCRIPTION_LONG, APP_VERSION, cn } from "~/utils/misc";
+import { cn } from "~/utils/misc";
 
 export interface IntroProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
@@ -20,15 +20,15 @@ export const Intro = forwardRef<React.ElementRef<"div">, IntroProps>(
         ref={forwardedRef}
       >
         <h1 className="mr-4 inline font-semibold">
-          {APP_NAME}{" "}
+          {ENV.APP_NAME}{" "}
           <Badge>
             <abbr className="no-underline" title="Version">
               v
             </abbr>
-            {APP_VERSION}
+            {ENV.APP_VERSION}
           </Badge>
         </h1>
-        <p className="inline text-[0.875em]">{APP_DESCRIPTION_LONG}</p>
+        <p className="inline text-[0.875em]">{ENV.APP_DESCRIPTION_LONG}</p>
       </div>
     );
   },

@@ -1,10 +1,15 @@
 {
   "name": "tagsfordays",
   "description": "TagsForDays extends traditional bookmarking with advanced organization and search capabilities.",
+  "homepage": "https://tagsfordays.fly.dev",
+  "repository": "github:michaelschwobe/tagsfordays",
+  "author": {
+    "name": "Michael Schwobe",
+    "email": "mschwobe@gmail.com",
+    "url": "https://schwobe.dev"
+  },
   "version": "0.1.0",
   "license": "MIT",
-  "author": "Michael Schwobe <mschwobe@gmail.com> (https://schwobe.dev)",
-  "repository": "github:michaelschwobe/tagsfordays",
   "private": true,
   "sideEffects": false,
   "type": "module",

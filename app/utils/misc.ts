@@ -7,11 +7,19 @@ import { twMerge } from "tailwind-merge";
  * If changing this, also change the same value in:
  * - `/package.json`
  */
+export const APP_VERSION = "0.1.0";
+
+/**
+ * If changing this, also change the same value in:
+ * - `/package.json`
+ * - `/README.md`
+ */
 export const APP_NAME = "TagsForDays";
 
 /**
  * If changing this, also change the same value in:
  * - `/package.json`
+ * - `/README.md`
  */
 export const APP_DESCRIPTION_LONG =
   "TagsForDays extends traditional bookmarking with advanced organization and search capabilities.";

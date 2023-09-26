@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { Intro } from "~/components/intro";
 import { LatestBookmarks } from "~/components/latest-bookmarks";
 import { LatestTags } from "~/components/latest-tags";
 import { Main } from "~/components/main";
@@ -44,10 +45,7 @@ export default function HomePage() {
   return (
     <Main>
       <div className="grid gap-2 sm:grid-cols-2 sm:gap-8">
-        <div className="sr-only">
-          <h1>{APP_NAME}</h1>
-          <p>{APP_DESCRIPTION_LONG}</p>
-        </div>
+        <Intro className="sm:col-span-2" />
 
         <QuickBookmark redirectTo="/" />
 

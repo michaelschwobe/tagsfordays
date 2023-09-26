@@ -77,7 +77,7 @@ jobs:
     needs: [lint, typecheck]
     strategy:
       matrix:
-        flyctl-version: [0.1.92]
+        flyctl-version: [0.1.101]
     # Only build/deploy main branch on pushes.
     if:
       ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev') &&

@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
 # Set node version
-# If changing this, also change the same value in:
+# If changing this, match the same values from:
 # - `/.github/workflows/deploy.yml`
 # - `/package.json`
 ARG NODE_VERSION=20.7.0
@@ -16,7 +16,7 @@ WORKDIR /app
 ENV NODE_ENV="production"
 
 # Install pnpm
-# If changing this, also change the same value in:
+# If changing this, match the same values from:
 # - `/.github/workflows/deploy.yml`
 # - `/package.json`
 ARG PNPM_VERSION=8.8.0

@@ -6,25 +6,6 @@ on:
       - main
       - dev
   pull_request: {}
-  workflow_call:
-    inputs:
-      # If changing this, also change the same value in:
-      # - `/.github/workflows/deploy.yml`
-      # - `/package.json`
-      node-version:
-        type: string
-        default: "20.7.0"
-      # If changing this, also change the same value in:
-      # - `/.github/workflows/deploy.yml`
-      # - `/package.json`
-      pnpm-version:
-        type: string
-        default: "8.8.0"
-      # If changing this, match the same value from:
-      # - Running `flyctl version` on your local machine
-      flyctl-version:
-        type: string
-        default: "0.1.101"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -38,19 +19,26 @@ jobs:
   lint:
     name: ⬣ ESLint
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # If changing these, match the same values from:
+        # - `/Dockerfile`
+        # - `/package.json`
+        node-version: [20.7.0]
+        pnpm-version: [8.8.0]
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
-      - name: 📥 Setup pnpm ${{ inputs.pnpm-version }}
+      - name: 📥 Setup pnpm ${{ matrix.pnpm-version }}
         uses: pnpm/action-setup@v2
         with:
-          version: ${{ inputs.pnpm-version }}
+          version: ${{ matrix.pnpm-version }}
 
-      - name: ⎔ Setup node ${{ inputs.node-version }}
+      - name: ⎔ Setup node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ inputs.node-version }}
+          node-version: ${{ matrix.node-version }}
           cache: "pnpm"
 
       - name: 📥 Install dependencies
@@ -62,19 +50,26 @@ jobs:
   typecheck:
     name: ʦ TypeScript
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # If changing these, match the same values from:
+        # - `/Dockerfile`
+        # - `/package.json`
+        node-version: [20.7.0]
+        pnpm-version: [8.8.0]
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
-      - name: 📥 Setup pnpm ${{ inputs.pnpm-version }}
+      - name: 📥 Setup pnpm ${{ matrix.pnpm-version }}
         uses: pnpm/action-setup@v2
         with:
-          version: ${{ inputs.pnpm-version }}
+          version: ${{ matrix.pnpm-version }}
 
-      - name: ⎔ Setup node ${{ inputs.node-version }}
+      - name: ⎔ Setup node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ inputs.node-version }}
+          node-version: ${{ matrix.node-version }}
           cache: "pnpm"
 
       - name: 📥 Install dependencies
@@ -86,6 +81,11 @@ jobs:
   deploy:
     name: 🚀 Deploy
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # If changing this, match the same value from:
+        # - Running `flyctl version` on your local machine
+        flyctl-version: [0.1.101]
     needs: [lint, typecheck]
     # Only build/deploy main branch on pushes.
     if:
@@ -102,10 +102,10 @@ jobs:
           file: "fly.toml"
           field: "app"
 
-      - name: 🎈 Setup Fly ${{ inputs.flyctl-version }}
+      - name: 🎈 Setup Fly ${{ matrix.flyctl-version }}
         uses: superfly/flyctl-actions/setup-flyctl@master
         with:
-          version: ${{ inputs.flyctl-version }}
+          version: ${{ matrix.flyctl-version }}
 
       - name: 🚀 Deploy Staging
         if: ${{ github.ref == 'refs/heads/dev' }}

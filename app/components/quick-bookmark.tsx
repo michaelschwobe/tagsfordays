@@ -35,7 +35,12 @@ export const QuickBookmark = forwardRef<
   const optionalUser = useOptionalUser();
 
   return (
-    <Card {...props} className={cn(className)} ref={forwardedRef}>
+    <Card
+      {...props}
+      className={cn(className)}
+      data-testid="quick-bookmark"
+      ref={forwardedRef}
+    >
       <CardHeader>
         <H2>Quick Bookmark</H2>
       </CardHeader>
@@ -72,7 +77,7 @@ export const QuickBookmark = forwardRef<
             className="max-sm:w-full"
           >
             <Icon type="log-in" />
-            <span>Login to use this feature</span>
+            <span>Log in to use this feature</span>
           </LinkButton>
         </CardFooter>
       )}

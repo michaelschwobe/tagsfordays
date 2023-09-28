@@ -23,7 +23,12 @@ export interface LatestTagsProps
 export const LatestTags = forwardRef<React.ElementRef<"div">, LatestTagsProps>(
   ({ className, data, ...props }, forwardedRef) => {
     return (
-      <Card {...props} className={cn(className)} ref={forwardedRef}>
+      <Card
+        {...props}
+        className={cn(className)}
+        data-testid="latest-tags"
+        ref={forwardedRef}
+      >
         <CardHeader>
           <H2>Latest Tags</H2>
         </CardHeader>

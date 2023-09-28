@@ -181,7 +181,7 @@ export const Header = forwardRef<React.ElementRef<"header">, HeaderProps>(
             <div className="flex items-center gap-2 pr-3 max-sm:sr-only">
               <Icon type="user" />
               <span className="sr-only">Logged in as </span>
-              <span className="font-medium text-white">
+              <span className="font-medium text-white" data-testid="username">
                 {optionalUser.username}
               </span>
             </div>

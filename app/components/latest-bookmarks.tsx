@@ -27,7 +27,12 @@ export const LatestBookmarks = forwardRef<
   LatestBookmarksProps
 >(({ className, data, ...props }, forwardedRef) => {
   return (
-    <Card {...props} className={cn(className)} ref={forwardedRef}>
+    <Card
+      {...props}
+      className={cn(className)}
+      data-testid="latest-bookmarks"
+      ref={forwardedRef}
+    >
       <CardHeader>
         <H2>Latest Bookmarks</H2>
       </CardHeader>
@@ -42,7 +47,7 @@ export const LatestBookmarks = forwardRef<
                     className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
                     variant="ghost"
                   >
-                    <Favicon src={bookmark.favicon} />
+                    <Favicon src={bookmark.favicon} />{" "}
                     <span className="truncate text-sm">
                       {bookmark.title ? (
                         <span>{bookmark.title}</span>
@@ -50,8 +55,7 @@ export const LatestBookmarks = forwardRef<
                         <span aria-label="Untitled">--</span>
                       )}
                     </span>
-                  </LinkButton>
-
+                  </LinkButton>{" "}
                   <LinkButton
                     to={bookmark.url}
                     target="_blank"

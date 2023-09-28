@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { Badge } from "~/components/ui/badge";
+import { Code } from "~/components/ui/code";
 import { cn } from "~/utils/misc";
 
 export interface IntroProps
@@ -17,17 +17,16 @@ export const Intro = forwardRef<React.ElementRef<"div">, IntroProps>(
           "px-4 pb-4 pt-2 text-center [text-wrap:balance] sm:py-0 sm:text-lg",
           className,
         )}
+        data-testid="intro"
         ref={forwardedRef}
       >
-        <h1 className="mr-4 inline font-semibold">
-          {ENV.APP_NAME}{" "}
-          <Badge>
-            <abbr className="no-underline" title="Version">
-              v
-            </abbr>
-            {ENV.APP_VERSION}
-          </Badge>
-        </h1>
+        <h1 className="inline font-semibold">{ENV.APP_NAME}</h1>
+        <Code className="mx-3" data-testid="app-version">
+          <abbr className="no-underline" title="Version">
+            v
+          </abbr>
+          <span>{ENV.APP_VERSION}</span>
+        </Code>
         <p className="inline text-[0.875em]">{ENV.APP_DESCRIPTION_LONG}</p>
       </div>
     );

@@ -22,10 +22,11 @@
     "dev": "remix dev --manual",
     "format": "prettier --ignore-unknown --write .",
     "lint": "eslint --ext=.js,.jsx,.ts,.tsx .",
-    "setup": "prisma generate && prisma migrate deploy && prisma db seed",
+    "setup": "pnpm install && pnpm run build && prisma generate && prisma migrate deploy && prisma db seed",
     "start": "remix-serve ./build/index.js",
     "studio": "prisma studio",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "validate": "pnpm run typecheck && pnpm run lint"
   },
   "dependencies": {
     "@conform-to/react": "^0.9.0",

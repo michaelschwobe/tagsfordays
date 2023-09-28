@@ -121,7 +121,7 @@ export default function BookmarksIndexPage() {
                 className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
                 variant="ghost"
               >
-                <Favicon src={bookmark.favicon} />
+                <Favicon src={bookmark.favicon} />{" "}
                 <span className="truncate text-sm">
                   {bookmark.title ? (
                     <span>{bookmark.title}</span>

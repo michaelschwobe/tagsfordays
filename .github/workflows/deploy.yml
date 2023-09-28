@@ -99,8 +99,8 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
-      # - name: 🏄 Copy test env vars
-      #   run: cp .env.example .env
+      - name: 🏄 Copy test env vars
+        run: cp .env.example .env
 
       - name: 📥 Setup pnpm
         uses: pnpm/action-setup@v2
@@ -117,7 +117,7 @@ jobs:
         run: pnpm install
 
       - name: 📥 Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: 🛠 Setup Database
         run: pnpm exec prisma migrate deploy

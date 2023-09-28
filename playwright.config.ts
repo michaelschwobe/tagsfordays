@@ -1,5 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-// import 'dotenv/config';
+import "dotenv/config";
 
 const PORT = process.env["PORT"] || "3000";
 
@@ -22,7 +22,7 @@ export default defineConfig({
   reporter: "html",
 
   use: {
-    baseURL: `http://127.0.0.1:${PORT}`, // `http://localhost:${PORT}`,
+    baseURL: `http://localhost:${PORT}`,
     trace: "on-first-retry",
   },
 

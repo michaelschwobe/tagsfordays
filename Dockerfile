@@ -19,7 +19,7 @@ ENV NODE_ENV="production"
 # If changing this, match the same values from:
 # - `/.github/workflows/deploy.yml`
 # - `/package.json`
-ARG PNPM_VERSION=8.7.6
+ARG PNPM_VERSION=8.8.0
 RUN npm install -g pnpm@$PNPM_VERSION
 
 
@@ -36,7 +36,7 @@ RUN pnpm install --frozen-lockfile --prod=false
 
 # Generate Prisma Client
 COPY --link prisma .
-RUN npx prisma generate
+RUN pnpm exec prisma generate
 
 # Copy application code
 COPY --link . .

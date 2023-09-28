@@ -18,15 +18,18 @@
   },
   "scripts": {
     "build": "remix build",
-    "clean": "rm -rf .cache && rm -rf coverage && rm -rf build && rm -rf public/build && rm -rf node_modules",
+    "clean": "rm -rf .cache && rm -rf coverage && rm -rf build && rm -rf playwright-report && rm -rf public/build && rm -rf test-results && rm -rf node_modules",
     "dev": "remix dev --manual",
+    "e2e": "pnpm --silent run build && CI=true playwright test",
+    "e2e:dev": "playwright test --ui",
     "format": "prettier --ignore-unknown --write .",
     "lint": "eslint --ext=.js,.jsx,.ts,.tsx .",
-    "setup": "pnpm install && pnpm run build && prisma generate && prisma migrate deploy && prisma db seed",
+    "setup": "pnpm install && pnpm run build && prisma generate && prisma migrate deploy && prisma db seed && playwright install",
     "start": "remix-serve ./build/index.js",
+    "start:mocks": "MOCKS=true remix-serve ./build/index.js",
     "studio": "prisma studio",
     "typecheck": "tsc",
-    "validate": "pnpm run typecheck && pnpm run lint"
+    "validate": "pnpm run typecheck && pnpm run lint && pnpm run e2e"
   },
   "dependencies": {
     "@conform-to/react": "^0.9.0",
@@ -52,6 +55,7 @@
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.4.10",
+    "@playwright/test": "^1.38.1",
     "@remix-run/dev": "^2.0.1",
     "@remix-run/eslint-config": "^2.0.1",
     "@tailwindcss/aspect-ratio": "^0.4.2",

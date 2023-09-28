@@ -5,6 +5,9 @@
 
 # testing
 /coverage
+/playwright-report/
+/playwright/.cache/
+/test-results/
 
 # production
 /build

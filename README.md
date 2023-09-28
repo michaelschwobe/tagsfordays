@@ -15,7 +15,6 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 
 ### General
 
-- TODO: Add E2E tests via Playwright
 - TODO: Add Unit tests via Vitest
 - TODO: Add feature: all/model-filtered data resouce route
 

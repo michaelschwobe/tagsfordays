@@ -15,7 +15,8 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 
 ### General
 
-- TODO: Add Unit tests via Vitest
+- TODO: Add more E2E tests
+- TODO: Add more Unit tests
 - TODO: Add feature: all/model-filtered data resouce route
 
 ### Users

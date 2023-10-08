@@ -96,7 +96,7 @@ export function formatItemsFoundByCount({
 }
 
 export function formatMetaTitle(title: string) {
-  return `${title} | ${ENV.APP_NAME}`;
+  return title ? `${title} | ${ENV.APP_NAME}` : ENV.APP_NAME;
 }
 
 export function invariant(

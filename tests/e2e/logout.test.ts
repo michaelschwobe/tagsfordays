@@ -1,19 +1,22 @@
 import { expect, login, test } from "../utils/playwright-test-utils";
 
-test.describe("Logout GET", () => {
+test.describe("GET", () => {
   test("User is redirected to the homepage by default", async ({ page }) => {
     await page.goto("/logout");
-    await page.waitForURL("/");
+
+    await expect(page).toHaveURL("/");
   });
 
   test("User is redirected to page the request came from", async ({ page }) => {
     const redirectTo = "/tags";
     await page.goto(`/logout?redirectTo=${redirectTo}`);
-    await page.waitForURL(redirectTo);
+
+    await expect(page).toHaveURL(redirectTo);
   });
 
-  test("User session is preserved", async ({ page }) => {
+  test("User session is NOT destroyed", async ({ page }) => {
     const { username } = await login({ page, to: "/logout" });
+
     await page.waitForURL("/");
     await expect(
       page.getByTestId("username").getByText(username),
@@ -21,9 +24,10 @@ test.describe("Logout GET", () => {
   });
 });
 
-test.describe("Logout POST", () => {
+test.describe("POST", () => {
   test("User session is destroyed", async ({ page }) => {
     const { username } = await login({ page, to: "/logout" });
+
     await page.waitForURL("/");
     await expect(
       page.getByTestId("username").getByText(username),

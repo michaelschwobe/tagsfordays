@@ -1,10 +1,15 @@
 import { expect, test } from "../utils/playwright-test-utils";
 
-test("Error boundary caught", async ({ page }) => {
+test("User can view the page title", async ({ page }) => {
+  await page.goto("/someroute");
+
+  await expect(page).toHaveTitle(/^Error \|/);
+});
+
+test("User can view the error boundary content", async ({ page }) => {
   const response = await page.goto("/someroute");
 
   expect(response?.status()).toBe(404);
-  await expect(page).toHaveTitle(/error | tagsfordays/i);
 
   await expect(page.getByRole("heading", { name: /error/i })).toBeVisible();
   await expect(

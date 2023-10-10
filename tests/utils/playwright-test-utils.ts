@@ -29,6 +29,20 @@ export async function logout({ page }: { page: Page }) {
     .press("Enter");
 }
 
+export function encodeUrlRedirectTo({
+  page,
+  url,
+}: {
+  page: Page;
+  url: string;
+}) {
+  const { pathname, searchParams } = new URL(url, page.url());
+  const encodedRedirectTo = encodeURIComponent(
+    searchParams.get("redirectTo") || "/",
+  );
+  return `${pathname}?redirectTo=${encodedRedirectTo}`;
+}
+
 const test = base.extend({});
 
 export { expect, test };

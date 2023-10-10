@@ -14,50 +14,56 @@ async function seed() {
     username: "someuser",
     password: "somepass",
     tags: [
-      "tag1",
-      "tag2",
-      "tag3",
-      "tag4",
-      "tag5",
-      "tag6",
-      "tag7",
-      "tag8",
-      "tag9",
-      "tag10",
-      "taaaaaaaaaaaaag that is exactly 45 characters",
+      { id: "tid0", name: "tag1" },
+      { id: "tid1", name: "tag2" },
+      { id: "tid2", name: "tag3" },
+      { id: "tid3", name: "tag4" },
+      { id: "tid4", name: "tag5" },
+      { id: "tid5", name: "tag6" },
+      { id: "tid6", name: "tag7" },
+      { id: "tid7", name: "tag8" },
+      { id: "tid8", name: "tag9" },
+      { id: "tid9", name: "tag10" },
+      { id: "tid10", name: "taaaaaaaaaaaaag that is exactly 45 characters" },
     ],
     bookmarks: [
       {
+        id: "bid0",
         url: "https://conform.guide",
         title: "Conform",
         content:
           "A progressive enhancement first form validation library for Remix and React Router.",
       },
       {
+        id: "bid1",
         url: "https://www.prisma.io",
         title: "Prisma",
         content:
           "Prisma is a next-generation Node.js and TypeScript ORM for PostgreSQL, MySQL, SQL Server, SQLite, MongoDB, and CockroachDB. It provides type-safety, automated migrations, and an intuitive data model.",
       },
       {
+        id: "bid2",
         url: "https://remix.run",
         title: "Remix",
         content:
           "Remix is a full stack web framework that lets you focus on the user interface and work back through web standards to deliver a fast, slick, and resilient user experience. People are gonna love using your stuff.",
       },
       {
+        id: "bid3",
         url: "https://tailwindcss.com",
         title: "Tailwind CSS",
         content:
           "Tailwind CSS is a utility-first CSS framework for rapidly building modern websites without ever leaving your HTML.",
       },
       {
+        id: "bid4",
         url: "https://www.typescriptlang.org",
         title: "TypeScript",
         content:
           "TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale.",
       },
       {
+        id: "bid5",
         url: "https://zod.dev",
         title: "Zod",
         content:
@@ -89,9 +95,9 @@ async function seed() {
   console.time(CONSTANTS.createTags);
   const tags = await Promise.all(
     CONSTANTS.tags.map(
-      async (name) =>
+      async ({ id, name }) =>
         await prisma.tag.create({
-          data: { name, userId },
+          data: { id, name, userId },
           select: { id: true },
         }),
     ),
@@ -104,6 +110,7 @@ async function seed() {
       async (bookmark, bookmarkIdx) =>
         await prisma.bookmark.create({
           data: {
+            id: bookmark.id,
             url: bookmark.url,
             title: bookmark.title,
             content: bookmark.content,

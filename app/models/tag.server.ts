@@ -134,12 +134,28 @@ export async function deleteTagByName({
 export async function mergeTag({
   sourceTagId,
   targetTagId,
+  userId,
 }: {
   sourceTagId: Tag["id"];
   targetTagId: Tag["id"];
+  userId: User["id"];
 }) {
-  return prisma.tagOnBookmark.updateMany({
-    where: { tagId: sourceTagId },
-    data: { tagId: targetTagId },
+  const [sourceRelations, targetRelations] = await Promise.all([
+    prisma.tagOnBookmark.findMany({ where: { tagId: sourceTagId } }),
+    prisma.tagOnBookmark.findMany({ where: { tagId: targetTagId } }),
+  ]);
+  const sourceBookmarkIds = sourceRelations.map((el) => el.bookmarkId);
+  const targetBookmarkIds = targetRelations.map((el) => el.bookmarkId);
+  const uniqueBookmarkIds = sourceBookmarkIds.filter(
+    (bookmarkId) => !targetBookmarkIds.includes(bookmarkId),
+  );
+  const createBookmarkRelations = uniqueBookmarkIds.map((bookmarkId) =>
+    prisma.tagOnBookmark.create({
+      data: { tagId: targetTagId, bookmarkId },
+    }),
+  );
+  const deleteSourceTag = prisma.tag.deleteMany({
+    where: { id: sourceTagId, userId },
   });
+  return prisma.$transaction([...createBookmarkRelations, deleteSourceTag]);
 }

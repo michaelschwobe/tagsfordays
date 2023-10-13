@@ -27,13 +27,7 @@ import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { LinkButton } from "~/components/ui/link-button";
 import { SelectItem, SimpleSelect } from "~/components/ui/select";
-import {
-  deleteTag,
-  getTag,
-  getTagByName,
-  getTags,
-  mergeTag,
-} from "~/models/tag.server";
+import { getTag, getTagByName, getTags, mergeTag } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import {
   formatMetaTitle,
@@ -80,16 +74,16 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   const targetTag = await getTagByName({ name: submission.value.name });
   invariantResponse(targetTag, "Target Tag Not Found", { status: 404 });
 
-  const { count } = await mergeTag({
+  const mergeTagResults = await mergeTag({
     sourceTagId: sourceTag.id,
     targetTagId: targetTag.id,
+    userId,
   });
-  await deleteTag({ id: sourceTag.id, userId });
 
   return redirectWithToast(`/tags/${targetTag.id}`, {
     type: "success",
-    title: "Tags merged:",
-    description: `${count} relations updated`,
+    title: "Tag merged:",
+    description: `${mergeTagResults.length - 1} relation(s) updated`,
   });
 };
 

@@ -10,10 +10,10 @@ import {
   Form,
   useActionData,
   useLoaderData,
-  useNavigate,
   useNavigation,
 } from "@remix-run/react";
 import { useId } from "react";
+import { ButtonCancel } from "~/components/button-cancel";
 import { ButtonDelete } from "~/components/button-delete";
 import { GeneralErrorBoundary, MainError } from "~/components/error-boundary";
 import { Main } from "~/components/main";
@@ -105,7 +105,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export default function EditTagPage() {
   const actionData = useActionData<typeof action>();
   const loaderData = useLoaderData<typeof loader>();
-  const navigate = useNavigate();
   const navigation = useNavigation();
 
   const id = useId();
@@ -131,10 +130,7 @@ export default function EditTagPage() {
           <Icon type="tag" />
           Edit Tag
         </H1>
-        <Button type="button" onClick={() => navigate(-1)} size="md-icon">
-          <Icon type="x" />
-          <span className="sr-only">Cancel</span>
-        </Button>
+        <ButtonCancel />
       </div>
 
       <Form method="POST" {...form.props}>

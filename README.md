@@ -13,34 +13,23 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 >
 > This project is still in development and all items are subject to change and in no specific order.
 
-### General
+- TODO: Tag: trending widget (relation count x relation dates)
+- TODO: Tag: popular widget (relation count)
+- TODO: Tag: tag colors or other fields
 
-- TODO: Add more Unit tests
-- TODO: Add feature: all/model-filtered data resouce route
-- TODO: Add feature: db writes/resets when testing
+- TODO: Bookmark: import/selection
+- TODO: Bookmark: export/selection (text, csv, json, html)
+- TODO: Bookmark: watchtower route (dead links, redirects, etc.)
+- TODO: Bookmark: suggest/postfetch-opt-in title/description
+- TODO: Bookmark: suggest tags
 
-### Users
+- TODO: Collection: collection model (grouped bookmarks, tagged)
 
-- TODO: Add feature: multitenancy
-- TODO: Add feature: profiles
+- TODO: User: multitenancy
+- TODO: User: profiles
 
-### Tags
-
-- TODO: Add feature: tag colors or other fields
-- TODO: Add feature: popular tags (relation count)
-- TODO: Add feature: trending tags (relation count x relation dates)
-- TODO: Add feature: data resouce route
-- TODO: Add more data (seeded, production, etc.)
-
-### Bookmarks
-
-- TODO: Add feature: import/selection
-- TODO: Add feature: export/selection (text, csv, json, html)
-- TODO: Add feature: bookmark suggest/postfetch-opt-in title/description
-- TODO: Add feature: bookmark suggest tags
-- TODO: Add feature: bookmark watchtower route (dead links, redirects, etc.)
-- TODO: Add more data (seeded, production, etc.)
-
-### Collections
-
-- TODO: Add feature: collection model (grouped bookmarks)
+- TODO: General: more data (seeded, production, etc.)
+- TODO: General: db writes/resets when testing
+- TODO: General: tailwindcss config for custom colors, spacing, etc.
+- TODO: General: all/model-filtered data resouce route(s)
+- TODO: General: more Unit tests / enable skipped tests when db writes/resets are implemented

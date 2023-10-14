@@ -38,7 +38,6 @@ test.describe("Unauthenticated", () => {
     await expect(page).toHaveURL("/tags");
   });
 
-  // TODO: enable test when db writes/resets are implemented
   test.skip("User can NOT view the 'Latest Bookmarks' content if data is missing", async ({
     page,
   }) => {
@@ -50,7 +49,6 @@ test.describe("Unauthenticated", () => {
     ).toBeVisible();
   });
 
-  // TODO: enable test when db writes/resets are implemented
   test.skip("User can NOT view the 'Latest Tags' content if data is missing", async ({
     page,
   }) => {

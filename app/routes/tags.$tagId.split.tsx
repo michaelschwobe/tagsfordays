@@ -34,8 +34,7 @@ import {
   getFieldError,
   invariant,
   invariantResponse,
-  isFulfilled,
-  isRejected,
+  promiseAllSettledUnion,
 } from "~/utils/misc";
 import { toCreateTagFormSchema } from "~/utils/tag-validation";
 import { createToastHeaders, redirectWithToast } from "~/utils/toast.server";
@@ -84,31 +83,23 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
   const names = submission.value.name.split(",");
 
-  const tagsResults = await Promise.allSettled(
-    names.map((name) =>
-      createAndConnectTag({
-        name,
-        bookmarkIds:
-          sourceTag._count.bookmarks > 0
-            ? sourceTag.bookmarks.map(({ bookmarkId }) => bookmarkId)
-            : undefined,
-        userId,
-      }),
-    ),
+  const promises = names.map((name) =>
+    createAndConnectTag({
+      name,
+      bookmarkIds:
+        sourceTag._count.bookmarks > 0
+          ? sourceTag.bookmarks.map(({ bookmarkId }) => bookmarkId)
+          : undefined,
+      userId,
+    }),
   );
 
-  const tagsFulfilled = tagsResults
-    .filter(isFulfilled)
-    .map((result) => result.value);
+  const [fulfilled, rejected] = await promiseAllSettledUnion(promises);
 
-  const tagsRejected = tagsResults
-    .filter(isRejected)
-    .map((result) => result.reason);
-
-  const namesFulfilled = tagsFulfilled.map((tag) => tag.name);
+  const namesFulfilled = fulfilled.map((tag) => tag.name);
   const namesRejected = names.filter((name) => !namesFulfilled.includes(name));
 
-  if (tagsRejected.length > 0) {
+  if (rejected.length > 0) {
     const error = { "": [`Tags not added: ${namesRejected.join(", ")}`] };
     const headers = await createToastHeaders({
       type: "error",
@@ -118,10 +109,10 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     return json({ ...submission, error }, { status: 422, headers });
   }
 
-  const isSingleTag = names.length === 1;
-  const singleTagId = tagsFulfilled.at(0)?.id;
-  if (isSingleTag && singleTagId) {
-    return redirect(`/tags/${singleTagId}`);
+  const isSinglePromise = promises.length === 1;
+  const fulfilledId = fulfilled.at(0)?.id;
+  if (isSinglePromise && fulfilledId) {
+    return redirect(`/tags/${fulfilledId}`);
   }
 
   return redirectWithToast("/tags", {

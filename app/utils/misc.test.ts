@@ -3,6 +3,7 @@ import {
   formatMetaTitle,
   isFulfilled,
   isRejected,
+  promiseAllSettledUnion,
   safeRedirect,
   toTitleCase,
 } from "./misc";
@@ -77,6 +78,47 @@ describe("isRejected", () => {
     const fulfilledPromise = Promise.resolve(fulfilled);
     const result = await Promise.resolve(fulfilledPromise).then(isRejected);
     expect(result).toBe(false);
+  });
+});
+
+describe("promiseAllSettledUnion", () => {
+  it("returns an array with two empty arrays when passed an empty array", async () => {
+    const result = await promiseAllSettledUnion([]);
+    expect(result).toEqual([[], []]);
+  });
+
+  it("returns an array with two empty arrays when passed an array of resolved promises", async () => {
+    const promises = [
+      Promise.resolve(1),
+      Promise.resolve(2),
+      Promise.resolve(3),
+    ];
+    const result = await promiseAllSettledUnion(promises);
+    expect(result).toEqual([[1, 2, 3], []]);
+  });
+
+  it("returns an array with two empty arrays when passed an array of rejected promises", async () => {
+    const promises = [
+      Promise.reject("error 1"),
+      Promise.reject("error 2"),
+      Promise.reject("error 3"),
+    ];
+    const result = await promiseAllSettledUnion(promises);
+    expect(result).toEqual([[], ["error 1", "error 2", "error 3"]]);
+  });
+
+  it("returns an array with fulfilled and rejected values when passed an array of mixed promises", async () => {
+    const promises = [
+      Promise.resolve(1),
+      Promise.reject("error 1"),
+      Promise.resolve(2),
+      Promise.reject("error 2"),
+    ];
+    const result = await promiseAllSettledUnion(promises);
+    expect(result).toEqual([
+      [1, 2],
+      ["error 1", "error 2"],
+    ]);
   });
 });
 

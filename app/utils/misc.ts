@@ -133,6 +133,15 @@ export function isRejected<T>(
   return p.status === "rejected";
 }
 
+export async function promiseAllSettledUnion<T>(
+  promises: Array<Promise<T>>,
+): Promise<[fulfilled: T[], rejected: unknown[]]> {
+  const results = await Promise.allSettled(promises);
+  const fulfilled = results.filter(isFulfilled).map((result) => result.value);
+  const rejected = results.filter(isRejected).map((result) => result.reason);
+  return [fulfilled, rejected];
+}
+
 export function safeRedirect(
   to: FormDataEntryValue | string | null | undefined,
   toFallback: string = "/",

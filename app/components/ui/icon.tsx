@@ -27,6 +27,7 @@ export const ICON_TYPES = [
   "tag",
   "tags",
   "trash-2",
+  "upload",
   "user",
   "x",
 ] as const;

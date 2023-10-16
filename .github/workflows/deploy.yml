@@ -24,8 +24,8 @@ jobs:
         # If changing these, match the same values from:
         # - `/Dockerfile`
         # - `/package.json`
-        node-version: [20.8.0]
-        pnpm-version: [8.9.0]
+        node-version: [20.8.1]
+        pnpm-version: [8.9.2]
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -58,8 +58,8 @@ jobs:
         # If changing these, match the same values from:
         # - `/Dockerfile`
         # - `/package.json`
-        node-version: [20.8.0]
-        pnpm-version: [8.9.0]
+        node-version: [20.8.1]
+        pnpm-version: [8.9.2]
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -92,8 +92,8 @@ jobs:
         # If changing these, match the same values from:
         # - `/Dockerfile`
         # - `/package.json`
-        node-version: [20.8.0]
-        pnpm-version: [8.9.0]
+        node-version: [20.8.1]
+        pnpm-version: [8.9.2]
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -130,8 +130,8 @@ jobs:
         # If changing these, match the same values from:
         # - `/Dockerfile`
         # - `/package.json`
-        node-version: [20.8.0]
-        pnpm-version: [8.9.0]
+        node-version: [20.8.1]
+        pnpm-version: [8.9.2]
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -194,7 +194,7 @@ jobs:
       matrix:
         # If changing this, match the same value from:
         # - Running `flyctl version` on your local machine
-        flyctl-version: [0.1.101]
+        flyctl-version: [0.1.108]
     if: ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev') && github.event_name == 'push' }}
     steps:
       - name: ⬇️ Checkout repo

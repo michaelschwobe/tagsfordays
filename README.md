@@ -17,6 +17,7 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 - TODO: Tag: popular widget (relation count)
 - TODO: Tag: tag colors or other fields
 
+- TODO: Bookmark: Reenable favicon fetching when more performant
 - TODO: Bookmark: assess orderBy (title, date, etc.)
 - TODO: Bookmark: export/selection (text, csv, json, html)
 - TODO: Bookmark: watchtower route (dead links, redirects, etc.)

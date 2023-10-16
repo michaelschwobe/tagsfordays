@@ -12,7 +12,6 @@ import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { getBookmarks } from "~/models/bookmark.server";
-import { mapBookmarksWithFavicon } from "~/models/favicon.server";
 import {
   BOOKMARK_SEARCH_KEYS,
   BOOKMARK_SEARCH_KEYS_LABEL_MAP,
@@ -28,7 +27,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const searchValue = url.searchParams.get("searchValue");
 
   const bookmarks = await getBookmarks({ searchKey, searchValue });
-  const bookmarksWithFavicon = await mapBookmarksWithFavicon(bookmarks);
+  // const bookmarksWithFavicon = await mapBookmarksWithFavicon(bookmarks);
+  const bookmarksWithFavicon = bookmarks.map((b) => ({ ...b, favicon: null }));
 
   return json({ bookmarks: bookmarksWithFavicon, searchKey, searchValue });
 }

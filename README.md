@@ -17,7 +17,7 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 - TODO: Tag: popular widget (relation count)
 - TODO: Tag: tag colors or other fields
 
-- TODO: Bookmark: import/selection
+- TODO: Bookmark: assess orderBy (title, date, etc.)
 - TODO: Bookmark: export/selection (text, csv, json, html)
 - TODO: Bookmark: watchtower route (dead links, redirects, etc.)
 - TODO: Bookmark: suggest/postfetch-opt-in title/description
@@ -28,6 +28,8 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 - TODO: User: multitenancy
 - TODO: User: profiles
 
+- TODO: General: maskable icons for PWAs
+- TODO: General: performance optimizations
 - TODO: General: more data (seeded, production, etc.)
 - TODO: General: db writes/resets when testing
 - TODO: General: tailwindcss config for custom colors, spacing, etc.

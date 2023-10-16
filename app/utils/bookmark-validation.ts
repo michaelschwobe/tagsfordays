@@ -23,6 +23,22 @@ export const BookmarkFavoriteSchema = CheckboxSchema;
 
 export const BookmarkTagsSchema = z.array(TagNameSchema);
 
+export const BookmarkFilesSchema = z
+  .array(z.instanceof(File))
+  .min(1, "At least 1 file is required")
+  .refine(
+    (files) => files.every((file) => file.type === "text/html"),
+    "File must be of type text/html",
+  )
+  .refine(
+    (files) => files.every((file) => file.size < 400_000),
+    "File size must be less than 400kB",
+  );
+
+export const UploadBookmarkFilesSchema = z.object({
+  files: BookmarkFilesSchema,
+});
+
 export function toCreateBookmarkFormSchema(
   intent: string,
   constraints?: {

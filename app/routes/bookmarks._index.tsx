@@ -67,6 +67,10 @@ export default function BookmarksIndexPage() {
           <Icon type="bookmarks" />
           Bookmarks <Badge aria-hidden>{loaderData.bookmarks.length}</Badge>
         </H1>
+        <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/import`}>
+          <Icon type="upload" />
+          <span className="sr-only">Import bookmarks</span>
+        </LinkButton>
         <LinkButton
           to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
           variant="filled"

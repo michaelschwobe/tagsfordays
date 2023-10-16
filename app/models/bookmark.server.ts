@@ -125,6 +125,27 @@ export async function createBookmark({
   });
 }
 
+export async function importBookmark({
+  url,
+  title,
+  createdAt,
+  userId,
+}: Pick<Bookmark, "url" | "title" | "createdAt"> & {
+  userId: User["id"];
+}) {
+  return prisma.bookmark.create({
+    data: {
+      url,
+      title,
+      createdAt,
+      user: {
+        connect: { id: userId },
+      },
+    },
+    select: { id: true, url: true },
+  });
+}
+
 export async function updateBookmark({
   id,
   url,

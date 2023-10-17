@@ -22,6 +22,13 @@
     <symbol id="chevron-right" viewBox="0 0 24 24">
       <polyline points="9 18 15 12 9 6" />
     </symbol>
+    <symbol id="chevron-up" viewBox="0 0 24 24">
+      <path d="m18 15-6-6-6 6" />
+    </symbol>
+    <symbol id="chevrons-up-down" viewBox="0 0 24 24">
+      <path d="m7 15 5 5 5-5" />
+      <path d="m7 9 5-5 5 5" />
+    </symbol>
     <symbol id="external-link" viewBox="0 0 24 24">
       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
       <polyline points="15 3 21 3 21 9" />
@@ -66,6 +73,9 @@
       <path d="m8 6 4-4 4 4" />
       <path d="M12 2v10.3a4 4 0 0 1-1.172 2.872L4 22" />
       <path d="m20 22-5-5" />
+    </symbol>
+    <symbol id="minus" viewBox="0 0 24 24">
+      <path d="M5 12h14" />
     </symbol>
     <symbol id="moon" viewBox="0 0 24 24">
       <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />

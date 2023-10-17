@@ -2,7 +2,7 @@
 
 TagsForDays extends traditional bookmarking with advanced organization and search capabilities. [https://tagsfordays.fly.dev](https://tagsfordays.fly.dev)
 
-![Screenshot of the homepage](./public/favicons/opengraph-image.png)
+![Screenshot of the homepage](./public/favicons/screenshot-wide.png)
 
 ## Roadmap
 
@@ -29,7 +29,6 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 - TODO: User: multitenancy
 - TODO: User: profiles
 
-- TODO: General: maskable icons for PWAs
 - TODO: General: performance optimizations
 - TODO: General: more data (seeded, production, etc.)
 - TODO: General: db writes/resets when testing

@@ -52,7 +52,7 @@ export function generateSocialMeta(props: {
 }): MetaDescriptor[] {
   const { title, description } = props;
   const image = {
-    src: "/favicons/opengraph-image.png",
+    src: "/favicons/screenshot-wide.png",
     alt: "Screenshot of the homepage",
     ...props.image,
   };

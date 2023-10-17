@@ -43,6 +43,7 @@ export function getEnv() {
 
     /**
      * If changing this, also change the same value in:
+     * - `/public/site.webmanifest`
      * - `/README.md`
      */
     APP_NAME: "TagsForDays",
@@ -55,6 +56,9 @@ export function getEnv() {
 
     /**
      * Do not include a period.
+     *
+     * If changing this, also change the same value in:
+     * - `/public/site.webmanifest`
      */
     APP_DESCRIPTION_SHORT: "Enhance and organize your bookmarks",
 

@@ -1,20 +1,50 @@
 {
   "name": "TagsForDays",
   "short_name": "TagsForDays",
+  "description": "Enhance and organize your bookmarks",
   "start_url": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#06b6d4",
   "theme_color": "#06b6d4",
   "icons": [
     {
+      "src": "/favicons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicons/mask-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any monochrome"
+    },
+    {
       "src": "/favicons/android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/favicons/android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/favicons/screenshot-wide.png",
+      "type": "image/png",
+      "sizes": "1200x630",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/favicons/screenshot-narrow.png",
+      "type": "image/png",
+      "sizes": "1170x2532",
+      "form_factor": "narrow"
     }
   ]
 }

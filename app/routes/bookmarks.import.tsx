@@ -96,7 +96,7 @@ export default function BookmarksImportPage() {
     <Main>
       <div className="mb-4 flex items-center gap-2">
         <H1>
-          <Icon type="bookmark" />
+          <Icon type="bookmarks" />
           Import Bookmarks
         </H1>
         <ButtonCancel />

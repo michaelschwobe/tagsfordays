@@ -10,6 +10,7 @@ export const ICON_TYPES = [
   "chevron-right",
   "chevron-up",
   "chevrons-up-down",
+  "download",
   "external-link",
   "heart",
   "home",

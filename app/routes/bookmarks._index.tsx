@@ -58,7 +58,6 @@ export default function BookmarksIndexPage() {
   const loaderData = useLoaderData<typeof loader>();
 
   const hasBookmarks = loaderData.bookmarks.length > 0;
-  // const hasSearchValue = (loaderData.searchValue ?? "").length > 0;
 
   return (
     <Main>

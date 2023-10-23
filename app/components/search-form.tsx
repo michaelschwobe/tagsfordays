@@ -65,6 +65,8 @@ export function SearchForm({
     }
   }, [fields.searchValue.defaultValue, fields.searchValue.id]);
 
+  const hasSearchValue = (fields.searchValue.defaultValue ?? "").length > 0;
+
   return (
     <Form className={cn(className)} method="GET" {...form.props}>
       <fieldset
@@ -120,10 +122,12 @@ export function SearchForm({
             <Icon type="search" />
             <span className="sr-only">Submit</span>
           </Button>
-          <LinkButton to="." relative="path" reloadDocument size="md-icon">
-            <Icon type="x" />
-            <span className="sr-only">Reset</span>
-          </LinkButton>
+          {hasSearchValue ? (
+            <LinkButton to="." relative="path" reloadDocument size="md-icon">
+              <Icon type="x" />
+              <span className="sr-only">Reset</span>
+            </LinkButton>
+          ) : null}
         </FormItem>
       </fieldset>
     </Form>

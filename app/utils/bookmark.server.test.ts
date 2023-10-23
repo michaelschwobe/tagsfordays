@@ -84,37 +84,46 @@ describe("formatBookmarkTitle", () => {
 });
 
 describe("formatBookmarkCreatedAt", () => {
+  let currDate: Date;
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    currDate = new Date();
+    vi.setSystemTime(currDate);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("should return the default date when given a null value", () => {
-    const expected = new Date();
     const result = formatBookmarkCreatedAt(null);
-    expect(result).toEqual(expected);
+    expect(result).toEqual(currDate);
   });
 
   it("should return the default date when given a value of 0", () => {
-    const expected = new Date();
     const result = formatBookmarkCreatedAt("0");
-    expect(result).toEqual(expected);
+    expect(result).toEqual(currDate);
   });
 
   it("should return the default date when given a value with length not equal to 10", () => {
-    const expected = new Date();
     const resultShort = formatBookmarkCreatedAt("123456789");
     const resultLong = formatBookmarkCreatedAt("12345678901");
-    expect(resultShort).toEqual(expected);
-    expect(resultLong).toEqual(expected);
+    expect(resultShort).toEqual(currDate);
+    expect(resultLong).toEqual(currDate);
   });
 
   it("should return the default date when given a non-numeric value", () => {
-    const expected = new Date();
     const result = formatBookmarkCreatedAt("abcdefghij");
-    expect(result).toEqual(expected);
+    expect(result).toEqual(currDate);
   });
 
   it("should return the parsed date when given a valid value", () => {
     const sLength10 = 1234567890; // 2009-02-13T23:31:30.000Z
-    const expected = new Date(sLength10 * 1000);
+    const diffDate = new Date(sLength10 * 1000);
     const result = formatBookmarkCreatedAt(`${sLength10}`);
-    expect(result).toEqual(expected);
+    expect(result).not.toEqual(currDate);
+    expect(result).toEqual(diffDate);
   });
 });
 

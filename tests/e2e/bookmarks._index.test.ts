@@ -11,20 +11,34 @@ test.describe("Unauthenticated", () => {
 
   test("User can view bookmarks", async ({ page }) => {
     await expect(
-      page.getByText("TypeScript https://www.typescriptlang.org Unfavorite"),
-    ).toBeVisible();
-    await expect(page.getByText("Zod https://zod.dev Favorite")).toBeVisible();
-    await expect(
-      page.getByText("Conform https://conform.guide Unfavorite"),
+      page.getByRole("row", {
+        name: "TypeScript https://www.typescriptlang.org Unfavorite",
+      }),
     ).toBeVisible();
     await expect(
-      page.getByText("Prisma https://www.prisma.io Favorite"),
+      page.getByRole("row", {
+        name: "Zod https://zod.dev Favorite",
+      }),
     ).toBeVisible();
     await expect(
-      page.getByText("Remix https://remix.run Unfavorite"),
+      page.getByRole("row", {
+        name: "Conform https://conform.guide Unfavorite",
+      }),
     ).toBeVisible();
     await expect(
-      page.getByText("Tailwind CSS https://tailwindcss.com Favorite"),
+      page.getByRole("row", {
+        name: "Prisma https://www.prisma.io Favorite",
+      }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("row", {
+        name: "Remix https://remix.run Unfavorite",
+      }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("row", {
+        name: "Tailwind CSS https://tailwindcss.com Favorite",
+      }),
     ).toBeVisible();
   });
 
@@ -36,22 +50,34 @@ test.describe("Unauthenticated", () => {
     await expect(page.getByRole("group").getByText("URL")).toBeChecked();
     await expect(page.getByPlaceholder("Search for…")).toHaveValue("mix");
     await expect(
-      page.getByText("TypeScript https://www.typescriptlang.org Unfavorite"),
+      page.getByRole("row", {
+        name: "TypeScript https://www.typescriptlang.org Unfavorite",
+      }),
     ).not.toBeVisible();
     await expect(
-      page.getByText("Zod https://zod.dev Favorite"),
+      page.getByRole("row", {
+        name: "Zod https://zod.dev Favorite",
+      }),
     ).not.toBeVisible();
     await expect(
-      page.getByText("Conform https://conform.guide Unfavorite"),
+      page.getByRole("row", {
+        name: "Conform https://conform.guide Unfavorite",
+      }),
     ).not.toBeVisible();
     await expect(
-      page.getByText("Prisma https://www.prisma.io Favorite"),
+      page.getByRole("row", {
+        name: "Prisma https://www.prisma.io Favorite",
+      }),
     ).not.toBeVisible();
     await expect(
-      page.getByText("Remix https://remix.run Unfavorite"),
+      page.getByRole("row", {
+        name: "Remix https://remix.run Unfavorite",
+      }),
     ).toBeVisible();
     await expect(
-      page.getByText("Tailwind CSS https://tailwindcss.com Favorite"),
+      page.getByRole("row", {
+        name: "Tailwind CSS https://tailwindcss.com Favorite",
+      }),
     ).not.toBeVisible();
   });
 
@@ -68,22 +94,34 @@ test.describe("Unauthenticated", () => {
     await expect(page.getByRole("group").getByText("Content")).toBeChecked();
     await expect(page.getByPlaceholder("Search for…")).toHaveValue("mix");
     await expect(
-      page.getByText("TypeScript https://www.typescriptlang.org Unfavorite"),
+      page.getByRole("row", {
+        name: "TypeScript https://www.typescriptlang.org Unfavorite",
+      }),
     ).not.toBeVisible();
     await expect(
-      page.getByText("Zod https://zod.dev Favorite"),
+      page.getByRole("row", {
+        name: "Zod https://zod.dev Favorite",
+      }),
     ).not.toBeVisible();
     await expect(
-      page.getByText("Conform https://conform.guide Unfavorite"),
+      page.getByRole("row", {
+        name: "Conform https://conform.guide Unfavorite",
+      }),
     ).toBeVisible();
     await expect(
-      page.getByText("Prisma https://www.prisma.io Favorite"),
+      page.getByRole("row", {
+        name: "Prisma https://www.prisma.io Favorite",
+      }),
     ).not.toBeVisible();
     await expect(
-      page.getByText("Remix https://remix.run Unfavorite"),
+      page.getByRole("row", {
+        name: "Remix https://remix.run Unfavorite",
+      }),
     ).toBeVisible();
     await expect(
-      page.getByText("Tailwind CSS https://tailwindcss.com Favorite"),
+      page.getByRole("row", {
+        name: "Tailwind CSS https://tailwindcss.com Favorite",
+      }),
     ).not.toBeVisible();
   });
 

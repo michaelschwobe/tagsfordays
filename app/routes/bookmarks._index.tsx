@@ -1,13 +1,15 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import {
+  BookmarksTable,
+  bookmarksTableColumns,
+} from "~/components/bookmarks-table";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
-import { Favorite } from "~/components/favorite";
 import { Main } from "~/components/main";
 import { SearchForm } from "~/components/search-form";
 import { SearchHelp } from "~/components/search-help";
 import { Badge } from "~/components/ui/badge";
-import { Favicon } from "~/components/ui/favicon";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
@@ -57,14 +59,14 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export default function BookmarksIndexPage() {
   const loaderData = useLoaderData<typeof loader>();
 
-  const hasBookmarks = loaderData.bookmarks.length > 0;
+  const bookmarksCount = loaderData.bookmarks.length;
 
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
         <H1>
           <Icon type="bookmarks" />
-          Bookmarks <Badge aria-hidden>{loaderData.bookmarks.length}</Badge>
+          Bookmarks <Badge aria-hidden>{bookmarksCount}</Badge>
         </H1>
         <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/import`}>
           <Icon type="upload" />
@@ -90,7 +92,7 @@ export default function BookmarksIndexPage() {
 
       <SearchHelp
         className="mb-4"
-        count={loaderData.bookmarks.length}
+        count={bookmarksCount}
         singular="bookmark"
         plural="bookmarks"
       >
@@ -115,44 +117,13 @@ export default function BookmarksIndexPage() {
         </LinkButton>
       </SearchHelp>
 
-      {hasBookmarks ? (
-        <ul className="divide-y divide-slate-300 rounded-md border border-slate-300 bg-white dark:divide-slate-600 dark:border-slate-600 dark:bg-slate-800">
-          {loaderData.bookmarks.map((bookmark) => (
-            <li key={bookmark.id} className="flex gap-1 p-1">
-              <LinkButton
-                to={`/bookmarks/${bookmark.id}`}
-                className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
-                variant="ghost"
-              >
-                <Favicon src={bookmark.favicon} />{" "}
-                <span className="truncate text-sm">
-                  {bookmark.title ? (
-                    <span>{bookmark.title}</span>
-                  ) : (
-                    <span aria-label="Untitled">--</span>
-                  )}
-                </span>
-              </LinkButton>{" "}
-              <LinkButton
-                to={bookmark.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="grow justify-between overflow-hidden font-normal"
-                variant="ghost"
-              >
-                <span className="truncate text-xs font-normal">
-                  {bookmark.url}
-                </span>
-                <Icon type="external-link" />
-              </LinkButton>{" "}
-              <Favorite
-                formAction={`/bookmarks/${bookmark.id}`}
-                defaultValue={bookmark.favorite}
-                variant="ghost"
-              />
-            </li>
-          ))}
-        </ul>
+      {bookmarksCount > 0 ? (
+        <BookmarksTable
+          // TODO: remove ts-expect-error once this is fixed
+          // @ts-expect-error - node module bug https://github.com/TanStack/table/issues/5135
+          columns={bookmarksTableColumns}
+          data={loaderData.bookmarks}
+        />
       ) : null}
     </Main>
   );

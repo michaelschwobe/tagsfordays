@@ -1,20 +1,35 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
+export const TableWrapper = forwardRef<
+  React.ElementRef<"div">,
+  React.ComponentPropsWithoutRef<"div">
+>(({ children, className, ...props }, forwardedRef) => (
+  <div
+    {...props}
+    className={cn(
+      "relative w-full overflow-auto rounded-lg border-slate-300 dark:border-slate-600",
+      className,
+    )}
+    ref={forwardedRef}
+  >
+    {children}
+  </div>
+));
+TableWrapper.displayName = "TableWrapper";
+
 export const Table = forwardRef<
   React.ElementRef<"table">,
   React.ComponentPropsWithoutRef<"table">
 >(({ className, ...props }, forwardedRef) => (
-  <div className="relative w-full overflow-auto rounded-[inherit]">
-    <table
-      {...props}
-      className={cn(
-        "w-full caption-bottom bg-white text-sm text-slate-600 dark:bg-slate-800 dark:text-slate-400",
-        className,
-      )}
-      ref={forwardedRef}
-    />
-  </div>
+  <table
+    {...props}
+    className={cn(
+      "w-full caption-bottom bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-400",
+      className,
+    )}
+    ref={forwardedRef}
+  />
 ));
 Table.displayName = "Table";
 
@@ -22,11 +37,7 @@ export const Caption = forwardRef<
   React.ElementRef<"caption">,
   React.ComponentPropsWithoutRef<"caption">
 >(({ className, ...props }, forwardedRef) => (
-  <caption
-    {...props}
-    className={cn("my-4 text-sm", className)}
-    ref={forwardedRef}
-  />
+  <caption {...props} className={cn("my-4", className)} ref={forwardedRef} />
 ));
 Caption.displayName = "Caption";
 

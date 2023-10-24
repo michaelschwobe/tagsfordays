@@ -16,10 +16,12 @@ export const BOOKMARK_SEARCH_KEYS_LABEL_MAP = {
   tags: "Tags",
 } satisfies Readonly<Record<BookmarkSearchKey, string>>;
 
-export function parseBookmarkSearchKey(key: string | null): BookmarkSearchKey {
+export function parseBookmarkSearchKey(
+  key: string | null,
+): BookmarkSearchKey | null {
   return BOOKMARK_SEARCH_KEYS.includes(key ?? "")
     ? (key as BookmarkSearchKey)
-    : DEFAULT_BOOKMARK_SEARCH_KEY;
+    : null;
 }
 
 export function toFaviconServiceUrl(url: string) {

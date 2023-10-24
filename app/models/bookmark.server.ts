@@ -37,9 +37,9 @@ export async function getBookmarks({
   searchKey,
   searchValue,
 }: {
-  searchKey: BookmarkSearchKey;
+  searchKey?: BookmarkSearchKey | null;
   searchValue?: string | null;
-}) {
+} = {}) {
   if (searchValue && searchKey === "tags") {
     return prisma.bookmark.findMany({
       select: {
@@ -60,7 +60,7 @@ export async function getBookmarks({
     });
   }
 
-  if (searchValue) {
+  if (searchValue && searchKey) {
     return prisma.bookmark.findMany({
       select: { id: true, url: true, title: true, favorite: true },
       where: { [searchKey]: { contains: searchValue } },

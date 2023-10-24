@@ -46,8 +46,10 @@ test.describe("Unauthenticated", () => {
     await page.getByPlaceholder("Search for…").fill("mix");
     await page.getByPlaceholder("Search for…").press("Enter");
 
-    await expect(page).toHaveURL("/bookmarks?searchKey=url&searchValue=mix");
-    await expect(page.getByRole("group").getByText("URL")).toBeChecked();
+    await expect(page).toHaveURL("/bookmarks?searchValue=mix&searchKey=url");
+    await expect(
+      page.getByTestId("search-form").getByRole("button", { name: "URL" }),
+    ).toHaveAttribute("aria-pressed", "true");
     await expect(page.getByPlaceholder("Search for…")).toHaveValue("mix");
     await expect(
       page.getByRole("row", {
@@ -84,15 +86,16 @@ test.describe("Unauthenticated", () => {
   test("User can search bookmarks by keyword and column name", async ({
     page,
   }) => {
-    await page.getByRole("group").getByText("Content").click();
     await page.getByPlaceholder("Search for…").fill("mix");
-    await page.getByRole("button", { name: "Submit" }).press("Enter");
+    await page.getByRole("button", { name: "Content" }).press("Enter");
 
     await expect(page).toHaveURL(
-      "/bookmarks?searchKey=content&searchValue=mix",
+      "/bookmarks?searchValue=mix&searchKey=content",
     );
-    await expect(page.getByRole("group").getByText("Content")).toBeChecked();
     await expect(page.getByPlaceholder("Search for…")).toHaveValue("mix");
+    await expect(
+      page.getByTestId("search-form").getByRole("button", { name: "Content" }),
+    ).toHaveAttribute("aria-pressed", "true");
     await expect(
       page.getByRole("row", {
         name: "TypeScript https://www.typescriptlang.org Unfavorite",
@@ -126,16 +129,20 @@ test.describe("Unauthenticated", () => {
   });
 
   test("User can reset search form", async ({ page }) => {
-    await page.goto("/bookmarks?searchKey=tags&searchValue=badvalue");
+    await page.goto("/bookmarks?searchValue=badvalue&searchKey=tags");
 
-    await expect(page.getByRole("group").getByText("Tags")).toBeChecked();
     await expect(page.getByPlaceholder("Search for…")).toHaveValue("badvalue");
+    await expect(
+      page.getByTestId("search-form").getByRole("button", { name: "Tags" }),
+    ).toHaveAttribute("aria-pressed", "true");
 
     await page.getByRole("link", { name: "Reset" }).click();
 
     await expect(page).toHaveURL("/bookmarks");
-    await expect(page.getByRole("group").getByText("URL")).toBeChecked();
     await expect(page.getByPlaceholder("Search for…")).toHaveValue("");
+    await expect(
+      page.getByTestId("search-form").getByRole("button", { name: "Tags" }),
+    ).toHaveAttribute("aria-pressed", "false");
   });
 
   test("User can go to a bookmark's detail page", async ({ page }) => {
@@ -148,12 +155,15 @@ test.describe("Unauthenticated", () => {
   test("User can NOT view bookmarks if bookmarks data is missing", async ({
     page,
   }) => {
-    await page.getByRole("group").getByText("Tags").click();
     await page.getByPlaceholder("Search for…").fill("badvalue");
-    await page.getByRole("button", { name: "Submit" }).press("Enter");
+    await page
+      .getByRole("main")
+      .locator("form")
+      .getByRole("button", { name: "Tags" })
+      .press("Enter");
 
     await expect(page).toHaveURL(
-      "/bookmarks?searchKey=tags&searchValue=badvalue",
+      "/bookmarks?searchValue=badvalue&searchKey=tags",
     );
     await expect(
       page.getByRole("heading", { name: "No Bookmarks Found" }),

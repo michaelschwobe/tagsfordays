@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
 export const buttonGroupItemVariants = cva(
-  "inline-flex h-full cursor-pointer items-center justify-center gap-2 rounded border border-transparent px-3 py-1 text-sm font-medium text-black transition-all hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-600",
+  "inline-flex h-full cursor-pointer items-center justify-center gap-2 rounded-sm border border-transparent px-3 py-1 text-sm font-medium text-black transition-all hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-600",
   {
     variants: {
       variant: {
@@ -93,7 +93,7 @@ export const ButtonGroup = forwardRef<
     <div
       {...props}
       className={cn(
-        "inline-flex h-10 items-center gap-1 rounded-lg bg-slate-200 p-1 dark:bg-slate-700 max-sm:w-full",
+        "inline-flex h-10 items-center gap-1 rounded-md bg-slate-200 p-1 dark:bg-slate-700 max-sm:w-full",
         className,
       )}
       ref={forwardedRef}

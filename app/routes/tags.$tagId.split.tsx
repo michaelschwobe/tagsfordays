@@ -147,6 +147,8 @@ export default function SplitTagPage() {
     shouldRevalidate: "onBlur",
   });
 
+  const isPending = navigation.state !== "idle";
+
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
@@ -157,59 +159,57 @@ export default function SplitTagPage() {
         <ButtonCancel />
       </div>
 
-      <Form method="POST" {...form.props}>
-        <fieldset
-          className="flex flex-col gap-4"
-          disabled={["submitting", "loading"].includes(navigation.state)}
-        >
-          <FormMessage id={form.errorId}>{form.error}</FormMessage>
+      <Form className="flex flex-col gap-4" method="POST" {...form.props}>
+        <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
-          <FormItem>
-            <FormLabel htmlFor="sourceTag-name">Source</FormLabel>
-            <FormControl>
-              <Input
-                type="text"
-                id="sourceTag-name"
-                name="sourceTag-name"
-                value={loaderData.sourceTag.name}
-                aria-describedby="sourceTag-name-description"
-                readOnly
-              />
-            </FormControl>
-          </FormItem>
+        <FormItem>
+          <FormLabel htmlFor="sourceTag-name">Source</FormLabel>
+          <FormControl>
+            <Input
+              type="text"
+              id="sourceTag-name"
+              name="sourceTag-name"
+              value={loaderData.sourceTag.name}
+              aria-describedby="sourceTag-name-description"
+              readOnly
+              disabled={isPending}
+            />
+          </FormControl>
+        </FormItem>
 
-          <FormItem>
-            <FormLabel htmlFor={fields.name.id}>Target</FormLabel>
-            <FormControl>
-              <Input
-                {...conform.input(fields.name, {
-                  type: "text",
-                  description: true,
-                })}
-                autoComplete="false"
-                autoFocus
-              />
-            </FormControl>
-            <FormDescription id={fields.name.descriptionId}>
-              Comma separate names, ex: <Code>t1,t2,t3</Code>
-            </FormDescription>
-            <FormMessage id={fields.name.errorId}>
-              {getFieldError(fields.name)}
-            </FormMessage>
-          </FormItem>
+        <FormItem>
+          <FormLabel htmlFor={fields.name.id}>Target</FormLabel>
+          <FormControl>
+            <Input
+              {...conform.input(fields.name, {
+                type: "text",
+                description: true,
+              })}
+              autoComplete="false"
+              autoFocus
+              disabled={isPending}
+            />
+          </FormControl>
+          <FormDescription id={fields.name.descriptionId}>
+            Comma separate names, ex: <Code>t1,t2,t3</Code>
+          </FormDescription>
+          <FormMessage id={fields.name.errorId}>
+            {getFieldError(fields.name)}
+          </FormMessage>
+        </FormItem>
 
-          <FormItem isButtonGroup>
-            <Button
-              type="submit"
-              className="max-sm:w-full"
-              variant="filled"
-              size="lg"
-            >
-              <Icon type="split" />
-              <span>Split tag</span>
-            </Button>
-          </FormItem>
-        </fieldset>
+        <FormItem isButtonGroup>
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="max-sm:w-full"
+            variant="filled"
+            size="lg"
+          >
+            <Icon type="split" />
+            <span>Split tag</span>
+          </Button>
+        </FormItem>
       </Form>
     </Main>
   );

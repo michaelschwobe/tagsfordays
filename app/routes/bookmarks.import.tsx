@@ -92,6 +92,8 @@ export default function BookmarksImportPage() {
     shouldRevalidate: "onInput",
   });
 
+  const isPending = navigation.state !== "idle";
+
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
@@ -102,47 +104,49 @@ export default function BookmarksImportPage() {
         <ButtonCancel />
       </div>
 
-      <Form method="POST" encType="multipart/form-data" {...form.props}>
-        <fieldset
-          className="flex flex-col gap-4"
-          disabled={["submitting", "loading"].includes(navigation.state)}
-        >
-          <FormMessage id={form.errorId}>{form.error}</FormMessage>
+      <Form
+        className="flex flex-col gap-4"
+        method="POST"
+        encType="multipart/form-data"
+        {...form.props}
+      >
+        <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
-          <div className="flex flex-wrap gap-2 sm:max-w-fit sm:flex-nowrap">
-            <FormItem className="grow">
-              <FormLabel className="sr-only" htmlFor={fields.files.id}>
-                Files
-              </FormLabel>
-              <FormControl>
-                <Input
-                  {...conform.input(fields.files, { type: "file" })}
-                  accept="text/html"
-                  multiple
-                />
-              </FormControl>
-              <FormMessage id={fields.files.errorId}>
-                {getFieldError(fields.files)}
-              </FormMessage>
-            </FormItem>
+        <div className="flex flex-wrap gap-2 sm:max-w-fit sm:flex-nowrap">
+          <FormItem className="grow">
+            <FormLabel className="sr-only" htmlFor={fields.files.id}>
+              Files
+            </FormLabel>
+            <FormControl>
+              <Input
+                {...conform.input(fields.files, { type: "file" })}
+                accept="text/html"
+                multiple
+                disabled={isPending}
+              />
+            </FormControl>
+            <FormMessage id={fields.files.errorId}>
+              {getFieldError(fields.files)}
+            </FormMessage>
+          </FormItem>
 
-            <FormItem className="w-full flex-row sm:w-fit sm:flex-row-reverse">
-              <Button
-                className="max-sm:grow"
-                type="submit"
-                size="md"
-                variant="filled"
-              >
-                <Icon type="upload" />
-                <span>Upload</span>
-              </Button>
-              <LinkButton to="." relative="path" reloadDocument size="md-icon">
-                <Icon type="x" />
-                <span className="sr-only">Reset</span>
-              </LinkButton>
-            </FormItem>
-          </div>
-        </fieldset>
+          <FormItem className="w-full flex-row sm:w-fit sm:flex-row-reverse">
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="max-sm:grow"
+              size="md"
+              variant="filled"
+            >
+              <Icon type="upload" />
+              <span>Upload</span>
+            </Button>
+            <LinkButton to="." relative="path" reloadDocument size="md-icon">
+              <Icon type="x" />
+              <span className="sr-only">Reset</span>
+            </LinkButton>
+          </FormItem>
+        </div>
       </Form>
     </Main>
   );

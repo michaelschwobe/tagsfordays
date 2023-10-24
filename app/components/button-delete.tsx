@@ -38,9 +38,11 @@ export const ButtonDelete = forwardRef<
     const doubleCheck = useDoubleCheck();
 
     if (optionalUser) {
-      const isIdle = !doubleCheck.isPending;
-      const isClick1 = doubleCheck.isPending && navigation.state === "idle";
-      const isClick2 = doubleCheck.isPending && navigation.state !== "idle";
+      const isIdle = navigation.state === "idle";
+      const isPending = navigation.state !== "idle";
+      const isClick0 = doubleCheck.isPending === false;
+      const isClick1 = doubleCheck.isPending && isIdle;
+      const isClick2 = doubleCheck.isPending && isPending;
 
       return (
         <Form method="POST">
@@ -48,12 +50,13 @@ export const ButtonDelete = forwardRef<
           <Button
             {...doubleCheck.getButtonProps({ ...props })}
             type="submit"
+            disabled={isPending}
             className={cn(className)}
             size={size}
             variant={isClick1 ? "filled-danger" : variant}
             ref={forwardedRef}
           >
-            {isIdle ? (
+            {isClick0 ? (
               <>
                 <Icon type="trash-2" />
                 <span>Delete {singular}</span>

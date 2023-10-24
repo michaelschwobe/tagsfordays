@@ -123,6 +123,8 @@ export default function EditTagPage() {
     shouldRevalidate: "onBlur",
   });
 
+  const isPending = navigation.state !== "idle";
+
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
@@ -133,39 +135,35 @@ export default function EditTagPage() {
         <ButtonCancel />
       </div>
 
-      <Form method="POST" {...form.props}>
-        <fieldset
-          className="flex flex-col gap-4"
-          disabled={["submitting", "loading"].includes(navigation.state)}
-        >
-          <FormMessage id={form.errorId}>{form.error}</FormMessage>
+      <Form className="flex flex-col gap-4" method="POST" {...form.props}>
+        <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
-          <input
-            type="hidden"
-            name={fields.id.name}
-            value={fields.id.defaultValue}
-          />
+        <input
+          type="hidden"
+          name={fields.id.name}
+          value={fields.id.defaultValue}
+        />
 
-          <FormItem>
-            <FormLabel htmlFor={fields.name.id}>Name</FormLabel>
-            <FormControl>
-              <Input
-                {...conform.input(fields.name, {
-                  type: "text",
-                  description: true,
-                })}
-                autoComplete="false"
-                autoFocus
-              />
-            </FormControl>
-            <FormDescription id={fields.name.descriptionId}>
-              Original: <Code>{loaderData.tag.name}</Code>
-            </FormDescription>
-            <FormMessage id={fields.name.errorId}>
-              {getFieldError(fields.name)}
-            </FormMessage>
-          </FormItem>
-        </fieldset>
+        <FormItem>
+          <FormLabel htmlFor={fields.name.id}>Name</FormLabel>
+          <FormControl>
+            <Input
+              {...conform.input(fields.name, {
+                type: "text",
+                description: true,
+              })}
+              autoComplete="false"
+              autoFocus
+              disabled={isPending}
+            />
+          </FormControl>
+          <FormDescription id={fields.name.descriptionId}>
+            Original: <Code>{loaderData.tag.name}</Code>
+          </FormDescription>
+          <FormMessage id={fields.name.errorId}>
+            {getFieldError(fields.name)}
+          </FormMessage>
+        </FormItem>
       </Form>
 
       {/**
@@ -175,7 +173,7 @@ export default function EditTagPage() {
       <FormItem className="pt-6" isButtonGroup>
         <Button
           type="submit"
-          disabled={["submitting", "loading"].includes(navigation.state)}
+          disabled={isPending}
           form={form.id}
           className="max-sm:w-full"
           variant="filled"

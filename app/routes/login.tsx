@@ -100,6 +100,8 @@ export default function LoginPage() {
     shouldRevalidate: "onBlur",
   });
 
+  const isPending = navigation.state !== "idle";
+
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
@@ -110,66 +112,65 @@ export default function LoginPage() {
         <ButtonCancel />
       </div>
 
-      <Form method="POST" {...form.props}>
-        <fieldset
-          className="flex flex-col gap-4"
-          disabled={["submitting", "loading"].includes(navigation.state)}
-        >
-          <FormMessage id={form.errorId}>{form.error}</FormMessage>
+      <Form className="flex flex-col gap-4" method="POST" {...form.props}>
+        <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
-          <FormItem>
-            <FormLabel htmlFor={fields.username.id}>Username</FormLabel>
-            <FormControl>
-              <Input
-                {...conform.input(fields.username, { type: "text" })}
-                autoComplete="username"
-                autoFocus
-              />
-            </FormControl>
-            <FormMessage id={fields.username.errorId}>
-              {getFieldError(fields.username)}
-            </FormMessage>
-          </FormItem>
+        <FormItem>
+          <FormLabel htmlFor={fields.username.id}>Username</FormLabel>
+          <FormControl>
+            <Input
+              {...conform.input(fields.username, { type: "text" })}
+              autoComplete="username"
+              autoFocus
+              disabled={isPending}
+            />
+          </FormControl>
+          <FormMessage id={fields.username.errorId}>
+            {getFieldError(fields.username)}
+          </FormMessage>
+        </FormItem>
 
-          <FormItem>
-            <FormLabel htmlFor={fields.password.id}>Password</FormLabel>
-            <FormControl>
-              <Input
-                {...conform.input(fields.password, { type: "password" })}
-                autoComplete="password"
-              />
-            </FormControl>
-            <FormMessage id={fields.password.errorId}>
-              {getFieldError(fields.password)}
-            </FormMessage>
-          </FormItem>
+        <FormItem>
+          <FormLabel htmlFor={fields.password.id}>Password</FormLabel>
+          <FormControl>
+            <Input
+              {...conform.input(fields.password, { type: "password" })}
+              autoComplete="password"
+              disabled={isPending}
+            />
+          </FormControl>
+          <FormMessage id={fields.password.errorId}>
+            {getFieldError(fields.password)}
+          </FormMessage>
+        </FormItem>
 
-          <FormItem>
-            <FormControl>
-              <input
-                {...conform.input(fields.remember, { type: "checkbox" })}
-              />
-              <Label htmlFor={fields.remember.id}>Remember me</Label>
-            </FormControl>
-            <FormMessage id={fields.remember.errorId}>
-              {getFieldError(fields.remember)}
-            </FormMessage>
-          </FormItem>
+        <FormItem>
+          <FormControl>
+            <input
+              {...conform.input(fields.remember, { type: "checkbox" })}
+              disabled={isPending}
+            />
+            <Label htmlFor={fields.remember.id}>Remember me</Label>
+          </FormControl>
+          <FormMessage id={fields.remember.errorId}>
+            {getFieldError(fields.remember)}
+          </FormMessage>
+        </FormItem>
 
-          <input {...conform.input(fields.redirectTo, { type: "hidden" })} />
+        <input {...conform.input(fields.redirectTo, { type: "hidden" })} />
 
-          <FormItem isButtonGroup>
-            <Button
-              type="submit"
-              className="max-sm:w-full"
-              variant="filled"
-              size="lg"
-            >
-              <Icon type="log-in" />
-              <span>Log in</span>
-            </Button>
-          </FormItem>
-        </fieldset>
+        <FormItem isButtonGroup>
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="max-sm:w-full"
+            variant="filled"
+            size="lg"
+          >
+            <Icon type="log-in" />
+            <span>Log in</span>
+          </Button>
+        </FormItem>
       </Form>
     </Main>
   );

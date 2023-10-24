@@ -57,7 +57,8 @@ export function Favorite({
         <input type="hidden" name={conform.INTENT} value="favorite" />
         <input type="hidden" name="favorite" value={nextValue} />
         <Button
-          type={isPending ? "button" : "submit"}
+          type="submit"
+          disabled={isPending}
           size={size}
           variant={variant}
         >

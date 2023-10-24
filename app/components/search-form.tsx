@@ -46,6 +46,7 @@ export function SearchForm({
   });
 
   const hasSearchValue = Boolean(fields.searchValue.defaultValue);
+  const isPending = navigation.state !== "idle";
 
   return (
     <Form
@@ -68,7 +69,7 @@ export function SearchForm({
             {...conform.input(fields.searchValue, { type: "text" })}
             placeholder="Search for…"
             autoComplete="false"
-            disabled={["submitting", "loading"].includes(navigation.state)}
+            disabled={isPending}
           />
         </FormControl>
         <FormMessage id={fields.searchValue.errorId}>

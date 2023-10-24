@@ -96,7 +96,7 @@ export const bookmarksTableColumns = [
 ];
 
 export interface BookmarksTableProps<TData, TValue>
-  extends Omit<React.ComponentPropsWithoutRef<"table">, "children"> {
+  extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
   /** Sets the `class` attribute. */
   className?: string | undefined;
   /** Sets table column definitions, display templates, etc. **Required** */
@@ -120,8 +120,8 @@ export function BookmarksTable<TData, TValue>({
   });
 
   return (
-    <TableWrapper className="border">
-      <Table {...props} className={cn(className)}>
+    <TableWrapper {...props} className={cn("border", className)}>
+      <Table>
         <Thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>

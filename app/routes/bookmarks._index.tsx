@@ -7,6 +7,7 @@ import {
 } from "~/components/bookmarks-table";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
+import { Pagination, paginateSearchParams } from "~/components/pagination";
 import { SearchForm } from "~/components/search-form";
 import { SearchHelp } from "~/components/search-help";
 import { Badge } from "~/components/ui/badge";
@@ -29,18 +30,30 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const searchKey = parseBookmarkSearchKey(url.searchParams.get("searchKey"));
   const searchValue = url.searchParams.get("searchValue");
 
+  const defaultPerPage = 20;
+  const { params, skip, take } = paginateSearchParams({
+    searchParams: url.searchParams,
+    defaultPerPage,
+  });
+
   const bookmarksResult = await getBookmarks({ searchKey, searchValue });
   const bookmarksLength = bookmarksResult.length;
-  const bookmarks = await mapWithFaviconSrc(bookmarksResult);
+  const bookmarksPaginated = bookmarksResult.slice(skip, skip + take);
+  const bookmarks = await mapWithFaviconSrc(bookmarksPaginated);
 
   const hasBookmarks = bookmarksLength > 0;
+  const hasPagination = bookmarksLength > defaultPerPage;
 
   return json({
     bookmarks,
     bookmarksLength,
     hasBookmarks,
+    hasPagination,
+    params,
     searchKey,
     searchValue,
+    skip,
+    take,
   });
 }
 
@@ -126,10 +139,20 @@ export default function BookmarksIndexPage() {
 
       {loaderData.hasBookmarks ? (
         <BookmarksTable
+          className="mb-4"
           // TODO: remove ts-expect-error once this is fixed
           // @ts-expect-error - node module bug https://github.com/TanStack/table/issues/5135
           columns={bookmarksTableColumns}
           data={loaderData.bookmarks}
+        />
+      ) : null}
+
+      {loaderData.hasPagination ? (
+        <Pagination
+          params={loaderData.params}
+          skip={loaderData.skip}
+          take={loaderData.take}
+          total={loaderData.bookmarksLength}
         />
       ) : null}
     </Main>

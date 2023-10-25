@@ -16,6 +16,9 @@
     <symbol id="check" viewBox="0 0 24 24">
       <polyline points="20 6 9 17 4 12" />
     </symbol>
+    <symbol id="chevron-left" viewBox="0 0 24 24">
+      <path d="m15 18-6-6 6-6" />
+    </symbol>
     <symbol id="chevron-down" viewBox="0 0 24 24">
       <polyline points="6 9 12 15 18 9" />
     </symbol>
@@ -24,6 +27,14 @@
     </symbol>
     <symbol id="chevron-up" viewBox="0 0 24 24">
       <path d="m18 15-6-6-6 6" />
+    </symbol>
+    <symbol id="chevrons-left" viewBox="0 0 24 24">
+      <path d="m11 17-5-5 5-5" />
+      <path d="m18 17-5-5 5-5" />
+    </symbol>
+    <symbol id="chevrons-right" viewBox="0 0 24 24">
+      <path d="m6 17 5-5-5-5" />
+      <path d="m13 17 5-5-5-5" />
     </symbol>
     <symbol id="chevrons-up-down" viewBox="0 0 24 24">
       <path d="m7 15 5 5 5-5" />

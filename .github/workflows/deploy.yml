@@ -24,7 +24,7 @@ jobs:
         # If changing these, match the same values from:
         # - `/Dockerfile`
         # - `/package.json`
-        node-version: [20.8.1]
+        node-version: [21.1.0]
         pnpm-version: [8.9.2]
     steps:
       - name: ⬇️ Checkout repo
@@ -58,7 +58,7 @@ jobs:
         # If changing these, match the same values from:
         # - `/Dockerfile`
         # - `/package.json`
-        node-version: [20.8.1]
+        node-version: [21.1.0]
         pnpm-version: [8.9.2]
     steps:
       - name: ⬇️ Checkout repo
@@ -92,7 +92,7 @@ jobs:
         # If changing these, match the same values from:
         # - `/Dockerfile`
         # - `/package.json`
-        node-version: [20.8.1]
+        node-version: [21.1.0]
         pnpm-version: [8.9.2]
     steps:
       - name: ⬇️ Checkout repo
@@ -130,7 +130,7 @@ jobs:
         # If changing these, match the same values from:
         # - `/Dockerfile`
         # - `/package.json`
-        node-version: [20.8.1]
+        node-version: [21.1.0]
         pnpm-version: [8.9.2]
     steps:
       - name: ⬇️ Checkout repo

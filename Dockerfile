@@ -4,7 +4,7 @@
 # If changing this, match the same values from:
 # - `/.github/workflows/deploy.yml`
 # - `/package.json`
-ARG NODE_VERSION=20.8.1
+ARG NODE_VERSION=21.1.0
 FROM node:${NODE_VERSION}-slim as base
 
 LABEL fly_launch_runtime="Remix/Prisma"

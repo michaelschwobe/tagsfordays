@@ -14,6 +14,7 @@ import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { getBookmarks } from "~/models/bookmark.server";
+import { mapWithFaviconSrc } from "~/models/favicon.server";
 import {
   BOOKMARK_SEARCH_KEYS,
   BOOKMARK_SEARCH_KEYS_LABEL_MAP,
@@ -28,11 +29,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const searchKey = parseBookmarkSearchKey(url.searchParams.get("searchKey"));
   const searchValue = url.searchParams.get("searchValue");
 
-  const bookmarks = await getBookmarks({ searchKey, searchValue });
-  // const bookmarksWithFavicon = await mapBookmarksWithFavicon(bookmarks);
-  const bookmarksWithFavicon = bookmarks.map((b) => ({ ...b, favicon: null }));
+  const bookmarksResult = await getBookmarks({ searchKey, searchValue });
+  const bookmarksLength = bookmarksResult.length;
+  const bookmarks = await mapWithFaviconSrc(bookmarksResult);
 
-  return json({ bookmarks: bookmarksWithFavicon, searchKey, searchValue });
+  const hasBookmarks = bookmarksLength > 0;
+
+  return json({
+    bookmarks,
+    bookmarksLength,
+    hasBookmarks,
+    searchKey,
+    searchValue,
+  });
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -41,7 +50,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   const description =
     data?.searchKey && data?.searchValue
       ? `${formatItemsFoundByCount({
-          count: data?.bookmarks.length ?? 0,
+          count: data?.bookmarksLength ?? 0,
           singular: "bookmark",
           plural: "bookmarks",
         })} within '${
@@ -59,14 +68,12 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export default function BookmarksIndexPage() {
   const loaderData = useLoaderData<typeof loader>();
 
-  const bookmarksCount = loaderData.bookmarks.length;
-
   return (
     <Main>
       <div className="mb-4 flex items-center gap-2">
         <H1>
           <Icon type="bookmarks" />
-          Bookmarks <Badge aria-hidden>{bookmarksCount}</Badge>
+          Bookmarks <Badge aria-hidden>{loaderData.bookmarksLength}</Badge>
         </H1>
         <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/import`}>
           <Icon type="upload" />
@@ -92,7 +99,7 @@ export default function BookmarksIndexPage() {
 
       <SearchHelp
         className="mb-4"
-        count={bookmarksCount}
+        count={loaderData.bookmarksLength}
         singular="bookmark"
         plural="bookmarks"
       >
@@ -117,7 +124,7 @@ export default function BookmarksIndexPage() {
         </LinkButton>
       </SearchHelp>
 
-      {bookmarksCount > 0 ? (
+      {loaderData.hasBookmarks ? (
         <BookmarksTable
           // TODO: remove ts-expect-error once this is fixed
           // @ts-expect-error - node module bug https://github.com/TanStack/table/issues/5135

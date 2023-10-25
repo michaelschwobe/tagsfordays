@@ -10,7 +10,7 @@ import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import type { LatestBookmarksData } from "~/models/bookmark.server";
-import type { BookmarksWithFaviconData } from "~/models/favicon.server";
+import type { ItemsWithFaviconSrcData } from "~/models/favicon.server";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
@@ -19,7 +19,7 @@ export interface LatestBookmarksProps
   /** Sets the `class` attribute. */
   className?: string | undefined;
   /** Sets the "found" content. **Required** */
-  data: BookmarksWithFaviconData<LatestBookmarksData>;
+  data: ItemsWithFaviconSrcData<LatestBookmarksData>;
 }
 
 export const LatestBookmarks = forwardRef<
@@ -47,7 +47,7 @@ export const LatestBookmarks = forwardRef<
                     className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
                     variant="ghost"
                   >
-                    <Favicon src={bookmark.favicon} />{" "}
+                    <Favicon src={bookmark.faviconSrc} />{" "}
                     <span className="truncate text-sm">
                       {bookmark.title ? (
                         <span>{bookmark.title}</span>

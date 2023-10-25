@@ -2,6 +2,9 @@ import { expect, login, logout, test } from "../utils/playwright-test-utils";
 
 test.describe("Unauthenticated", () => {
   test.beforeEach(async ({ page }) => {
+    await page.route("https://icons.duckduckgo.com/ip3/**", async (route) => {
+      route.abort();
+    });
     await page.goto("/bookmarks");
   });
 
@@ -202,6 +205,9 @@ test.describe("Unauthenticated", () => {
 
 test.describe("Authenticated", () => {
   test.beforeEach(async ({ page }) => {
+    await page.route("https://icons.duckduckgo.com/ip3/**", async (route) => {
+      route.abort();
+    });
     const { redirectTo } = await login({ page, to: "/bookmarks" });
     await page.waitForURL(redirectTo);
   });

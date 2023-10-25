@@ -8,19 +8,18 @@ import { Main } from "~/components/main";
 import { QuickBookmark } from "~/components/quick-bookmark";
 import { QuickTag } from "~/components/quick-tag";
 import { getLatestBookmarks } from "~/models/bookmark.server";
-import { mapBookmarksWithFavicon } from "~/models/favicon.server";
+import { mapWithFaviconSrc } from "~/models/favicon.server";
 import { getLatestTags } from "~/models/tag.server";
 import { generateSocialMeta } from "~/utils/meta";
 
 export async function loader() {
-  const [latestBookmarks, latestTags] = await Promise.all([
+  const [latestBookmarksResults, latestTags] = await Promise.all([
     getLatestBookmarks(),
     getLatestTags({ take: 9 }),
   ]);
-  const latestBookmarksWithFavicon =
-    await mapBookmarksWithFavicon(latestBookmarks);
+  const latestBookmarks = await mapWithFaviconSrc(latestBookmarksResults);
 
-  return json({ latestBookmarks: latestBookmarksWithFavicon, latestTags });
+  return json({ latestBookmarks, latestTags });
 }
 
 export const meta: MetaFunction<typeof loader> = () => {

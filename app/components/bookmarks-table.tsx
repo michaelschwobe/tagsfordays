@@ -24,15 +24,15 @@ import {
 } from "~/components/ui/table";
 import { cn } from "~/utils/misc";
 
-export interface BookmarksWithFavicon {
+export interface BookmarksWithFaviconSrc {
   id: string;
   title: string | null;
   url: string;
   favorite: boolean | null;
-  favicon: null;
+  faviconSrc: string | null;
 }
 
-const columnHelper = createColumnHelper<BookmarksWithFavicon>();
+const columnHelper = createColumnHelper<BookmarksWithFaviconSrc>();
 
 export const bookmarksTableColumns = [
   columnHelper.display({
@@ -74,7 +74,7 @@ export const bookmarksTableColumns = [
     cell: ({ row, getValue }) => (
       <ButtonTitle
         bookmarkId={row.original.id}
-        faviconSrc={row.original.favicon}
+        faviconSrc={row.original.faviconSrc}
         title={getValue()}
       />
     ),

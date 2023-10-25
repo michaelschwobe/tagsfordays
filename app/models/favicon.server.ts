@@ -1,16 +1,21 @@
-import { toFaviconServiceUrl } from "~/utils/bookmark";
-
 type ArrayElementType<T> = T extends (infer E)[] ? E : T;
 
-type Favicon = string | null;
+type FaviconSrc = string | null;
 
-type BookmarksWithUrlProp<T> = Array<ArrayElementType<T> & { url: string }>;
+type ItemsWithUrlProp<T> = Array<ArrayElementType<T> & { url: string }>;
 
-type BookmarksWithFaviconProp<T> = Array<
-  ArrayElementType<T> & { favicon: Favicon }
+type ItemsWithFaviconSrcProp<T> = Array<
+  ArrayElementType<T> & { faviconSrc: FaviconSrc }
 >;
 
-export async function getFavicon(url: string): Promise<Favicon> {
+export function toFaviconServiceUrl(url: string) {
+  const { hostname } = new URL(url);
+  const faviconServiceUrl = new URL("https://icons.duckduckgo.com/ip3");
+  faviconServiceUrl.pathname += `/${hostname}.ico`;
+  return faviconServiceUrl.href;
+}
+
+export async function getFavicon(url: string): Promise<FaviconSrc> {
   try {
     const faviconServiceUrl = toFaviconServiceUrl(url);
     const response = await fetch(faviconServiceUrl);
@@ -23,16 +28,17 @@ export async function getFavicon(url: string): Promise<Favicon> {
   }
 }
 
-export async function mapBookmarksWithFavicon<
-  T extends BookmarksWithUrlProp<T>,
->(bookmarks: T): Promise<BookmarksWithFaviconProp<T>> {
+export async function mapWithFaviconSrc<T extends ItemsWithUrlProp<T>>(
+  bookmarks: T,
+): Promise<ItemsWithFaviconSrcProp<T>> {
   return Promise.all(
     bookmarks.map(async (bookmark) => {
-      const favicon = await getFavicon(bookmark.url);
-      return { ...bookmark, favicon };
+      const faviconSrc = await getFavicon(bookmark.url);
+      return { ...bookmark, faviconSrc };
     }),
   );
 }
 
-export type BookmarksWithFaviconData<T extends BookmarksWithUrlProp<T>> =
-  Awaited<ReturnType<typeof mapBookmarksWithFavicon<T>>>;
+export type ItemsWithFaviconSrcData<T extends ItemsWithUrlProp<T>> = Awaited<
+  ReturnType<typeof mapWithFaviconSrc<T>>
+>;

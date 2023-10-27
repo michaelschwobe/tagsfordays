@@ -26,14 +26,7 @@ export const Checkbox = forwardRef<
     const isIndeterminate = !checked && indeterminate === true;
     const isChecked = checked === true;
     const checkedProp = isIndeterminate ? "indeterminate" : isChecked;
-    //  const checkedState = isIndeterminate
-    //    ? "indeterminate"
-    //    : isChecked
-    //    ? "checked"
-    //    : "unchecked";
-    if (isIndeterminate) {
-      console.table({ checkedProp, checked, indeterminate, ...props });
-    }
+
     return (
       <CheckboxPrimitive.Root
         {...props}

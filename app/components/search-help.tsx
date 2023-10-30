@@ -30,7 +30,7 @@ export const SearchHelp = forwardRef<React.ElementRef<"div">, SearchHelpProps>(
     return (
       <Card
         {...props}
-        className={cn(className, hasItems ? "sr-only" : "mb-2")}
+        className={cn(className, hasItems ? "sr-only" : undefined)}
         ref={forwardedRef}
       >
         <CardHeader>
@@ -42,7 +42,7 @@ export const SearchHelp = forwardRef<React.ElementRef<"div">, SearchHelpProps>(
         {!hasItems ? (
           <>
             <CardContent>
-              <p className="mb-2">Suggestions:</p>
+              <p>Suggestions:</p>
               <ul className="list-disc pl-8">
                 <li>Make sure all words are spelled correctly.</li>
                 <li>Try different keywords.</li>

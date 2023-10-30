@@ -83,7 +83,7 @@ export default function BookmarksIndexPage() {
 
   return (
     <Main>
-      <div className="mb-4 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <H1>
           <Icon type="bookmarks" />
           Bookmarks <Badge aria-hidden>{loaderData.bookmarksLength}</Badge>
@@ -103,7 +103,6 @@ export default function BookmarksIndexPage() {
       </div>
 
       <SearchForm
-        className="mb-4"
         searchKey={loaderData.searchKey}
         searchKeys={[...BOOKMARK_SEARCH_KEYS]}
         searchKeysLabelMap={BOOKMARK_SEARCH_KEYS_LABEL_MAP}
@@ -111,7 +110,6 @@ export default function BookmarksIndexPage() {
       />
 
       <SearchHelp
-        className="mb-4"
         count={loaderData.bookmarksLength}
         singular="bookmark"
         plural="bookmarks"
@@ -139,7 +137,6 @@ export default function BookmarksIndexPage() {
 
       {loaderData.hasBookmarks ? (
         <BookmarksTable
-          className="mb-4"
           // TODO: remove ts-expect-error once this is fixed
           // @ts-expect-error - node module bug https://github.com/TanStack/table/issues/5135
           columns={bookmarksTableColumns}

@@ -117,7 +117,7 @@ export default function NewTagPage() {
 
   return (
     <Main>
-      <div className="mb-4 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <H1>
           <Icon type="tag" />
           New Tag

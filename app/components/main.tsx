@@ -13,7 +13,7 @@ export const Main = forwardRef<React.ElementRef<"main">, MainProps>(
     return (
       <main
         {...props}
-        className={cn("p-4 sm:p-8", className)}
+        className={cn("space-y-4 p-4 sm:p-8", className)}
         ref={forwardedRef}
       >
         {children}

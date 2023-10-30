@@ -12,7 +12,7 @@ import { getErrorMessage } from "~/utils/misc";
 export function MainError({ children }: { children: React.ReactNode }) {
   return (
     <Main>
-      <H1 className="mb-4">
+      <H1>
         <Icon type="alert-triangle" />
         Error
       </H1>

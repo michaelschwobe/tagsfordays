@@ -26,7 +26,7 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <MainError>
-            <p className="mb-4">
+            <p>
               We can&rsquo;t find this page: <Code>{location.pathname}</Code>
             </p>
             <div>

@@ -75,7 +75,7 @@ export default function TagDetailPage() {
 
   return (
     <Main>
-      <div className="mb-4 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <H1>
           <Icon type="tag" />
           Tag
@@ -150,7 +150,7 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <MainError>
-            <p className="mb-4">Tag not found.</p>
+            <p>Tag not found.</p>
             <div>
               <LinkButton to="/tags">
                 <Icon type="tags" />

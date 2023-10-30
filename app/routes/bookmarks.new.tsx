@@ -115,7 +115,7 @@ export default function NewBookmarkPage() {
 
   return (
     <Main>
-      <div className="mb-4 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <H1>
           <Icon type="bookmark" />
           New Bookmark
@@ -176,8 +176,8 @@ export default function NewBookmarkPage() {
           </FormMessage>
         </FormItem>
 
-        <fieldset>
-          <legend className="mb-2 flex items-center gap-2 text-sm font-medium">
+        <fieldset className="space-y-2">
+          <legend className="flex items-center gap-2 text-sm font-medium">
             Tags <Badge aria-hidden>{tagsSelected.length}</Badge>
           </legend>
           <FormControl className="flex-wrap">

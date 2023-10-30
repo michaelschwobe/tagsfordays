@@ -33,7 +33,7 @@ export const CardContent = forwardRef<
   CardContentProps
 >(({ children, className, ...props }, forwardedRef) => {
   return (
-    <div {...props} className={cn(className)} ref={forwardedRef}>
+    <div {...props} className={cn("space-y-2", className)} ref={forwardedRef}>
       {children}
     </div>
   );

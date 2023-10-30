@@ -100,7 +100,7 @@ export default function BookmarkDetailPage() {
 
   return (
     <Main>
-      <div className="mb-4 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <H1>
           <Icon type="bookmark" />
           Bookmark
@@ -167,7 +167,7 @@ export default function BookmarkDetailPage() {
         </FormItem>
 
         <FormItem>
-          <div className="mb-2 mr-auto flex items-center gap-2 text-sm font-medium">
+          <div className="mr-auto flex items-center gap-2 text-sm font-medium">
             Tags <Badge aria-hidden>{loaderData.bookmark.tags.length}</Badge>
           </div>
           <FormControl>
@@ -234,7 +234,7 @@ export function ErrorBoundary() {
       statusHandlers={{
         404: () => (
           <MainError>
-            <p className="mb-4">Bookmark not found.</p>
+            <p>Bookmark not found.</p>
             <div>
               <LinkButton to="/bookmarks">
                 <Icon type="bookmarks" />

@@ -53,7 +53,7 @@ export default function TagsIndexPage() {
 
   return (
     <Main>
-      <div className="mb-4 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <H1>
           <Icon type="tags" />
           Tags <Badge aria-hidden>{loaderData.tags.length}</Badge>
@@ -69,7 +69,7 @@ export default function TagsIndexPage() {
       </div>
 
       {loaderData.tags.length > 1 ? (
-        <Form className="mb-4" method="GET">
+        <Form method="GET">
           <div className="sr-only">Order By</div>
           <ButtonGroup>
             <ButtonGroupButton
@@ -103,7 +103,7 @@ export default function TagsIndexPage() {
           ))}
         </ul>
       ) : (
-        <Card className="mb-4">
+        <Card>
           <CardHeader>
             <H2>No Tags Found</H2>
           </CardHeader>

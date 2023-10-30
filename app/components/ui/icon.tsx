@@ -5,6 +5,7 @@ export const ICON_TYPES = [
   "alert-triangle",
   "bookmark",
   "bookmarks",
+  "calendar",
   "check",
   "chevron-down",
   "chevron-left",

@@ -18,7 +18,6 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 - TODO: Tag: tag colors or other fields
 
 - TODO: Bookmark: assess orderBy (title, date, etc.)
-- TODO: Bookmark: export/selection (text, csv, json, html)
 - TODO: Bookmark: watchtower route (dead links, redirects, etc.)
 - TODO: Bookmark: suggest/postfetch-opt-in title/description
 - TODO: Bookmark: suggest tags

@@ -1,3 +1,4 @@
+import { Form } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import {
   createColumnHelper,
@@ -25,6 +26,7 @@ import {
 } from "~/components/ui/table";
 import type { getBookmarks } from "~/models/bookmark.server";
 import type { ItemWithFaviconSrcProp } from "~/models/favicon.server";
+import { BOOKMARK_EXPORT_LABEL_MAP } from "~/utils/bookmark";
 import { cn } from "~/utils/misc";
 
 type GetBookmarksData = Awaited<ReturnType<typeof getBookmarks>>;
@@ -253,8 +255,12 @@ export function BookmarksTable<TData, TValue>({
               />
             </Td>
             <Td className="pl-6 pr-3" colSpan={columns.length - 1}>
-              {selectedIds.length} of {table.getRowModel().rows.length} Rows
-              selected
+              <SelectedBookmarksForm
+                selectedIds={selectedIds}
+                totalLength={table.getRowModel().rows.length}
+              >
+                <ButtonExportGroup />
+              </SelectedBookmarksForm>
             </Td>
           </Tr>
         </Tfoot>
@@ -347,5 +353,55 @@ function ButtonFavorite({
       defaultValue={defaultValue}
       variant="ghost"
     />
+  );
+}
+
+function ButtonExportGroup() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      {Object.entries(BOOKMARK_EXPORT_LABEL_MAP).map(([ext, label]) => (
+        <ButtonExport key={ext} formAction={`/bookmarks.${ext}`}>
+          {label}
+        </ButtonExport>
+      ))}
+    </div>
+  );
+}
+
+function ButtonExport({
+  children,
+  formAction,
+}: {
+  children: React.ReactNode;
+  formAction: string;
+}) {
+  return (
+    <Button type="submit" formAction={formAction} variant="outlined" size="sm">
+      <Icon type="download" />
+      <span className="sr-only">Export </span>
+      {children}
+    </Button>
+  );
+}
+
+function SelectedBookmarksForm({
+  children,
+  selectedIds,
+  totalLength,
+}: {
+  children: React.ReactNode;
+  selectedIds: string[];
+  totalLength: number;
+}) {
+  return (
+    <Form method="POST" reloadDocument>
+      <input type="hidden" name="selected-ids" value={selectedIds.join(",")} />
+      <div className="flex flex-col gap-2 max-sm:max-w-[75vw] sm:flex-row sm:items-center sm:justify-between">
+        <div className="text-sm tabular-nums">
+          {selectedIds.length} of {totalLength} rows selected.
+        </div>
+        {children}
+      </div>
+    </Form>
   );
 }

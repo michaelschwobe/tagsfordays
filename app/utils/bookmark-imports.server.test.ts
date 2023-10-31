@@ -83,7 +83,7 @@ describe("formatBookmarkCreatedAt", () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
-    currDate = new Date(1970, 0, 1);
+    currDate = new Date("1970-01-01T00:00:00.000+00:00");
     vi.setSystemTime(currDate);
   });
 

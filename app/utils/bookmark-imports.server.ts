@@ -103,7 +103,7 @@ export function formatBookmarkTitle(title: string): string {
 }
 
 export function formatBookmarkCreatedAt(value: string | null): Date {
-  const defaultDate = new Date(1970, 0, 1);
+  const defaultDate = new Date("1970-01-01T00:00:00.000+00:00");
   if (!value || value === "0" || value.length !== 10) {
     return defaultDate;
   }

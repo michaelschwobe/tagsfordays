@@ -137,7 +137,7 @@ export default function BookmarksIndexPage() {
 
       {loaderData.hasBookmarks ? (
         <BookmarksTable
-          // TODO: remove ts-expect-error once this is fixed
+          // TODO: remove comment once this is fixed.
           // @ts-expect-error - node module bug https://github.com/TanStack/table/issues/5135
           columns={bookmarksTableColumns}
           data={loaderData.bookmarks}

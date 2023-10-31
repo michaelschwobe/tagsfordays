@@ -21,8 +21,8 @@ import { Input } from "~/components/ui/input";
 import { LinkButton } from "~/components/ui/link-button";
 import { importBookmark } from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
+import { parseBookmarkFiles } from "~/utils/bookmark-imports.server";
 import { UploadBookmarkFilesSchema } from "~/utils/bookmark-validation";
-import { parseBookmarkFiles } from "~/utils/bookmark.server";
 import {
   formatMetaTitle,
   getFieldError,

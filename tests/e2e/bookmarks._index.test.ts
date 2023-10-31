@@ -14,34 +14,22 @@ test.describe("Unauthenticated", () => {
 
   test("User can view bookmarks", async ({ page }) => {
     await expect(
-      page.getByRole("row", {
-        name: "TypeScript https://www.typescriptlang.org Unfavorite",
-      }),
+      page.getByRole("link", { name: "https://www.typescriptlang.org" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Zod https://zod.dev Favorite",
-      }),
+      page.getByRole("link", { name: "https://zod.dev" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Conform https://conform.guide Unfavorite",
-      }),
+      page.getByRole("link", { name: "https://conform.guide" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Prisma https://www.prisma.io Favorite",
-      }),
+      page.getByRole("link", { name: "https://www.prisma.io" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Remix https://remix.run Unfavorite",
-      }),
+      page.getByRole("link", { name: "https://remix.run" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Tailwind CSS https://tailwindcss.com Favorite",
-      }),
+      page.getByRole("link", { name: "https://tailwindcss.com" }),
     ).toBeVisible();
   });
 
@@ -55,34 +43,22 @@ test.describe("Unauthenticated", () => {
     ).toHaveAttribute("aria-pressed", "true");
     await expect(page.getByPlaceholder("Search for…")).toHaveValue("mix");
     await expect(
-      page.getByRole("row", {
-        name: "TypeScript https://www.typescriptlang.org Unfavorite",
-      }),
+      page.getByRole("link", { name: "https://www.typescriptlang.org" }),
     ).not.toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Zod https://zod.dev Favorite",
-      }),
+      page.getByRole("link", { name: "https://zod.dev" }),
     ).not.toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Conform https://conform.guide Unfavorite",
-      }),
+      page.getByRole("link", { name: "https://conform.guide" }),
     ).not.toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Prisma https://www.prisma.io Favorite",
-      }),
+      page.getByRole("link", { name: "https://www.prisma.io" }),
     ).not.toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Remix https://remix.run Unfavorite",
-      }),
+      page.getByRole("link", { name: "https://remix.run" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Tailwind CSS https://tailwindcss.com Favorite",
-      }),
+      page.getByRole("link", { name: "https://tailwindcss.com" }),
     ).not.toBeVisible();
   });
 
@@ -100,34 +76,22 @@ test.describe("Unauthenticated", () => {
       page.getByTestId("search-form").getByRole("button", { name: "Content" }),
     ).toHaveAttribute("aria-pressed", "true");
     await expect(
-      page.getByRole("row", {
-        name: "TypeScript https://www.typescriptlang.org Unfavorite",
-      }),
+      page.getByRole("link", { name: "https://www.typescriptlang.org" }),
     ).not.toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Zod https://zod.dev Favorite",
-      }),
+      page.getByRole("link", { name: "https://zod.dev" }),
     ).not.toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Conform https://conform.guide Unfavorite",
-      }),
+      page.getByRole("link", { name: "https://conform.guide" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Prisma https://www.prisma.io Favorite",
-      }),
+      page.getByRole("link", { name: "https://www.prisma.io" }),
     ).not.toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Remix https://remix.run Unfavorite",
-      }),
+      page.getByRole("link", { name: "https://remix.run" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("row", {
-        name: "Tailwind CSS https://tailwindcss.com Favorite",
-      }),
+      page.getByRole("link", { name: "https://tailwindcss.com" }),
     ).not.toBeVisible();
   });
 

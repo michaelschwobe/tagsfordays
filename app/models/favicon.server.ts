@@ -2,10 +2,12 @@ type ArrayElementType<T> = T extends (infer E)[] ? E : T;
 
 type FaviconSrc = string | null;
 
+export type ItemWithFaviconSrcProp = { faviconSrc: FaviconSrc };
+
 type ItemsWithUrlProp<T> = Array<ArrayElementType<T> & { url: string }>;
 
 type ItemsWithFaviconSrcProp<T> = Array<
-  ArrayElementType<T> & { faviconSrc: FaviconSrc }
+  ArrayElementType<T> & ItemWithFaviconSrcProp
 >;
 
 export function toFaviconServiceUrl(url: string) {

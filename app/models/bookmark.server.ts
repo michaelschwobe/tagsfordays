@@ -47,6 +47,7 @@ export async function getBookmarks({
         url: true,
         title: true,
         favorite: true,
+        createdAt: true,
         _count: { select: { tags: true } },
       },
       where: {
@@ -62,7 +63,14 @@ export async function getBookmarks({
 
   if (searchValue && searchKey) {
     return prisma.bookmark.findMany({
-      select: { id: true, url: true, title: true, favorite: true },
+      select: {
+        id: true,
+        url: true,
+        title: true,
+        favorite: true,
+        createdAt: true,
+        _count: { select: { tags: true } },
+      },
       where: { [searchKey]: { contains: searchValue } },
       orderBy: [{ [searchKey]: "asc" }, { createdAt: "desc" }],
     });
@@ -74,6 +82,7 @@ export async function getBookmarks({
       url: true,
       title: true,
       favorite: true,
+      createdAt: true,
       _count: { select: { tags: true } },
     },
     orderBy: [{ createdAt: "desc" }, { title: "asc" }],

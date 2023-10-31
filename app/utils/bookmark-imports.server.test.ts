@@ -6,7 +6,7 @@ import {
   parseAnchorImports,
   parseBookmarkFiles,
   sortBookmarkImports,
-} from "./bookmark.server";
+} from "./bookmark-imports.server";
 
 describe("formatBookmarkUrl", () => {
   type Provided = Parameters<typeof formatBookmarkUrl>[0];
@@ -76,11 +76,6 @@ describe("formatBookmarkTitle", () => {
     const result = formatBookmarkTitle(" 1  2    3 ");
     expect(result).toEqual("1 2 3");
   });
-
-  it("should return a truncated string when given a string with length greater than 100", () => {
-    const result = formatBookmarkTitle("x".repeat(100));
-    expect(result).toEqual("x".repeat(45));
-  });
 });
 
 describe("formatBookmarkCreatedAt", () => {
@@ -88,7 +83,7 @@ describe("formatBookmarkCreatedAt", () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
-    currDate = new Date();
+    currDate = new Date(1970, 0, 1);
     vi.setSystemTime(currDate);
   });
 
@@ -233,7 +228,7 @@ describe("parseAnchorImports", () => {
     expect(result).toEqual([]);
   });
 
-  it("should return an array with only secure unique urls", () => {
+  it("should return an array with secure unique urls", () => {
     const provided: Provided = [
       { href: "https://example.com", innerHtml: "01", addDate: "" },
       { href: "https://example.org", innerHtml: "02", addDate: "" },
@@ -244,44 +239,6 @@ describe("parseAnchorImports", () => {
     expect(result).toEqual([
       { url: "https://example.com", title: "01", createdAt: expect.any(Date) },
       { url: "https://example.org", title: "02", createdAt: expect.any(Date) },
-    ]);
-  });
-
-  it("should return an array with secure unique urls and truncated titles", () => {
-    const provided: Provided = [
-      {
-        href: "https://example.com",
-        innerHtml: " 0 1 ".repeat(20),
-        addDate: "",
-      },
-      {
-        href: "https://example.org",
-        innerHtml: " 0 2 ".repeat(20),
-        addDate: "",
-      },
-      {
-        href: "http://example.com",
-        innerHtml: " x 3 ".repeat(20),
-        addDate: "",
-      },
-      {
-        href: "https://example.com",
-        innerHtml: " 0 4 ".repeat(20),
-        addDate: "",
-      },
-    ];
-    const result = parseAnchorImports(provided);
-    expect(result).toEqual([
-      {
-        url: "https://example.com",
-        title: "0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0",
-        createdAt: expect.any(Date),
-      },
-      {
-        url: "https://example.org",
-        title: "0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0",
-        createdAt: expect.any(Date),
-      },
     ]);
   });
 
@@ -414,6 +371,11 @@ describe("parseBookmarkFiles", () => {
     const result = await parseBookmarkFiles(provided);
     expect(result).toEqual([
       {
+        url: "https://example.com/2",
+        title: "2",
+        createdAt: expect.any(Date),
+      },
+      {
         url: "https://example.com/1",
         title: "1",
         createdAt: new Date(1234567890 * 1000),
@@ -422,11 +384,6 @@ describe("parseBookmarkFiles", () => {
         url: "https://example.com/3",
         title: "3",
         createdAt: new Date(1234567890 * 1000),
-      },
-      {
-        url: "https://example.com/2",
-        title: "2",
-        createdAt: expect.any(Date),
       },
     ]);
   });

@@ -7,6 +7,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Favorite } from "~/components/favorite";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Favicon } from "~/components/ui/favicon";
@@ -22,24 +23,31 @@ import {
   Thead,
   Tr,
 } from "~/components/ui/table";
+import type { getBookmarks } from "~/models/bookmark.server";
+import type { ItemWithFaviconSrcProp } from "~/models/favicon.server";
 import { cn } from "~/utils/misc";
 
-export interface BookmarksWithFaviconSrc {
-  id: string;
-  title: string | null;
-  url: string;
-  favorite: boolean | null;
-  faviconSrc: string | null;
-}
+type GetBookmarksData = Awaited<ReturnType<typeof getBookmarks>>;
 
-const columnHelper = createColumnHelper<BookmarksWithFaviconSrc>();
+// 🤷‍♂️ Patched with string type for `createdAt` property.
+type GetBookmarksDataItem = Omit<GetBookmarksData[0], "createdAt"> & {
+  createdAt: Date | string;
+};
 
+type BookmarksTableData = GetBookmarksDataItem & ItemWithFaviconSrcProp;
+
+const columnHelper = createColumnHelper<BookmarksTableData>();
+
+// 🤷‍♂️ Flagged as a TS error and @ts-expect-error doesn't work, leaving as is.
+// TODO: remove comment once this is fixed.
+// See node module bug https://github.com/TanStack/table/issues/5135
 export const bookmarksTableColumns = [
   columnHelper.display({
     id: "select",
     header: ({ table }) => (
       <Checkbox
         aria-label="Select all rows"
+        name="selectedIdsAll"
         aria-controls={table
           .getSelectedRowModel()
           .rows.map((row) => row.original.id)
@@ -86,8 +94,42 @@ export const bookmarksTableColumns = [
     cell: ({ getValue }) => <ButtonUrl url={getValue()} />,
   }),
 
+  columnHelper.accessor("createdAt", {
+    sortingFn: "datetime",
+    header: () => (
+      <span>
+        <Icon type="calendar" />
+        <span className="sr-only">Date Created</span>
+      </span>
+    ),
+    footer: ({ column }) => column.id,
+    cell: ({ getValue }) => (
+      <span className="whitespace-nowrap text-xs">
+        {new Date(getValue()).toLocaleDateString()}
+      </span>
+    ),
+  }),
+
+  columnHelper.accessor("_count.tags", {
+    id: "tagRelations",
+    sortingFn: "alphanumeric",
+    header: () => (
+      <span>
+        <Icon type="tags" />
+        <span className="sr-only">Tag Relations</span>
+      </span>
+    ),
+    footer: ({ column }) => column.id,
+    cell: ({ getValue }) => <Badge>{getValue()}</Badge>,
+  }),
+
   columnHelper.accessor("favorite", {
-    header: () => <span className="sr-only">Favorite</span>,
+    header: () => (
+      <span>
+        <Icon type="heart" />
+        <span className="sr-only">Favorite</span>
+      </span>
+    ),
     footer: ({ column }) => column.id,
     cell: ({ row, getValue }) => (
       <ButtonFavorite bookmarkId={row.original.id} defaultValue={getValue()} />
@@ -119,6 +161,12 @@ export function BookmarksTable<TData, TValue>({
     enableRowSelection: true,
   });
 
+  const selectedIds = table
+    .getSelectedRowModel()
+    // TODO: remove ts-expect-error once this is fixed
+    // @ts-expect-error - 🤷‍♂️ 'id' does exist
+    .rows.map((row) => row.original.id);
+
   return (
     <TableWrapper {...props} className={cn("border", className)}>
       <Table>
@@ -135,32 +183,16 @@ export function BookmarksTable<TData, TValue>({
                     )}
                   >
                     {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        className={cn(
-                          "cursor-pointer select-none",
-                          header.column.id !== "favorite"
-                            ? "w-full justify-start px-4"
-                            : undefined,
-                        )}
-                        size="sm"
+                      <ThButton
                         onClick={header.column.getToggleSortingHandler()}
+                        isSortedAsc={header.column.getIsSorted() === "asc"}
+                        isSortedDesc={header.column.getIsSorted() === "desc"}
                       >
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext(),
                         )}
-                        <Icon
-                          type={
-                            header.column.getIsSorted() === "asc"
-                              ? "chevron-up"
-                              : header.column.getIsSorted() === "desc"
-                              ? "chevron-down"
-                              : "chevrons-up-down"
-                          }
-                        />
-                      </Button>
+                      </ThButton>
                     ) : (
                       flexRender(
                         header.column.columnDef.header,
@@ -181,7 +213,17 @@ export function BookmarksTable<TData, TValue>({
                 data-state={row.getIsSelected() ? "selected" : undefined}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <Td key={cell.id} className="py-1">
+                  <Td
+                    key={cell.id}
+                    className={cn(
+                      "py-1",
+                      ["createdAt", "tagRelations", "favorite"].includes(
+                        cell.column.id,
+                      )
+                        ? "text-center"
+                        : undefined,
+                    )}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
                 ))}
@@ -200,12 +242,7 @@ export function BookmarksTable<TData, TValue>({
             <Td>
               <Checkbox
                 aria-label="Select all rows"
-                aria-controls={table
-                  .getSelectedRowModel()
-                  // TODO: remove ts-expect-error once this is fixed
-                  // @ts-expect-error - 🤷‍♂️ 'id' does exist
-                  .rows.map((row) => row.original.id)
-                  .join(" ")}
+                aria-controls={selectedIds.join(" ")}
                 checked={table.getIsAllRowsSelected()}
                 indeterminate={table.getIsSomeRowsSelected()}
                 onCheckedChange={(checked) =>
@@ -215,14 +252,47 @@ export function BookmarksTable<TData, TValue>({
                 }
               />
             </Td>
-            <Td className="pl-6 pr-4 text-sm" colSpan={columns.length - 1}>
-              {table.getSelectedRowModel().rows.length} of{" "}
-              {table.getRowModel().rows.length} Rows selected
+            <Td className="pl-6 pr-3" colSpan={columns.length - 1}>
+              {selectedIds.length} of {table.getRowModel().rows.length} Rows
+              selected
             </Td>
           </Tr>
         </Tfoot>
       </Table>
     </TableWrapper>
+  );
+}
+
+function ThButton({
+  children,
+  isSortedAsc,
+  isSortedDesc,
+  onClick,
+}: {
+  children: React.ReactNode;
+  isSortedAsc: boolean;
+  isSortedDesc: boolean;
+  onClick: ((event: unknown) => void) | undefined;
+}) {
+  return (
+    <Button
+      type="button"
+      onClick={onClick}
+      className="w-full max-w-[75vw] cursor-pointer select-none justify-start px-4 sm:max-w-[45vw]"
+      variant="ghost"
+      size="sm"
+    >
+      {children}
+      <Icon
+        type={
+          isSortedAsc
+            ? "chevron-up"
+            : isSortedDesc
+            ? "chevron-down"
+            : "chevrons-up-down"
+        }
+      />
+    </Button>
   );
 }
 
@@ -239,7 +309,7 @@ function ButtonTitle({
     <LinkButton
       to={`/bookmarks/${bookmarkId}`}
       variant="ghost"
-      className="w-full max-w-full justify-start overflow-hidden"
+      className="w-full max-w-[75vw] justify-start overflow-hidden sm:max-w-[30vw]"
     >
       <Favicon src={faviconSrc} />{" "}
       <span className="truncate text-sm">
@@ -256,7 +326,7 @@ function ButtonUrl({ url }: { url: string }) {
       target="_blank"
       rel="noopener noreferrer"
       variant="ghost"
-      className="w-full max-w-[65vw] justify-start overflow-hidden font-normal"
+      className="w-full max-w-[75vw] justify-start overflow-hidden font-normal sm:max-w-[45vw]"
     >
       <Icon type="external-link" />
       <span className="truncate text-xs font-normal">{url}</span>

@@ -99,11 +99,11 @@ export function formatBookmarkUrl({
 }
 
 export function formatBookmarkTitle(title: string): string {
-  return title.trim().replaceAll(REG_EXP_MULTIPLE_SPACES, " ").slice(0, 45);
+  return title.trim().replaceAll(REG_EXP_MULTIPLE_SPACES, " ");
 }
 
 export function formatBookmarkCreatedAt(value: string | null): Date {
-  const defaultDate = new Date();
+  const defaultDate = new Date(1970, 0, 1);
   if (!value || value === "0" || value.length !== 10) {
     return defaultDate;
   }

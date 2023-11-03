@@ -26,6 +26,7 @@ export const ICON_TYPES = [
   "merge",
   "minus",
   "moon",
+  "palette",
   "pencil",
   "plus",
   "search",

@@ -106,7 +106,7 @@ export const bookmarksTableColumns = [
     ),
     footer: ({ column }) => column.id,
     cell: ({ getValue }) => (
-      <span className="whitespace-nowrap text-xs">
+      <span className="whitespace-nowrap">
         {new Date(getValue()).toLocaleDateString()}
       </span>
     ),
@@ -170,7 +170,7 @@ export function BookmarksTable<TData, TValue>({
     .rows.map((row) => row.original.id);
 
   return (
-    <TableWrapper {...props} className={cn("border", className)}>
+    <TableWrapper {...props} className={cn(className)}>
       <Table>
         <Thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -218,7 +218,7 @@ export function BookmarksTable<TData, TValue>({
                   <Td
                     key={cell.id}
                     className={cn(
-                      "py-1",
+                      "py-1.5",
                       ["createdAt", "tagRelations", "favorite"].includes(
                         cell.column.id,
                       )
@@ -254,7 +254,7 @@ export function BookmarksTable<TData, TValue>({
                 }
               />
             </Td>
-            <Td className="pl-6 pr-3" colSpan={columns.length - 1}>
+            <Td className="pl-5 pr-3" colSpan={columns.length - 1}>
               <SelectedBookmarksForm
                 selectedIds={selectedIds}
                 totalLength={table.getRowModel().rows.length}
@@ -316,9 +316,10 @@ function ButtonTitle({
       to={`/bookmarks/${bookmarkId}`}
       variant="ghost"
       className="w-full max-w-[75vw] justify-start overflow-hidden sm:max-w-[30vw]"
+      size="sm"
     >
       <Favicon src={faviconSrc} />{" "}
-      <span className="truncate text-sm">
+      <span className="truncate">
         {title ? <span>{title}</span> : <span aria-label="Untitled">--</span>}
       </span>
     </LinkButton>
@@ -333,9 +334,10 @@ function ButtonUrl({ url }: { url: string }) {
       rel="noopener noreferrer"
       variant="ghost"
       className="w-full max-w-[75vw] justify-start overflow-hidden font-normal sm:max-w-[45vw]"
+      size="sm"
     >
       <Icon type="external-link" />
-      <span className="truncate text-xs font-normal">{url}</span>
+      <span className="truncate font-normal">{url}</span>
     </LinkButton>
   );
 }
@@ -352,6 +354,7 @@ function ButtonFavorite({
       formAction={`/bookmarks/${bookmarkId}`}
       defaultValue={defaultValue}
       variant="ghost"
+      size="sm-icon"
     />
   );
 }
@@ -397,7 +400,7 @@ function SelectedBookmarksForm({
     <Form method="POST" reloadDocument>
       <input type="hidden" name="selected-ids" value={selectedIds.join(",")} />
       <div className="flex flex-col gap-2 max-sm:max-w-[75vw] sm:flex-row sm:items-center sm:justify-between">
-        <div className="text-sm tabular-nums">
+        <div className="tabular-nums">
           {selectedIds.length} of {totalLength} rows selected.
         </div>
         {children}

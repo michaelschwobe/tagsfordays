@@ -85,8 +85,7 @@ export const SelectItem = forwardRef<
 
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
-export interface SimpleSelectProps
-  extends Omit<React.ComponentPropsWithoutRef<"button">, "placeholder"> {
+export interface SimpleSelectProps extends SelectPrimitive.SelectProps {
   /** Sets the content. **Required** */
   children: SelectPrimitive.SelectContentProps["children"];
   /** Sets the `class` attribute. */
@@ -97,6 +96,11 @@ export interface SimpleSelectProps
   name: NonNullable<SelectPrimitive.SelectProps["name"]>;
   /** Sets the "placeholder" content. */
   placeholder?: SelectPrimitive.SelectValueProps["placeholder"];
+  /** Sets the "trigger" props */
+  triggerProps?: Omit<
+    SelectPrimitive.SelectTriggerProps,
+    "asChild" | "children" | "className" | "id"
+  >;
 }
 
 export const SimpleSelect = forwardRef<
@@ -104,13 +108,21 @@ export const SimpleSelect = forwardRef<
   SimpleSelectProps
 >(
   (
-    { children, className, id, name, placeholder = "Select…", ...props },
+    {
+      children,
+      className,
+      id,
+      name,
+      placeholder = "Select…",
+      triggerProps,
+      ...props
+    },
     forwardedRef,
   ) => {
     return (
-      <Select name={name}>
+      <Select {...props} name={name}>
         <SelectTrigger
-          {...props}
+          {...triggerProps}
           className={cn(className)}
           id={id}
           ref={forwardedRef}

@@ -9,7 +9,7 @@ export const buttonGroupItemVariants = cva(
       variant: {
         button:
           "focus-visible:border-pink-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-pink-500 aria-[pressed=true]:bg-white aria-[pressed=true]:text-black dark:focus-visible:border-pink-500 dark:focus-visible:ring-pink-500 dark:aria-[pressed=true]:bg-slate-800 dark:aria-[pressed=true]:text-white",
-        radio:
+        input:
           "focus-within:border-pink-500 focus-within:outline-none focus-within:ring-1 focus-within:ring-pink-500 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-visible:border-pink-500 dark:focus-visible:ring-pink-500 [&:has(:checked)]:bg-white [&:has(:checked)]:text-black dark:[&:has(:checked)]:bg-slate-800 dark:[&:has(:checked)]:text-white",
       },
     },
@@ -52,30 +52,38 @@ export const ButtonGroupButton = forwardRef<
 
 ButtonGroupButton.displayName = "ButtonGroupButton";
 
-export interface ButtonGroupRadioProps
+export interface ButtonGroupInputProps
   extends React.ComponentPropsWithoutRef<"input"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */
   className?: string | undefined;
+  /** Sets the `type` attribute. */
+  type: "checkbox" | "radio";
 }
 
-export const ButtonGroupRadio = forwardRef<
+export const ButtonGroupInput = forwardRef<
   React.ElementRef<"input">,
-  ButtonGroupRadioProps
->(({ children, className, id, ...props }, forwardedRef) => {
+  ButtonGroupInputProps
+>(({ children, className, id, type, ...props }, forwardedRef) => {
   return (
     <label
-      className={cn(buttonGroupItemVariants({ className, variant: "radio" }))}
+      className={cn(buttonGroupItemVariants({ className, variant: "input" }))}
       htmlFor={id}
     >
-      <input {...props} className="sr-only" id={id} ref={forwardedRef} />
+      <input
+        {...props}
+        type={type}
+        className="sr-only"
+        id={id}
+        ref={forwardedRef}
+      />
       <span>{children}</span>
     </label>
   );
 });
 
-ButtonGroupRadio.displayName = "ButtonGroupRadio";
+ButtonGroupInput.displayName = "ButtonGroupInput";
 
 export interface ButtonGroupProps
   extends React.ComponentPropsWithoutRef<"div"> {

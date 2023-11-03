@@ -8,7 +8,7 @@ export const TableWrapper = forwardRef<
   <div
     {...props}
     className={cn(
-      "relative w-full overflow-auto rounded-lg border-slate-300 dark:border-slate-600",
+      "relative w-full overflow-x-auto rounded-lg border border-slate-300 dark:border-slate-600",
       className,
     )}
     ref={forwardedRef}
@@ -25,7 +25,7 @@ export const Table = forwardRef<
   <table
     {...props}
     className={cn(
-      "w-full caption-bottom bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-400",
+      "w-full caption-bottom bg-white text-sm text-slate-600 dark:bg-slate-800 dark:text-slate-400",
       className,
     )}
     ref={forwardedRef}
@@ -37,7 +37,14 @@ export const Caption = forwardRef<
   React.ElementRef<"caption">,
   React.ComponentPropsWithoutRef<"caption">
 >(({ className, ...props }, forwardedRef) => (
-  <caption {...props} className={cn("my-4", className)} ref={forwardedRef} />
+  <caption
+    {...props}
+    className={cn(
+      "border-t border-slate-300 bg-white py-4 text-slate-600 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400",
+      className,
+    )}
+    ref={forwardedRef}
+  />
 ));
 Caption.displayName = "Caption";
 

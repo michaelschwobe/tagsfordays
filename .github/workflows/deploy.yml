@@ -194,7 +194,7 @@ jobs:
       matrix:
         # If changing this, match the same value from:
         # - Running `flyctl version` on your local machine
-        flyctl-version: [0.1.115]
+        flyctl-version: [0.1.118]
     if: ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev') && github.event_name == 'push' }}
     steps:
       - name: ⬇️ Checkout repo

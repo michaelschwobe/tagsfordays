@@ -72,9 +72,9 @@ export function formatExportAsCsv(data: GetBookmarksData) {
   const head = ["text", "href", "date"].join(",");
 
   const rows = data.map(({ createdAt, title, url }) => {
-    const text = title?.replace(",", "\\,") ?? "Untitled";
+    const text = title ? `"${title.replaceAll(`"`, `""`)}"` : "Untitled";
     const href = url;
-    const date = createdAt.toUTCString().replace(",", "\\,");
+    const date = `"${createdAt.toUTCString()}"`;
     const row = [text, href, date].join(",");
     return row;
   });

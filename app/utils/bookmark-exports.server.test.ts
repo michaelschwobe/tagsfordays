@@ -117,10 +117,10 @@ describe("formatExportAsCsv", () => {
     ];
     const result = formatExportAsCsv(data);
     expect(result.body.split("\n")[1]).toEqual(
-      "Example 0,https://example.com/0,Thu\\, 01 Jan 1970 00:00:00 GMT",
+      `"Example 0",https://example.com/0,"Thu, 01 Jan 1970 00:00:00 GMT"`,
     );
     expect(result.body.split("\n")[2]).toEqual(
-      "Example 1,https://example.com/1,Thu\\, 01 Jan 1970 00:00:00 GMT",
+      `"Example 1",https://example.com/1,"Thu, 01 Jan 1970 00:00:00 GMT"`,
     );
   });
 
@@ -140,12 +140,12 @@ describe("formatExportAsCsv", () => {
     expect(result.body.split("\n")[1]).toContain("Untitled");
   });
 
-  it("should return comma-escaped strings for title and createdAt", () => {
+  it("should return quoted/quote-escaped strings for title and createdAt", () => {
     const data = [
       {
         id: "",
         url: "https://example.com",
-        title: "Example, with comma",
+        title: 'Example, with comma and "quotes"',
         favorite: null,
         createdAt: currDate,
         _count: { tags: 0 },
@@ -153,7 +153,7 @@ describe("formatExportAsCsv", () => {
     ];
     const result = formatExportAsCsv(data);
     expect(result.body.split("\n")[1]).toEqual(
-      "Example\\, with comma,https://example.com,Thu\\, 01 Jan 1970 00:00:00 GMT",
+      `"Example, with comma and ""quotes""",https://example.com,"Thu, 01 Jan 1970 00:00:00 GMT"`,
     );
   });
 });

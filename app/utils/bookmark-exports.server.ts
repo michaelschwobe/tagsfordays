@@ -52,9 +52,19 @@ export function exportResponse({
   fileExtension: BookmarkExportFileExtension;
 }) {
   const { body, mimeType } = mappedExportFunctions[fileExtension](data);
+  const filename = `bookmarks_${new Date()
+    .toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "2-digit",
+    })
+    .replace(/\//g, "_")}.${fileExtension}`;
   return new Response(body, {
     status: 200,
-    headers: { "Content-Type": mimeType },
+    headers: {
+      "Content-Disposition": `attachment; filename=${filename}`,
+      "Content-Type": `${mimeType}; charset=utf-8`,
+    },
   });
 }
 

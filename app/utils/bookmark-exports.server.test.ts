@@ -45,7 +45,10 @@ describe("exportResponse", () => {
       expect(response).toBeDefined();
       expect(response).toHaveProperty("body");
       expect(response).toHaveProperty("status", 200);
-      expect(response.headers.get("content-type")).toEqual(mimeType);
+      expect(response.headers.get("content-disposition")).toContain(
+        fileExtension,
+      );
+      expect(response.headers.get("content-type")).toContain(mimeType);
     },
   );
 });

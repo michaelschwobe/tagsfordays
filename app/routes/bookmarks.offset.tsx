@@ -1,3 +1,5 @@
+// TODO: remove route when pagination is finalized.
+
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useNavigation } from "@remix-run/react";
@@ -8,7 +10,7 @@ import {
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import {
-  ButtonCursorPagination,
+  ButtonGroupOffsetPagination,
   PaginationForm,
 } from "~/components/pagination";
 import { SearchForm } from "~/components/search-form";
@@ -17,7 +19,7 @@ import { Badge } from "~/components/ui/badge";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
-import { getBookmarks, getBookmarksCount } from "~/models/bookmark.server";
+import { getBookmarks } from "~/models/bookmark.server";
 import { mapWithFaviconSrc } from "~/models/favicon.server";
 import {
   BOOKMARK_SEARCH_KEYS,
@@ -27,8 +29,8 @@ import {
 import { generateSocialMeta } from "~/utils/meta";
 import { formatItemsFoundByCount, formatMetaTitle } from "~/utils/misc";
 import {
-  getCursorPaginationFieldEntries,
-  getCursorPaginationSearchParams,
+  getOffsetPaginationFieldEntries,
+  getOffsetPaginationSearchParams,
 } from "~/utils/pagination.server";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
@@ -36,30 +38,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const searchKey = parseBookmarkSearchKey(url.searchParams.get("searchKey"));
   const searchValue = url.searchParams.get("searchValue");
-  const { cursorId, limit, skip, take } = getCursorPaginationSearchParams({
+  const { skip, take } = getOffsetPaginationSearchParams({
     searchParams: url.searchParams,
     initialLimit: 20,
   });
 
-  const bookmarks = await getBookmarks({
-    searchKey,
-    searchValue,
-    skip,
-    take,
-    cursorId,
-  });
-  const count = await getBookmarksCount({ searchKey, searchValue });
-  const data = await mapWithFaviconSrc(bookmarks);
+  const bookmarks = await getBookmarks({ searchKey, searchValue });
+  const count = bookmarks.length;
+  const data = await mapWithFaviconSrc(bookmarks.slice(skip, skip + take));
 
-  const nextCursorId =
-    data.length > limit ? bookmarks.at(-1)?.id ?? null : null;
-  const fields = getCursorPaginationFieldEntries({
+  const fields = getOffsetPaginationFieldEntries({
     searchParams: url.searchParams,
-    cursor: nextCursorId,
-    limit,
+    take,
   });
   const hasData = data.length > 0;
-  const hasPagination = Boolean(nextCursorId);
+  const hasPagination = count > take;
 
   return json({
     count,
@@ -69,6 +62,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     hasPagination,
     searchKey,
     searchValue,
+    skip,
+    take,
   });
 }
 
@@ -169,7 +164,11 @@ export default function BookmarksIndexPage() {
               <input key={name} type="hidden" name={name} value={value} />
             ))}
 
-            <ButtonCursorPagination className="w-full" />
+            <ButtonGroupOffsetPagination
+              skip={loaderData.skip}
+              take={loaderData.take}
+              total={loaderData.count}
+            />
           </fieldset>
         </PaginationForm>
       ) : null}

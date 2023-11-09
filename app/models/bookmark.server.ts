@@ -33,7 +33,7 @@ export async function getBookmarkByUrl({ url }: Pick<Bookmark, "url">) {
   });
 }
 
-export async function getBookmarks({
+export async function getBookmarksCount({
   searchKey,
   searchValue,
 }: {
@@ -41,7 +41,44 @@ export async function getBookmarks({
   searchValue?: string | null;
 } = {}) {
   if (searchValue && searchKey === "tags") {
+    return prisma.bookmark.count({
+      where: {
+        tags: { some: { tag: { name: { contains: searchValue } } } },
+      },
+    });
+  }
+
+  if (searchValue && searchKey) {
+    return prisma.bookmark.count({
+      where: { [searchKey]: { contains: searchValue } },
+    });
+  }
+
+  return prisma.bookmark.count();
+}
+
+export async function getBookmarks({
+  searchKey,
+  searchValue,
+  cursorId,
+  skip,
+  take,
+}: {
+  searchKey?: BookmarkSearchKey | null;
+  searchValue?: string | null;
+  cursorId?: Bookmark["id"] | null;
+  skip?: number | null;
+  take?: number | null;
+} = {}) {
+  const pagination = {
+    ...(skip ? { skip } : {}),
+    ...(take ? { take } : {}),
+    ...(cursorId ? { cursor: { id: cursorId } } : {}),
+  };
+
+  if (searchValue && searchKey === "tags") {
     return prisma.bookmark.findMany({
+      ...pagination,
       select: {
         id: true,
         url: true,
@@ -63,6 +100,7 @@ export async function getBookmarks({
 
   if (searchValue && searchKey) {
     return prisma.bookmark.findMany({
+      ...pagination,
       select: {
         id: true,
         url: true,
@@ -77,6 +115,7 @@ export async function getBookmarks({
   }
 
   return prisma.bookmark.findMany({
+    ...pagination,
     select: {
       id: true,
       url: true,

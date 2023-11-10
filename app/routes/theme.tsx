@@ -74,6 +74,9 @@ function Content() {
           <Favicon src="" />
           <Favicon src="/favicons/favicon.svg" />
           <Badge>Badge</Badge>
+          <Badge variant="danger">Badge</Badge>
+          <Badge variant="warning">Badge</Badge>
+          <Badge variant="success">Badge</Badge>
           <Code>Code</Code>
           <Checkbox onCheckedChange={() => {}} />
           <Checkbox onCheckedChange={() => {}} indeterminate />

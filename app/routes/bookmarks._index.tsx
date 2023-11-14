@@ -1,10 +1,6 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useNavigation } from "@remix-run/react";
-import {
-  BookmarksTable,
-  bookmarksTableColumns,
-} from "~/components/bookmarks-table";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import {
@@ -13,6 +9,10 @@ import {
 } from "~/components/pagination";
 import { SearchForm } from "~/components/search-form";
 import { SearchHelp } from "~/components/search-help";
+import {
+  TableBookmarks,
+  columnsTableBookmarks,
+} from "~/components/table-bookmarks";
 import { Badge } from "~/components/ui/badge";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
@@ -105,8 +105,17 @@ export default function BookmarksIndexPage() {
           <Icon type="bookmarks" />
           Bookmarks <Badge aria-hidden>{loaderData.count}</Badge>
         </H1>
-        <LinkButton to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/import`}>
-          <Icon type="plus" />
+        <LinkButton
+          to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/status`}
+          size="md-icon"
+        >
+          <Icon type="shield-check" />
+          <span className="sr-only">Bookmarks status</span>
+        </LinkButton>
+        <LinkButton
+          to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/import`}
+          size="md-icon"
+        >
           <Icon type="upload" />
           <span className="sr-only">Import bookmarks</span>
         </LinkButton>
@@ -154,10 +163,8 @@ export default function BookmarksIndexPage() {
       </SearchHelp>
 
       {loaderData.hasData ? (
-        <BookmarksTable
-          // TODO: remove comment once this is fixed.
-          // @ts-expect-error - node module bug https://github.com/TanStack/table/issues/5135
-          columns={bookmarksTableColumns}
+        <TableBookmarks
+          columns={columnsTableBookmarks}
           data={loaderData.data}
         />
       ) : null}

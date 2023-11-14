@@ -1,4 +1,10 @@
-import { expect, login, logout, test } from "../utils/playwright-test-utils";
+import {
+  encodeUrl,
+  expect,
+  login,
+  logout,
+  test,
+} from "../utils/playwright-test-utils";
 
 test.describe("Unauthenticated", () => {
   test.beforeEach(async ({ page }) => {
@@ -10,7 +16,7 @@ test.describe("Unauthenticated", () => {
   });
 
   test("User can search bookmarks by tag", async ({ page }) => {
-    await page.getByText("Bookmarks(6)").click();
+    await page.getByText("Bookmarks6").click();
 
     await expect(page).toHaveURL("/bookmarks?searchValue=tag1&searchKey=tags");
   });
@@ -40,9 +46,14 @@ test.describe("Unauthenticated", () => {
   });
 
   test("User can NOT delete a tag", async ({ page }) => {
-    await page.getByRole("link", { name: "Delete tag", exact: true }).click();
+    await page.getByRole("button", { name: "Delete tag", exact: true }).click();
+    await page
+      .getByRole("button", { name: "Confirm delete tag", exact: true })
+      .click();
 
-    await expect(page).toHaveURL("/login?redirectTo=/tags/tid0");
+    await expect(page).toHaveURL(
+      encodeUrl({ page, url: "/login?redirectTo=/tags/tid0/edit" }),
+    );
   });
 });
 

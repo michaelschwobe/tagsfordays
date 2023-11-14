@@ -11,26 +11,23 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 >   <img alt="Warning" src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/dark-theme/warning.svg">
 > </picture><br>
 >
-> This project is still in development and all items are subject to change and in no specific order.
+> This project is still in development and all TODOs are subject to change.
 
-- TODO: Tag: trending widget (relation count x relation dates)
-- TODO: Tag: popular widget (relation count)
-- TODO: Tag: tag colors or other fields
+### MVP
 
-- TODO: Bookmark: assess orderBy (title, date, etc.)
-- TODO: Bookmark: watchtower route (dead links, redirects, etc.)
-- TODO: Bookmark: suggest/postfetch-opt-in title/description
-- TODO: Bookmark: suggest tags
+- TODO: Finalize pagination (cursor vs offset, remove `bookmarks.offset.tsx` route)
+- TODO: Finalize tables (construction and types)
+- TODO: Add database writes/resets (seeding, testing)
+- TODO: Add database "Collection" model (grouped bookmarks, relations, other)
+- Complete all TODOs found in codebase
 
-- TODO: Collection: collection model (grouped bookmarks, tagged)
+### Other
 
-- TODO: User: multitenancy
-- TODO: User: profiles
-
-- TODO: General: finalize pagination (cursor vs offset)
-- TODO: General: performance optimizations
-- TODO: General: more data (seeded, production, etc.)
-- TODO: General: db writes/resets when testing
-- TODO: General: tailwindcss config for custom colors, spacing, etc.
-- TODO: General: all/model-filtered data resouce route(s)
-- TODO: General: more Unit tests / enable skipped tests when db writes/resets are implemented
+- TODO: Update button/link variant (warning, success)
+- TODO: Suggest bookmark title/description/tags (action)
+- TODO: Create "Unused Tags" widget (relation count)
+- TODO: Create "Popular Tags" widget (relation count x createdAt)
+- TODO: Add more E2E and Unit tests
+- TODO: Optimize performance
+- TODO: Custom tailwindcss config (custom colors, spacing, etc.)
+- TODO: Add user multitenancy / profiles

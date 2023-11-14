@@ -4,7 +4,7 @@ import { cn } from "~/utils/misc";
 export const TableWrapper = forwardRef<
   React.ElementRef<"div">,
   React.ComponentPropsWithoutRef<"div">
->(({ children, className, ...props }, forwardedRef) => (
+>(({ className, ...props }, forwardedRef) => (
   <div
     {...props}
     className={cn(
@@ -12,9 +12,7 @@ export const TableWrapper = forwardRef<
       className,
     )}
     ref={forwardedRef}
-  >
-    {children}
-  </div>
+  />
 ));
 TableWrapper.displayName = "TableWrapper";
 
@@ -55,7 +53,8 @@ export const Thead = forwardRef<
   <thead
     {...props}
     className={cn(
-      "border-slate-300 dark:border-slate-600 [&_tr]:border-b",
+      "border-slate-300 dark:border-slate-600",
+      "[&_tr]:border-b",
       className,
     )}
     ref={forwardedRef}
@@ -82,7 +81,9 @@ export const Tfoot = forwardRef<
   <tfoot
     {...props}
     className={cn(
-      "border-slate-300 font-medium dark:border-slate-600 [&_tr]:border-b-0 [&_tr]:border-t",
+      "border-slate-300 dark:border-slate-600",
+      "[&_tr]:border-b-0 [&_tr]:border-t",
+      // "[&_tr:has([type=checkbox],[role=checkbox])_td:last-child]:bg-red-500",
       className,
     )}
     ref={forwardedRef}
@@ -97,7 +98,8 @@ export const Tr = forwardRef<
   <tr
     {...props}
     className={cn(
-      "border-b border-slate-300 transition-colors data-[state=selected]:bg-slate-100 dark:border-slate-600 dark:data-[state=selected]:bg-slate-900",
+      "border-b border-slate-300 transition-colors dark:border-slate-600",
+      "data-[state=selected]:bg-slate-100 dark:data-[state=selected]:bg-slate-900",
       className,
     )}
     ref={forwardedRef}
@@ -112,7 +114,9 @@ export const Th = forwardRef<
   <th
     {...props}
     className={cn(
-      "px-1.5 py-3.5 text-left align-middle font-medium [&:has([type=checkbox],[role=checkbox])]:pl-4",
+      "p-4 text-center align-middle font-medium",
+      "[&:has(a,button)]:py-2",
+      "[&:has([type=checkbox],[role=checkbox])]:w-4 [&:has([type=checkbox],[role=checkbox])]:pr-0",
       className,
     )}
     ref={forwardedRef}
@@ -127,7 +131,9 @@ export const Td = forwardRef<
   <td
     {...props}
     className={cn(
-      "px-1.5 py-3.5 align-middle [&:has([type=checkbox],[role=checkbox])]:pl-4",
+      "p-4 text-center align-middle",
+      "[&:has(a,button)]:py-2",
+      "[&:has([type=checkbox],[role=checkbox])]:w-4 [&:has([type=checkbox],[role=checkbox])]:pr-0",
       className,
     )}
     ref={forwardedRef}

@@ -33,13 +33,17 @@ import { LinkButton } from "~/components/ui/link-button";
 import { Textarea } from "~/components/ui/textarea";
 import {
   deleteBookmark,
+  favoriteBookmark,
   getBookmark,
   getBookmarkByUrl,
   updateBookmark,
 } from "~/models/bookmark.server";
 import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
-import { toUpdateBookmarkFormSchema } from "~/utils/bookmark-validation";
+import {
+  FavoriteBookmarkFormSchema,
+  toUpdateBookmarkFormSchema,
+} from "~/utils/bookmark-validation";
 import {
   formatMetaTitle,
   getFieldError,
@@ -71,6 +75,15 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
   const formData = await request.formData();
   const intent = formData.get(conform.INTENT);
+
+  if (intent === "favorite") {
+    const formFields = Object.fromEntries(formData.entries());
+    const submission = FavoriteBookmarkFormSchema.safeParse(formFields);
+    if (submission.success) {
+      const { favorite = null } = submission.data;
+      await favoriteBookmark({ id, favorite, userId });
+    }
+  }
 
   if (intent === "delete") {
     await deleteBookmark({ id, userId });
@@ -311,7 +324,12 @@ export default function EditBookmarkPage() {
           <Icon type="check" />
           <span>Update bookmark</span>
         </Button>{" "}
-        <ButtonDelete singular="bookmark" className="max-sm:w-full" size="lg" />
+        <ButtonDelete
+          formAction={`/bookmarks/${loaderData.bookmark.id}/edit`}
+          label="bookmark"
+          size="lg"
+          className="max-sm:w-full"
+        />
       </FormItem>
     </Main>
   );

@@ -1,4 +1,10 @@
-import { expect, login, logout, test } from "../utils/playwright-test-utils";
+import {
+  encodeUrl,
+  expect,
+  login,
+  logout,
+  test,
+} from "../utils/playwright-test-utils";
 
 test.describe("Unauthenticated", () => {
   test.beforeEach(async ({ page }) => {
@@ -159,11 +165,13 @@ test.describe("Unauthenticated", () => {
 
   test("User can NOT (un)favorite a bookmark", async ({ page }) => {
     await page
-      .getByRole("link", { name: "Unfavorite", exact: true })
+      .getByRole("button", { name: "Unfavorite bookmark", exact: true })
       .first()
       .click();
 
-    await expect(page).toHaveURL("/login?redirectTo=/bookmarks");
+    await expect(page).toHaveURL(
+      encodeUrl({ page, url: "/login?redirectTo=/bookmarks/bid0/edit" }),
+    );
   });
 });
 
@@ -188,7 +196,9 @@ test.describe("Authenticated", () => {
 
   test("User can (un)favorite a bookmark", async ({ page }) => {
     await expect(
-      page.getByRole("button", { name: "Unfavorite", exact: true }).first(),
+      page
+        .getByRole("button", { name: "Unfavorite bookmark", exact: true })
+        .first(),
     ).toBeVisible();
   });
 });

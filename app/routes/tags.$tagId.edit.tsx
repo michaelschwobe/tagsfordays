@@ -182,7 +182,12 @@ export default function EditTagPage() {
           <Icon type="check" />
           <span>Update tag</span>
         </Button>{" "}
-        <ButtonDelete singular="tag" className="max-sm:w-full" size="lg" />
+        <ButtonDelete
+          formAction={`/tags/${loaderData.tag.id}/edit`}
+          label="tag"
+          size="lg"
+          className="max-sm:w-full"
+        />
       </FormItem>
     </Main>
   );

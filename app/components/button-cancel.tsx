@@ -11,24 +11,34 @@ export interface ButtonCancelProps
   > {
   /** Sets the `class` attribute. */
   className?: string | undefined;
+  /** Sets the content. */
+  label?: string | undefined;
+  /** Sets `navigate` params. **Required** */
+  to?: string | undefined;
 }
 
 export const ButtonCancel = forwardRef<
   React.ElementRef<"button">,
   ButtonCancelProps
->((props, forwardedRef) => {
+>(({ label, to, ...props }, forwardedRef) => {
   const navigate = useNavigate();
 
   return (
     <Button
       {...props}
       type="button"
-      onClick={() => navigate(-1)}
+      onClick={() => {
+        if (to) {
+          navigate(to);
+        } else {
+          navigate(-1);
+        }
+      }}
       size="md-icon"
       ref={forwardedRef}
     >
       <Icon type="x" />
-      <span className="sr-only">Cancel</span>
+      <span className="sr-only">{label ?? "Cancel"}</span>
     </Button>
   );
 });

@@ -10,7 +10,7 @@ test.describe("Unauthenticated", () => {
   });
 
   test("User can view tags", async ({ page }) => {
-    const tagNameRegex = /^[a-zA-Z0-9-.\s]+\s\(\s\d+\s\)/;
+    const tagNameRegex = /^[a-zA-Z0-9-.\s]+\s\d+/;
     const tags = await page.getByRole("link", { name: tagNameRegex }).all();
 
     expect(tags.length).toBe(11);
@@ -19,7 +19,7 @@ test.describe("Unauthenticated", () => {
   test("User can view tags sorted by Name", async ({ page }) => {
     await expect(
       page.getByText(
-        "taaaaaaaaaaaaag that is exactly 45 characters (0)tag1 (6)tag10 (0)tag2 (5)tag3 (4)tag4 (3)tag5 (2)tag6 (1)tag7 (0)tag8 (0)tag9 (0)",
+        "taaaaaaaaaaaaag that is exactly 45 characters 0tag1 6tag10 0tag2 5tag3 4tag4 3tag5 2tag6 1tag7 0tag8 0tag9 0",
       ),
     ).toBeVisible();
   });
@@ -29,13 +29,13 @@ test.describe("Unauthenticated", () => {
 
     await expect(
       page.getByText(
-        "tag1 (6)tag2 (5)tag3 (4)tag4 (3)tag5 (2)tag6 (1)taaaaaaaaaaaaag that is exactly 45 characters (0)tag10 (0)tag7 (0)tag8 (0)tag9 (0)",
+        "tag1 6tag2 5tag3 4tag4 3tag5 2tag6 1taaaaaaaaaaaaag that is exactly 45 characters 0tag10 0tag7 0tag8 0tag9 0",
       ),
     ).toBeVisible();
   });
 
   test("User can go to a tag's detail page", async ({ page }) => {
-    await page.getByRole("link", { name: "tag1 ( 6 )", exact: true }).click();
+    await page.getByRole("link", { name: "tag1 6", exact: true }).click();
 
     await expect(page).toHaveURL("/tags/tid0");
   });

@@ -1,9 +1,4 @@
-import { conform } from "@conform-to/react";
-import type {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  MetaFunction,
-} from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useLocation } from "@remix-run/react";
 import { ButtonDelete } from "~/components/button-delete";
@@ -16,11 +11,9 @@ import { H1 } from "~/components/ui/h1";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
-import { deleteTag, getTag } from "~/models/tag.server";
-import { requireUserId } from "~/utils/auth.server";
+import { getTag } from "~/models/tag.server";
 import { generateSocialMeta } from "~/utils/meta";
 import { formatMetaTitle, invariant, invariantResponse } from "~/utils/misc";
-import { redirectWithToast } from "~/utils/toast.server";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -33,25 +26,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
   invariantResponse(tag, "Not Found", { status: 404 });
 
   return json({ tag });
-}
-
-export async function action({ params, request }: ActionFunctionArgs) {
-  const userId = await requireUserId(request);
-  invariant(params["tagId"], "tagId not found");
-
-  const formData = await request.formData();
-  const intent = formData.get(conform.INTENT);
-
-  if (intent === "delete") {
-    const { tagId: id } = params;
-    await deleteTag({ id, userId });
-    return redirectWithToast("/tags", {
-      type: "success",
-      description: "Tag deleted.",
-    });
-  }
-
-  return null;
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -137,7 +111,12 @@ export default function TagDetailPage() {
             <Icon type="merge" />
             <span>Merge tag</span>
           </LinkButton>{" "}
-          <ButtonDelete singular="tag" className="max-sm:w-full" size="lg" />
+          <ButtonDelete
+            formAction={`/tags/${loaderData.tag.id}/edit`}
+            label="tag"
+            size="lg"
+            className="max-sm:w-full"
+          />
         </FormItem>
       </div>
     </Main>

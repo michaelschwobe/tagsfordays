@@ -44,7 +44,7 @@ export const LatestBookmarks = forwardRef<
                 <li key={bookmark.id} className="flex gap-1 p-1">
                   <LinkButton
                     to={`/bookmarks/${bookmark.id}`}
-                    className="max-w-[18rem] basis-1/3 justify-start overflow-hidden"
+                    className="w-0 basis-1/3 justify-start overflow-hidden"
                     variant="ghost"
                   >
                     <Favicon src={bookmark.faviconSrc} />{" "}
@@ -60,13 +60,13 @@ export const LatestBookmarks = forwardRef<
                     to={bookmark.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="grow justify-between overflow-hidden font-normal"
+                    className="w-0 grow justify-start overflow-hidden font-normal"
                     variant="ghost"
                   >
+                    <Icon type="external-link" />
                     <span className="truncate text-xs font-normal">
                       {bookmark.url}
                     </span>
-                    <Icon type="external-link" />
                   </LinkButton>
                 </li>
               ))}

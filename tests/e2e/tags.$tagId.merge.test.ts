@@ -1,5 +1,5 @@
 import {
-  encodeUrlRedirectTo,
+  encodeUrl,
   expect,
   login,
   logout,
@@ -13,10 +13,7 @@ test.describe("Unauthenticated", () => {
 
   test("User can NOT view the page", async ({ page }) => {
     await expect(page).toHaveURL(
-      encodeUrlRedirectTo({
-        page,
-        url: "/login?redirectTo=/tags/tid0/merge",
-      }),
+      encodeUrl({ page, url: "/login?redirectTo=/tags/tid0/merge" }),
     );
   });
 });

@@ -20,7 +20,7 @@ export function createExportAction(fileExtension: BookmarkExportFileExtension) {
     await requireUserId(request);
 
     const formData = await request.formData();
-    const selectedIds = String(formData.get("selected-ids") ?? "")
+    const idsSelected = String(formData.get("ids-selected") ?? "")
       .split(",")
       .filter(Boolean);
 
@@ -28,8 +28,8 @@ export function createExportAction(fileExtension: BookmarkExportFileExtension) {
 
     return exportResponse({
       data:
-        selectedIds.length > 0
-          ? bookmarks.filter((el) => selectedIds.includes(el.id))
+        idsSelected.length > 0
+          ? bookmarks.filter((el) => idsSelected.includes(el.id))
           : bookmarks,
       fileExtension,
     });

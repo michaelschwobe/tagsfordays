@@ -1,4 +1,10 @@
-import { expect, login, logout, test } from "../utils/playwright-test-utils";
+import {
+  encodeUrl,
+  expect,
+  login,
+  logout,
+  test,
+} from "../utils/playwright-test-utils";
 
 test.describe("Unauthenticated", () => {
   test.beforeEach(async ({ page }) => {
@@ -25,9 +31,11 @@ test.describe("Unauthenticated", () => {
   });
 
   test("User can NOT (un)favorite a bookmark", async ({ page }) => {
-    await page.getByRole("link", { name: "Unfavorite", exact: true }).click();
+    await page.getByRole("button", { name: "Unfavorite", exact: true }).click();
 
-    await expect(page).toHaveURL("/login?redirectTo=/bookmarks/bid2");
+    await expect(page).toHaveURL(
+      encodeUrl({ page, url: "/login?redirectTo=/bookmarks/bid2/edit" }),
+    );
   });
 
   test("User can NOT edit a bookmark", async ({ page }) => {
@@ -40,10 +48,17 @@ test.describe("Unauthenticated", () => {
 
   test("User can NOT delete a bookmark", async ({ page }) => {
     await page
-      .getByRole("link", { name: "Delete bookmark", exact: true })
+      .getByRole("button", { name: "Delete bookmark", exact: true })
+      .click();
+    await page
+      .getByRole("button", { name: "Confirm delete bookmark", exact: true })
       .click();
 
-    await expect(page).toHaveURL("/login?redirectTo=/bookmarks/bid2");
+    // await expect(page).toHaveURL("/login?redirectTo=/bookmarks/bid2/edit");
+
+    await expect(page).toHaveURL(
+      encodeUrl({ page, url: "/login?redirectTo=/bookmarks/bid2/edit" }),
+    );
   });
 });
 

@@ -1,14 +1,9 @@
-import { conform } from "@conform-to/react";
-import type {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  MetaFunction,
-} from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useLocation } from "@remix-run/react";
 import { ButtonDelete } from "~/components/button-delete";
+import { ButtonFavorite } from "~/components/button-favorite";
 import { GeneralErrorBoundary, MainError } from "~/components/error-boundary";
-import { Favorite } from "~/components/favorite";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -19,14 +14,8 @@ import { H1 } from "~/components/ui/h1";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
-import {
-  deleteBookmark,
-  favoriteBookmark,
-  getBookmark,
-} from "~/models/bookmark.server";
+import { getBookmark } from "~/models/bookmark.server";
 import { mapWithFaviconSrc } from "~/models/favicon.server";
-import { requireUserId } from "~/utils/auth.server";
-import { FavoriteBookmarkFormSchema } from "~/utils/bookmark-validation";
 import { generateSocialMeta } from "~/utils/meta";
 import {
   asyncShare,
@@ -34,7 +23,6 @@ import {
   invariant,
   invariantResponse,
 } from "~/utils/misc";
-import { redirectWithToast } from "~/utils/toast.server";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -48,35 +36,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
   invariant(bookmark, "bookmark not found");
 
   return json({ bookmark });
-}
-
-export async function action({ params, request }: ActionFunctionArgs) {
-  const userId = await requireUserId(request);
-
-  invariant(params["bookmarkId"], "bookmarkId not found");
-  const { bookmarkId: id } = params;
-
-  const formData = await request.formData();
-  const intent = formData.get(conform.INTENT);
-
-  if (intent === "favorite") {
-    const formFields = Object.fromEntries(formData.entries());
-    const submission = FavoriteBookmarkFormSchema.safeParse(formFields);
-    if (submission.success) {
-      const { favorite = null } = submission.data;
-      await favoriteBookmark({ id, favorite, userId });
-    }
-  }
-
-  if (intent === "delete") {
-    await deleteBookmark({ id, userId });
-    return redirectWithToast("/bookmarks", {
-      type: "success",
-      description: "Bookmark deleted.",
-    });
-  }
-
-  return null;
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -200,9 +159,10 @@ export default function BookmarkDetailPage() {
         <FormItem>
           <div className="text-sm font-medium">Favorite</div>
           <FormControl>
-            <Favorite
-              formAction={`/bookmarks/${loaderData.bookmark.id}`}
-              defaultValue={loaderData.bookmark.favorite}
+            <ButtonFavorite
+              formAction={`/bookmarks/${loaderData.bookmark.id}/edit`}
+              isFavorite={Boolean(loaderData.bookmark.favorite)}
+              size="sm"
             />
           </FormControl>
         </FormItem>
@@ -218,9 +178,10 @@ export default function BookmarkDetailPage() {
             <span>Edit bookmark</span>
           </LinkButton>{" "}
           <ButtonDelete
-            singular="bookmark"
-            className="max-sm:w-full"
+            formAction={`/bookmarks/${loaderData.bookmark.id}/edit`}
+            label="bookmark"
             size="lg"
+            className="max-sm:w-full"
           />
         </FormItem>
       </div>

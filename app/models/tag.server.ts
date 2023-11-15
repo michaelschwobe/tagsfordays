@@ -53,7 +53,7 @@ export async function getLatestTags({ take = 3 }: { take?: number } = {}) {
     take,
   });
 }
-export type LatestTagsData = Awaited<ReturnType<typeof getLatestTags>>;
+export type GetLatestTagsData = Awaited<ReturnType<typeof getLatestTags>>;
 
 export async function createTag({
   name,

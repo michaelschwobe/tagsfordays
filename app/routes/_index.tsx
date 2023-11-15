@@ -1,12 +1,12 @@
 import type { MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { CardLatestBookmarks } from "~/components/card-latest-bookmarks";
+import { CardLatestTags } from "~/components/card-latest-tags";
+import { CardQuickBookmark } from "~/components/card-quick-bookmark";
+import { CardQuickTag } from "~/components/card-quick-tag";
 import { Intro } from "~/components/intro";
-import { LatestBookmarks } from "~/components/latest-bookmarks";
-import { LatestTags } from "~/components/latest-tags";
 import { Main } from "~/components/main";
-import { QuickBookmark } from "~/components/quick-bookmark";
-import { QuickTag } from "~/components/quick-tag";
 import { getLatestBookmarks } from "~/models/bookmark.server";
 import { mapWithFaviconSrc } from "~/models/favicon.server";
 import { getLatestTags } from "~/models/tag.server";
@@ -41,13 +41,13 @@ export default function HomePage() {
       <div className="grid gap-2 sm:grid-cols-2 sm:gap-8">
         <Intro className="sm:col-span-2" />
 
-        <QuickBookmark redirectTo="/" />
+        <CardQuickBookmark redirectTo="/" />
 
-        <QuickTag redirectTo="/" />
+        <CardQuickTag redirectTo="/" />
 
-        <LatestBookmarks data={loaderData.latestBookmarks} />
+        <CardLatestBookmarks data={loaderData.latestBookmarks} />
 
-        <LatestTags data={loaderData.latestTags} />
+        <CardLatestTags data={loaderData.latestTags} />
       </div>
     </Main>
   );

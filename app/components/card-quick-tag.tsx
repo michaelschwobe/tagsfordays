@@ -1,4 +1,4 @@
-import { Form } from "@remix-run/react";
+import { Form, useLocation } from "@remix-run/react";
 import { forwardRef, useId } from "react";
 import { Button } from "~/components/ui/button";
 import {
@@ -19,7 +19,7 @@ import { LinkButton } from "~/components/ui/link-button";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE, useOptionalUser } from "~/utils/user";
 
-export interface QuickBookmarkProps
+export interface CardQuickTagProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
   /** Sets the `class` attribute. */
   className?: string | undefined;
@@ -27,45 +27,46 @@ export interface QuickBookmarkProps
   redirectTo: string;
 }
 
-export const QuickBookmark = forwardRef<
+export const CardQuickTag = forwardRef<
   React.ElementRef<"div">,
-  QuickBookmarkProps
+  CardQuickTagProps
 >(({ className, redirectTo, ...props }, forwardedRef) => {
   const id = useId();
+  const location = useLocation();
   const optionalUser = useOptionalUser();
 
   return (
     <Card
       {...props}
       className={cn(className)}
-      data-testid="quick-bookmark"
+      data-testid="card-quick-tag"
       ref={forwardedRef}
     >
       <CardHeader>
-        <H2>Quick Bookmark</H2>
+        <H2>Quick Tag</H2>
       </CardHeader>
       {optionalUser ? (
         <CardContent>
-          <Form method="POST" action="/bookmarks/new">
+          <Form method="POST" action="/tags/new">
             <FormItem>
-              <FormLabel htmlFor={`${id}-url`}>URL</FormLabel>
+              <FormLabel htmlFor={`${id}-name`}>Name</FormLabel>
               <FormControl>
                 <Input
                   className="w-full"
                   type="text"
-                  id={`${id}-url`}
-                  name="url"
+                  id={`${id}-name`}
+                  name="name"
                   autoComplete="false"
-                  aria-describedby={`${id}-url-description`}
+                  aria-describedby={`${id}-name-description`}
                 />
                 <Button type="submit" variant="filled">
                   <Icon type="plus" />
-                  <Icon type="bookmark" />
-                  <span className="sr-only">Add bookmark</span>
+                  <Icon type="tag" />
+                  <span className="sr-only">Add tag</span>
                 </Button>
               </FormControl>
-              <FormDescription id={`${id}-url-description`}>
-                Use secure URLs, ex: <Code>https://</Code>
+              <FormDescription id={`${id}-name-description`}>
+                Comma separate names, ex: <Code>t1,t2,t3</Code>
               </FormDescription>
             </FormItem>
           </Form>
@@ -73,7 +74,7 @@ export const QuickBookmark = forwardRef<
       ) : (
         <CardFooter>
           <LinkButton
-            to={`${USER_LOGIN_ROUTE}?redirectTo=${redirectTo}`}
+            to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}
             className="max-sm:w-full"
           >
             <Icon type="log-in" />
@@ -85,4 +86,4 @@ export const QuickBookmark = forwardRef<
   );
 });
 
-QuickBookmark.displayName = "QuickBookmark";
+CardQuickTag.displayName = "CardQuickTag";

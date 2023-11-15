@@ -9,28 +9,28 @@ import { Favicon } from "~/components/ui/favicon";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
-import type { LatestBookmarksData } from "~/models/bookmark.server";
+import type { GetLatestBookmarksData } from "~/models/bookmark.server";
 import type { ItemsWithFaviconSrcData } from "~/models/favicon.server";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
-export interface LatestBookmarksProps
+export interface CardLatestBookmarksProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
   /** Sets the `class` attribute. */
   className?: string | undefined;
   /** Sets the "found" content. **Required** */
-  data: ItemsWithFaviconSrcData<LatestBookmarksData>;
+  data: ItemsWithFaviconSrcData<GetLatestBookmarksData>;
 }
 
-export const LatestBookmarks = forwardRef<
+export const CardLatestBookmarks = forwardRef<
   React.ElementRef<"div">,
-  LatestBookmarksProps
+  CardLatestBookmarksProps
 >(({ className, data, ...props }, forwardedRef) => {
   return (
     <Card
       {...props}
       className={cn(className)}
-      data-testid="latest-bookmarks"
+      data-testid="card-latest-bookmarks"
       ref={forwardedRef}
     >
       <CardHeader>
@@ -104,4 +104,4 @@ export const LatestBookmarks = forwardRef<
   );
 });
 
-LatestBookmarks.displayName = "LatestBookmarks";
+CardLatestBookmarks.displayName = "CardLatestBookmarks";

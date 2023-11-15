@@ -45,7 +45,7 @@ test.describe("Unauthenticated", () => {
     page,
   }) => {
     await expect(
-      page.getByTestId("latest-bookmarks").getByText("None found."),
+      page.getByTestId("card-latest-bookmarks").getByText("None found."),
     ).toBeVisible();
     await expect(
       page.getByRole("link", { name: "Add bookmark" }),
@@ -56,7 +56,7 @@ test.describe("Unauthenticated", () => {
     page,
   }) => {
     await expect(
-      page.getByTestId("latest-tags").getByText("None found."),
+      page.getByTestId("card-latest-tags").getByText("None found."),
     ).toBeVisible();
     await expect(page.getByRole("link", { name: "Add tag" })).toBeVisible();
   });
@@ -64,7 +64,7 @@ test.describe("Unauthenticated", () => {
   test("User can NOT add a bookmark", async ({ page }) => {
     await expect(
       page
-        .getByTestId("quick-bookmark")
+        .getByTestId("card-quick-bookmark")
         .getByRole("link", { name: "Log in to use this feature" }),
     ).toBeVisible();
   });
@@ -72,7 +72,7 @@ test.describe("Unauthenticated", () => {
   test("User can NOT add a tag", async ({ page }) => {
     await expect(
       page
-        .getByTestId("quick-tag")
+        .getByTestId("card-quick-tag")
         .getByRole("link", { name: "Log in to use this feature" }),
     ).toBeVisible();
   });

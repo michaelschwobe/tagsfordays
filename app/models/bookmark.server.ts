@@ -135,7 +135,7 @@ export async function getLatestBookmarks({ take = 3 }: { take?: number } = {}) {
     take,
   });
 }
-export type LatestBookmarksData = Awaited<
+export type GetLatestBookmarksData = Awaited<
   ReturnType<typeof getLatestBookmarks>
 >;
 

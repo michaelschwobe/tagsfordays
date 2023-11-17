@@ -32,7 +32,7 @@ export const ButtonColumnSort = forwardRef<
         variant="ghost"
         size={children ? "sm" : "sm-icon"}
         className={cn(
-          "flex w-full cursor-pointer select-none overflow-hidden",
+          "flex cursor-pointer select-none overflow-hidden",
           className,
         )}
         ref={forwardedRef}

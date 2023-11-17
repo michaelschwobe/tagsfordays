@@ -1,4 +1,21 @@
-export function toOffsetPagination({
+export type InputHiddenEntries = Array<[name: string, value: string]>;
+
+export function toPaginationSearchParams({
+  searchParams,
+  take,
+}: {
+  searchParams: URLSearchParams;
+  take: number;
+}) {
+  const nextEntries: InputHiddenEntries = [["take", String(take)]];
+  const currEntries: InputHiddenEntries = Array.from(
+    searchParams.entries(),
+  ).filter(([key]) => key !== "skip" && key !== "take");
+  const output: InputHiddenEntries = [...nextEntries, ...currEntries];
+  return output;
+}
+
+export function toPaginationValues({
   pagesMax,
   skip,
   take,
@@ -16,9 +33,6 @@ export function toOffsetPagination({
   const prevPageValue = Math.max(skip - take, 0);
   const nextPageValue = Math.min(skip + take, total - take + 1);
   const lastPageValue = (pagesTotal - 1) * take;
-
-  const hasPrevPage = skip > 0;
-  const hasNextPage = skip + take < total;
 
   const skipPageNumbers: number[] = [];
   if (pagesTotal <= pagesMax) {
@@ -40,12 +54,15 @@ export function toOffsetPagination({
       skipPageNumbers.push(i);
     }
   }
-  const skipPages = skipPageNumbers.map((skipPageNumber) => {
-    const skipPageValue = (skipPageNumber - 1) * take;
-    const isCurrPage = skipPageNumber === currPageValue;
-    const isSkipPage = skipPageValue >= 0 && skipPageValue < total;
-    return { isCurrPage, isSkipPage, skipPageNumber, skipPageValue };
+  const skipPages = skipPageNumbers.map((number) => {
+    const value = (number - 1) * take;
+    const isCurrPage = number === currPageValue;
+    const isSkipPage = value >= 0 && value < total;
+    return { isCurrPage, isSkipPage, number, value };
   });
+
+  const hasPrevPage = skip > 0;
+  const hasNextPage = skip + take < total;
 
   return {
     prevPageValue,

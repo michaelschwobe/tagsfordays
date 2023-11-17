@@ -1,3 +1,4 @@
+import type { ColumnDef } from "@tanstack/react-table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ButtonDelete } from "~/components/button-delete";
 import { ButtonFavorite } from "~/components/button-favorite";
@@ -6,7 +7,27 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { Favicon } from "~/components/ui/favicon";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
+import type { loader as loaderBookmarks } from "~/routes/bookmarks._index";
+import type { loader as loaderBookmarksStatus } from "~/routes/bookmarks.status";
 import { cn } from "~/utils/misc";
+
+type BookmarksData = Awaited<
+  ReturnType<Awaited<ReturnType<typeof loaderBookmarks>>["json"]>
+>["data"];
+
+type BookmarksStatusData = Awaited<
+  ReturnType<Awaited<ReturnType<typeof loaderBookmarksStatus>>["json"]>
+>["data"];
+
+// 🤷‍♂️ Patch type Date with type string.
+// type StringifyDate<T> = Omit<T, "createdAt"> & { createdAt: Date | string };
+type StringifyDate<T> = { [K in keyof T]: T[K] extends Date ? string : T[K] };
+
+type BookmarksItem = StringifyDate<BookmarksData[0]>;
+type BookmarksStatusItem = StringifyDate<BookmarksStatusData[0]>;
+
+// const columnHelperBookmarks = createColumnHelper<BookmarksItem>();
+// const columnHelperBookmarksStatus = createColumnHelper<BookmarksStatusItem>();
 
 export const columnSelectable = createColumnHelper<{
   id: string;
@@ -200,10 +221,41 @@ export const columnBookmarksFavorite = createColumnHelper<{
     <ButtonFavorite
       formAction={`/bookmarks/${row.original.id}/edit`}
       label="bookmark"
-      isFavorite={getValue()}
+      isFavorite={Boolean(getValue())}
       variant="ghost"
       size="sm-icon"
     />
   ),
   footer: ({ column }) => column.id,
 });
+
+// TODO: Remove ts-expect-error(s) once this is fixed.
+// 🤷‍♂️ Flagged as a TS error and ts-expect-error doesn't work, leaving as is.
+// See node module bug https://github.com/TanStack/table/issues/5135
+export const columnsBookmarks: ColumnDef<BookmarksItem>[] = [
+  // @ts-expect-error - see comment above
+  columnSelectable,
+  // @ts-expect-error - see comment above
+  columnBookmarkTitle,
+  // @ts-expect-error - see comment above
+  columnBookmarkUrl,
+  // @ts-expect-error - see comment above
+  columnCreatedAt,
+  // @ts-expect-error - see comment above
+  columnTagRelations,
+  // @ts-expect-error - see comment above
+  columnBookmarksFavorite,
+];
+
+export const columnsBookmarksStatus: ColumnDef<BookmarksStatusItem>[] = [
+  // @ts-expect-error - see comment above
+  columnSelectable,
+  // @ts-expect-error - see comment above
+  columnBookmarkStatus,
+  // @ts-expect-error - see comment above
+  columnBookmarkTitle,
+  // @ts-expect-error - see comment above
+  columnBookmarkUrl,
+  // @ts-expect-error - see comment above
+  columnBookmarksDelete,
+];

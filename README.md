@@ -15,8 +15,7 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 
 ### MVP
 
-- TODO: Finalize pagination (cursor vs offset, remove `bookmarks.offset.tsx` route)
-- TODO: Finalize tables (construction and types)
+- TODO: Finalize bookmark mapped types (with favicon, with status, etc.)
 - TODO: Add database writes/resets (seeding, testing)
 - TODO: Add database "Collection" model (grouped bookmarks, relations, other)
 - Complete all TODOs found in codebase
@@ -26,7 +25,7 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 - TODO: Suggest bookmark title/description/tags (action)
 - TODO: Create "Unused Tags" widget (relation count)
 - TODO: Create "Popular Tags" widget (relation count x createdAt)
-- TODO: Add more E2E and Unit tests
+- TODO: Add more E2E and Unit tests (status, exports, themes, etc.)
 - TODO: Optimize performance
 - TODO: Custom tailwindcss config (custom colors, spacing, etc.)
 - TODO: Add user multitenancy / profiles

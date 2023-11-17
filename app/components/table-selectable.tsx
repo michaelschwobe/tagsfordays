@@ -12,7 +12,6 @@ import {
   TableWrapper,
   Tbody,
   Td,
-  Tfoot,
   Th,
   Thead,
   Tr,
@@ -30,8 +29,6 @@ export interface TableSelectableProps<TData, TValue>
   children?: React.ReactNode | ((props: RenderProps) => React.ReactNode);
   /** Sets the `class` attribute. */
   className?: string | undefined;
-  /** Sets the thead th `class` attribute. */
-  classNameMap?: Record<string, Record<string, string>>;
   /** Sets table column definitions, display templates, etc. **Required** */
   columns: ColumnDef<TData, TValue>[];
   /** Sets table data. **Required** */
@@ -41,7 +38,6 @@ export interface TableSelectableProps<TData, TValue>
 export function TableSelectable<TData, TValue>({
   children,
   className,
-  classNameMap,
   columns,
   data,
   ...props
@@ -67,87 +63,82 @@ export function TableSelectable<TData, TValue>({
   const renderProps: RenderProps = { idsNotSelected, idsSelected };
 
   return (
-    <TableWrapper {...props} className={cn(className)}>
-      <Table>
-        <Thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <Th
-                    className={classNameMap?.[header.id]?.["th"]}
-                    key={header.id}
-                  >
-                    {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                      <ButtonColumnSort
-                        className={classNameMap?.[header.id]?.["button"]}
-                        onClick={header.column.getToggleSortingHandler()}
-                        isSortedAsc={header.column.getIsSorted() === "asc"}
-                        isSortedDesc={header.column.getIsSorted() === "desc"}
-                      >
-                        {flexRender(
+    <>
+      <TableWrapper {...props} className={cn(className)}>
+        <Table>
+          <Thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <Tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <Th data-header-id={header.id} key={header.id}>
+                      {header.isPlaceholder ? null : header.column.getCanSort() ? (
+                        <ButtonColumnSort
+                          onClick={header.column.getToggleSortingHandler()}
+                          isSortedAsc={header.column.getIsSorted() === "asc"}
+                          isSortedDesc={header.column.getIsSorted() === "desc"}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                        </ButtonColumnSort>
+                      ) : (
+                        flexRender(
                           header.column.columnDef.header,
                           header.getContext(),
-                        )}
-                      </ButtonColumnSort>
-                    ) : (
-                      flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )
-                    )}
-                  </Th>
-                );
-              })}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody>
-          {rows?.length ? (
-            rows.map((row) => (
-              <Tr
-                key={row.id}
-                data-state={row.getIsSelected() ? "selected" : undefined}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <Td
-                    className={classNameMap?.[cell.column.id]?.["td"]}
-                    key={cell.id}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Td>
-                ))}
+                        )
+                      )}
+                    </Th>
+                  );
+                })}
               </Tr>
-            ))
-          ) : (
-            <Tr>
-              <Td colSpan={columns.length}>No results.</Td>
-            </Tr>
-          )}
-        </Tbody>
-        {children ? (
-          <Tfoot>
-            <Tr>
-              <Td className={classNameMap?.["tfoot"]?.[0]}>
-                <Checkbox
-                  name="idsSelectedAll"
-                  checked={table.getIsAllRowsSelected()}
-                  indeterminate={table.getIsSomeRowsSelected()}
-                  onCheckedChange={(checked) => {
-                    const handler = table.getToggleAllRowsSelectedHandler();
-                    return handler({ target: { checked } });
-                  }}
-                  aria-label="Select all rows"
-                  aria-controls={idsSelected.join(" ")}
-                />
-              </Td>
-              {typeof children === "function"
-                ? children(renderProps)
-                : children}
-            </Tr>
-          </Tfoot>
-        ) : null}
-      </Table>
-    </TableWrapper>
+            ))}
+          </Thead>
+          <Tbody>
+            {rows?.length ? (
+              rows.map((row) => (
+                <Tr
+                  key={row.id}
+                  data-state={row.getIsSelected() ? "selected" : undefined}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <Td data-cell-id={cell.id} key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </Td>
+                  ))}
+                </Tr>
+              ))
+            ) : (
+              <Tr>
+                <Td colSpan={columns.length}>No results.</Td>
+              </Tr>
+            )}
+          </Tbody>
+        </Table>
+      </TableWrapper>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+        <label className="flex items-center gap-2.5 max-sm:h-10 max-sm:justify-center">
+          <Checkbox
+            name="idsSelectedAll"
+            checked={table.getIsAllRowsSelected()}
+            indeterminate={table.getIsSomeRowsSelected()}
+            onCheckedChange={(checked) => {
+              const handler = table.getToggleAllRowsSelectedHandler();
+              return handler({ target: { checked } });
+            }}
+            aria-controls={idsSelected.join(" ")}
+          />
+          <span className="sr-only">Select all rows</span>
+          <span className="whitespace-nowrap text-sm tabular-nums">
+            {rowsSelected.length} of {rows.length} row(s) selected.
+          </span>
+        </label>
+        {typeof children === "function" ? children(renderProps) : children}
+      </div>
+    </>
   );
 }

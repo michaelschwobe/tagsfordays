@@ -1,72 +1,69 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useNavigation } from "@remix-run/react";
+import { ButtonExport } from "~/components/button-export";
+import { ButtonFirst } from "~/components/button-first";
+import { ButtonLast } from "~/components/button-last";
+import { ButtonNext } from "~/components/button-next";
+import { ButtonPage } from "~/components/button-page";
+import { ButtonPrev } from "~/components/button-prev";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
+import { FormExport } from "~/components/form-export";
+import { FormPaginate } from "~/components/form-paginate";
 import { Main } from "~/components/main";
-import {
-  ButtonCursorPagination,
-  PaginationForm,
-} from "~/components/pagination";
 import { SearchForm } from "~/components/search-form";
 import { SearchHelp } from "~/components/search-help";
-import {
-  TableBookmarks,
-  columnsTableBookmarks,
-} from "~/components/table-bookmarks";
+import { columnsBookmarks } from "~/components/table-columns";
+import { TableSelectable } from "~/components/table-selectable";
 import { Badge } from "~/components/ui/badge";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
-import { getBookmarks, getBookmarksCount } from "~/models/bookmark.server";
+import { getBookmarks } from "~/models/bookmark.server";
 import { mapWithFaviconSrc } from "~/models/favicon.server";
 import {
+  BOOKMARK_EXPORT_FILE_EXTENSIONS,
   BOOKMARK_SEARCH_KEYS,
   BOOKMARK_SEARCH_KEYS_LABEL_MAP,
-  parseBookmarkSearchKey,
 } from "~/utils/bookmark";
+import { parseBookmarkSearchParams } from "~/utils/bookmark-validation";
 import { generateSocialMeta } from "~/utils/meta";
 import { formatItemsFoundByCount, formatMetaTitle } from "~/utils/misc";
 import {
-  getCursorPaginationFieldEntries,
-  getCursorPaginationSearchParams,
-} from "~/utils/pagination.server";
+  toPaginationSearchParams,
+  toPaginationValues,
+} from "~/utils/pagination";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const searchKey = parseBookmarkSearchKey(url.searchParams.get("searchKey"));
-  const searchValue = url.searchParams.get("searchValue");
-  const { cursorId, limit, skip, take } = getCursorPaginationSearchParams({
-    searchParams: url.searchParams,
-    initialLimit: 20,
-  });
+  const { searchParams } = new URL(request.url);
+  const { searchKey, searchValue, skip, take } =
+    parseBookmarkSearchParams(searchParams);
 
-  const bookmarks = await getBookmarks({
-    searchKey,
-    searchValue,
+  const bookmarks = await getBookmarks({ searchKey, searchValue });
+  const count = bookmarks.length;
+  const data = await mapWithFaviconSrc(bookmarks.slice(skip, skip + take));
+
+  const paginationSearchParams = toPaginationSearchParams({
+    searchParams,
+    take,
+  });
+  const paginationValues = toPaginationValues({
+    pagesMax: 5,
     skip,
     take,
-    cursorId,
-  });
-  const count = await getBookmarksCount({ searchKey, searchValue });
-  const data = await mapWithFaviconSrc(bookmarks);
-
-  const nextCursorId =
-    data.length > limit ? bookmarks.at(-1)?.id ?? null : null;
-  const fields = getCursorPaginationFieldEntries({
-    searchParams: url.searchParams,
-    cursor: nextCursorId,
-    limit,
+    total: count,
   });
   const hasData = data.length > 0;
-  const hasPagination = Boolean(nextCursorId);
+  const hasPagination = count > take;
 
   return json({
     count,
     data,
-    fields,
     hasData,
     hasPagination,
+    paginationSearchParams,
+    paginationValues,
     searchKey,
     searchValue,
   });
@@ -163,22 +160,87 @@ export default function BookmarksIndexPage() {
       </SearchHelp>
 
       {loaderData.hasData ? (
-        <TableBookmarks
-          columns={columnsTableBookmarks}
+        <TableSelectable
+          className="[&_[data-header-id=title]]:w-1/5 [&_[data-header-id=url]]:w-full"
+          columns={columnsBookmarks}
           data={loaderData.data}
-        />
-      ) : null}
-
-      {loaderData.hasPagination ? (
-        <PaginationForm>
-          <fieldset disabled={isPending}>
-            {loaderData.fields.map(([name, value]) => (
-              <input key={name} type="hidden" name={name} value={value} />
-            ))}
-
-            <ButtonCursorPagination className="w-full" />
-          </fieldset>
-        </PaginationForm>
+        >
+          {({ idsSelected, idsNotSelected }) => (
+            <>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+                {BOOKMARK_EXPORT_FILE_EXTENSIONS.map((ext) => (
+                  <FormExport
+                    key={ext}
+                    actionRoute="/bookmarks"
+                    fileExtension={ext}
+                    idsSelected={
+                      idsSelected.length > 0 ? idsSelected : idsNotSelected
+                    }
+                    className="w-full"
+                  >
+                    <ButtonExport
+                      type="submit"
+                      fileExtension={ext}
+                      className="w-full"
+                      disabled={isPending}
+                    />
+                  </FormExport>
+                ))}
+              </div>
+              {loaderData.hasPagination ? (
+                <FormPaginate className="grid grid-cols-9 gap-2 max-sm:-order-1">
+                  {loaderData.paginationSearchParams.map(([name, value]) => (
+                    <input key={name} type="hidden" name={name} value={value} />
+                  ))}
+                  <ButtonFirst
+                    name="skip"
+                    value={0}
+                    disabled={
+                      isPending || !loaderData.paginationValues.hasPrevPage
+                    }
+                    size="sm-icon"
+                  />
+                  <ButtonPrev
+                    name="skip"
+                    value={loaderData.paginationValues.prevPageValue}
+                    disabled={
+                      isPending || !loaderData.paginationValues.hasPrevPage
+                    }
+                    size="sm-icon"
+                  />
+                  {loaderData.paginationValues.skipPages.map((el) => (
+                    <ButtonPage
+                      key={el.number}
+                      name="skip"
+                      value={el.value}
+                      number={el.number}
+                      isCurrPage={el.isCurrPage}
+                      disabled={isPending || !el.isSkipPage}
+                      size="sm-icon"
+                      variant={el.isCurrPage ? "ghost" : undefined}
+                    />
+                  ))}
+                  <ButtonNext
+                    name="skip"
+                    value={loaderData.paginationValues.nextPageValue}
+                    disabled={
+                      isPending || !loaderData.paginationValues.hasNextPage
+                    }
+                    size="sm-icon"
+                  />
+                  <ButtonLast
+                    name="skip"
+                    value={loaderData.paginationValues.lastPageValue}
+                    disabled={
+                      isPending || !loaderData.paginationValues.hasNextPage
+                    }
+                    size="sm-icon"
+                  />
+                </FormPaginate>
+              ) : null}
+            </>
+          )}
+        </TableSelectable>
       ) : null}
     </Main>
   );

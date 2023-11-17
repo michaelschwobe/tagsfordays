@@ -34,11 +34,3 @@ export const BOOKMARK_SEARCH_KEYS_LABEL_MAP = {
   content: "Content",
   tags: "Tags",
 } satisfies Readonly<Record<BookmarkSearchKey, string>>;
-
-export function parseBookmarkSearchKey(
-  key: string | null,
-): BookmarkSearchKey | null {
-  return BOOKMARK_SEARCH_KEYS.includes(key ?? "")
-    ? (key as BookmarkSearchKey)
-    : null;
-}

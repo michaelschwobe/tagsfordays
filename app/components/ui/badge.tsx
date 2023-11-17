@@ -3,14 +3,14 @@ import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
 const badgeVariants = cva(
-  "inline-block rounded px-1 py-0.5 text-center text-xs font-medium tabular-nums leading-none text-black dark:text-slate-300",
+  "inline-block rounded px-1 py-0.5 text-center text-xs font-medium tabular-nums leading-none text-black",
   {
     variants: {
       variant: {
-        normal: "bg-slate-200 dark:bg-slate-700",
-        danger: "bg-pink-200 dark:bg-pink-700",
-        warning: "bg-yellow-200 dark:bg-yellow-700",
-        success: "bg-lime-200 dark:bg-lime-700",
+        normal: "bg-slate-200 dark:bg-slate-500",
+        danger: "bg-pink-200 dark:bg-pink-500",
+        warning: "bg-yellow-200  dark:bg-yellow-500",
+        success: "bg-green-200 dark:bg-green-500",
       },
     },
     defaultVariants: {

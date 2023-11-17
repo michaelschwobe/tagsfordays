@@ -11,7 +11,7 @@ export const toastVariants = cva(
     variants: {
       variant: {
         message: "text-slate-600 dark:text-slate-400",
-        success: "text-lime-600 dark:text-lime-500",
+        success: "text-green-600 dark:text-green-500",
         error: "text-pink-600 dark:text-pink-500",
       },
     },

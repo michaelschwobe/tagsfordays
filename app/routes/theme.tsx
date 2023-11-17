@@ -113,6 +113,30 @@ function Content() {
           <Button type="button" variant="filled-danger">
             <Icon type="loader" /> Button
           </Button>
+          <Button type="button" variant="link-warning">
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="ghost-warning">
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="outlined-warning">
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="filled-warning">
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="link-success">
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="ghost-success">
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="outlined-success">
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="filled-success">
+            <Icon type="loader" /> Button
+          </Button>
         </div>
         <div className="grid grid-cols-4 gap-2">
           <Button type="button" variant="link" disabled>
@@ -137,6 +161,30 @@ function Content() {
             <Icon type="loader" /> Button
           </Button>
           <Button type="button" variant="filled-danger" disabled>
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="link-warning" disabled>
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="ghost-warning" disabled>
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="outlined-warning" disabled>
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="filled-warning" disabled>
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="link-success" disabled>
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="ghost-success" disabled>
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="outlined-success" disabled>
+            <Icon type="loader" /> Button
+          </Button>
+          <Button type="button" variant="filled-success" disabled>
             <Icon type="loader" /> Button
           </Button>
         </div>

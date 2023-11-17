@@ -23,7 +23,6 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 
 ### Other
 
-- TODO: Update button/link variant (warning, success)
 - TODO: Suggest bookmark title/description/tags (action)
 - TODO: Create "Unused Tags" widget (relation count)
 - TODO: Create "Popular Tags" widget (relation count x createdAt)

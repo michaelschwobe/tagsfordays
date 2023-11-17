@@ -70,7 +70,7 @@ export default function BookmarksStatusPage() {
                 ? "text-pink-500"
                 : loaderData.dataNotOkCount > 0
                 ? "text-yellow-500"
-                : "text-lime-500"
+                : "text-green-500"
             }
             type={
               loaderData.dataNotOkCount > 0 ? "shield-alert" : "shield-check"

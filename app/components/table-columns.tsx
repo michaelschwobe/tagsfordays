@@ -121,8 +121,8 @@ export const columnBookmarkStatus = createColumnHelper<{
         row.original._meta.ok === true
           ? "success"
           : getValue() >= 300 && getValue() <= 499
-          ? "warning"
-          : "danger"
+            ? "warning"
+            : "danger"
       }
     >
       {getValue()}

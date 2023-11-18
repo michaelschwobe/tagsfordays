@@ -43,8 +43,8 @@ export const ButtonColumnSort = forwardRef<
             isSortedAsc
               ? "chevron-up"
               : isSortedDesc
-              ? "chevron-down"
-              : "chevrons-up-down"
+                ? "chevron-down"
+                : "chevrons-up-down"
           }
         />
       </Button>

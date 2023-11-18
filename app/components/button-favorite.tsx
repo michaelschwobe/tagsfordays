@@ -46,8 +46,8 @@ export const ButtonFavorite = forwardRef<
     const verb = isMultiple
       ? "(Un)favorite"
       : isFavorited
-      ? "Unfavorite"
-      : "Favorite";
+        ? "Unfavorite"
+        : "Favorite";
     const text = label ? `${verb} ${label}` : verb;
 
     return (

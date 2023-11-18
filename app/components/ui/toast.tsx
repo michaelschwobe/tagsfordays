@@ -63,8 +63,8 @@ export const Toast = forwardRef<React.ElementRef<"div">, ToastProps>(
               variant === "error"
                 ? "alert-triangle"
                 : variant === "success"
-                ? "check"
-                : "info"
+                  ? "check"
+                  : "info"
             }
           />
         </div>

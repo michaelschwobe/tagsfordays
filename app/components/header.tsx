@@ -123,8 +123,8 @@ export const HeaderNavButtonTheme = ({
     currTheme === "system"
       ? "light"
       : currTheme === "light"
-      ? "dark"
-      : "system";
+        ? "dark"
+        : "system";
   const { icon, text } = THEME_ICON_AND_TEXT_MAP[currTheme];
 
   return (

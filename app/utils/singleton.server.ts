@@ -1,10 +1,11 @@
-// since the dev server re-requires the bundle, do some shenanigans to make
-// certain things persist across that 😆
-// Borrowed/modified from https://github.com/jenseng/abuse-the-platform/blob/2993a7e846c95ace693ce61626fa072174c8d9c7/app/utils/singleton.ts
+// The dev server re-evaluates modules on every change, this prevents re-evaluation.
+// Borrowed/modified from https://github.com/epicweb-dev/remember
 
-export function singleton<Value>(name: string, value: () => Value): Value {
-  const yolo = global as any;
-  yolo.__singletons ??= {};
-  yolo.__singletons[name] ??= value();
-  return yolo.__singletons[name];
+export function singleton<Value>(name: string, getValue: () => Value): Value {
+  const thusly = globalThis as any;
+  thusly.__singletons ??= new Map();
+  if (!thusly.__singletons.has(name)) {
+    thusly.__singletons.set(name, getValue());
+  }
+  return thusly.__singletons.get(name);
 }

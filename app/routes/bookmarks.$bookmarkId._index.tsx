@@ -15,7 +15,7 @@ import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { getBookmark } from "~/models/bookmark.server";
-import { mapWithFaviconSrc } from "~/models/favicon.server";
+import { getFavicons } from "~/utils/favicon.server";
 import { generateSocialMeta } from "~/utils/meta";
 import {
   asyncShare,
@@ -32,7 +32,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const bookmarkResult = await getBookmark({ id });
   invariantResponse(bookmarkResult, "Not Found", { status: 404 });
 
-  const [bookmark] = await mapWithFaviconSrc([bookmarkResult]);
+  const [bookmark] = await getFavicons([bookmarkResult]);
   invariant(bookmark, "bookmark not found");
 
   return json({ bookmark });
@@ -84,7 +84,7 @@ export default function BookmarkDetailPage() {
               rel="noopener noreferrer"
               className="justify-between overflow-hidden max-sm:w-full"
             >
-              <Favicon src={loaderData.bookmark.faviconSrc} />
+              <Favicon src={loaderData.bookmark._meta.faviconSrc} />
               <span className="truncate">{loaderData.bookmark.url}</span>
               <Icon type="external-link" />
             </LinkButton>{" "}

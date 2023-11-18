@@ -20,13 +20,13 @@ import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { getBookmarks } from "~/models/bookmark.server";
-import { mapWithFaviconSrc } from "~/models/favicon.server";
 import {
   BOOKMARK_EXPORT_FILE_EXTENSIONS,
   BOOKMARK_SEARCH_KEYS,
   BOOKMARK_SEARCH_KEYS_LABEL_MAP,
 } from "~/utils/bookmark";
 import { parseBookmarkSearchParams } from "~/utils/bookmark-validation";
+import { getFavicons } from "~/utils/favicon.server";
 import { generateSocialMeta } from "~/utils/meta";
 import { formatItemsFoundByCount, formatMetaTitle } from "~/utils/misc";
 import {
@@ -42,7 +42,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const bookmarks = await getBookmarks({ searchKey, searchValue });
   const count = bookmarks.length;
-  const data = await mapWithFaviconSrc(bookmarks.slice(skip, skip + take));
+  const data = await getFavicons(bookmarks.slice(skip, skip + take));
 
   const paginationSearchParams = toPaginationSearchParams({
     searchParams,

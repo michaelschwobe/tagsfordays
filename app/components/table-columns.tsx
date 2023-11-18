@@ -135,7 +135,7 @@ export const columnBookmarkStatus = createColumnHelper<{
 export const columnBookmarkTitle = createColumnHelper<{
   id: string;
   title: string;
-  faviconSrc: string | null;
+  _meta?: { faviconSrc: string | null };
 }>().accessor("title", {
   header: () => "Title",
   cell: ({ row, getValue }) => (
@@ -148,7 +148,7 @@ export const columnBookmarkTitle = createColumnHelper<{
         "max-w-[75vw] sm:max-w-[30vw]",
       )}
     >
-      <Favicon src={row.original.faviconSrc} />{" "}
+      <Favicon src={row.original._meta?.faviconSrc} />{" "}
       <span className="truncate">
         {getValue() ? (
           <span>{getValue()}</span>

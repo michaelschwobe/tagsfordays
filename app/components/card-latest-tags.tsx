@@ -8,7 +8,7 @@ import {
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
-import type { GetLatestTagsData } from "~/models/tag.server";
+import type { loader as loaderIndex } from "~/routes/_index";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
@@ -17,7 +17,9 @@ export interface CardLatestTagsProps
   /** Sets the `class` attribute. */
   className?: string | undefined;
   /** Sets the "found" content. **Required** */
-  data: GetLatestTagsData;
+  data: Awaited<
+    ReturnType<Awaited<ReturnType<typeof loaderIndex>>["json"]>
+  >["latestTags"];
 }
 
 export const CardLatestTags = forwardRef<

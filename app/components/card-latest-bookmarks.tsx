@@ -9,8 +9,7 @@ import { Favicon } from "~/components/ui/favicon";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
-import type { GetLatestBookmarksData } from "~/models/bookmark.server";
-import type { ItemsWithFaviconSrcData } from "~/models/favicon.server";
+import type { loader as loaderIndex } from "~/routes/_index";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
@@ -19,7 +18,9 @@ export interface CardLatestBookmarksProps
   /** Sets the `class` attribute. */
   className?: string | undefined;
   /** Sets the "found" content. **Required** */
-  data: ItemsWithFaviconSrcData<GetLatestBookmarksData>;
+  data: Awaited<
+    ReturnType<Awaited<ReturnType<typeof loaderIndex>>["json"]>
+  >["latestBookmarks"];
 }
 
 export const CardLatestBookmarks = forwardRef<
@@ -47,7 +48,7 @@ export const CardLatestBookmarks = forwardRef<
                     className="w-0 basis-1/3 justify-start overflow-hidden"
                     variant="ghost"
                   >
-                    <Favicon src={bookmark.faviconSrc} />{" "}
+                    <Favicon src={bookmark._meta?.faviconSrc} />{" "}
                     <span className="truncate text-sm">
                       {bookmark.title ? (
                         <span>{bookmark.title}</span>

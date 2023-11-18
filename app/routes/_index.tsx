@@ -8,8 +8,8 @@ import { CardQuickTag } from "~/components/card-quick-tag";
 import { Intro } from "~/components/intro";
 import { Main } from "~/components/main";
 import { getLatestBookmarks } from "~/models/bookmark.server";
-import { mapWithFaviconSrc } from "~/models/favicon.server";
 import { getLatestTags } from "~/models/tag.server";
+import { getFavicons } from "~/utils/favicon.server";
 import { generateSocialMeta } from "~/utils/meta";
 
 export async function loader() {
@@ -17,7 +17,7 @@ export async function loader() {
     getLatestBookmarks(),
     getLatestTags({ take: 9 }),
   ]);
-  const latestBookmarks = await mapWithFaviconSrc(latestBookmarksResults);
+  const latestBookmarks = await getFavicons(latestBookmarksResults);
 
   return json({ latestBookmarks, latestTags });
 }

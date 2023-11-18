@@ -16,13 +16,13 @@ import { Badge } from "~/components/ui/badge";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { getBookmarks } from "~/models/bookmark.server";
-import { getStatuses } from "~/models/status.server";
 import { parseBookmarkSearchParams } from "~/utils/bookmark-validation";
 import { cn, formatMetaTitle } from "~/utils/misc";
 import {
   toPaginationSearchParams,
   toPaginationValues,
 } from "~/utils/pagination";
+import { getStatuses } from "~/utils/status.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { searchParams } = new URL(request.url);

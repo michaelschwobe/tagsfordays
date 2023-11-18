@@ -1,19 +1,6 @@
 import { promiseAllSettledUnion } from "~/utils/misc";
 
-export interface GetStatusData {
-  ok: boolean;
-  status: number;
-  statusText: string;
-}
-
-export type GetStatusesData<TData> = ReadonlyArray<
-  TData & { _meta: GetStatusData }
->;
-
-export async function getStatus(
-  input: string,
-  timeout: number,
-): Promise<GetStatusData> {
+export async function getStatus(input: string, timeout: number) {
   try {
     const { ok, status, statusText } = await fetch(input, {
       method: "HEAD",
@@ -36,7 +23,9 @@ export async function getStatus(
 export async function getStatuses<TData extends { url: string }>(
   items: TData[],
   timeout: number,
-): Promise<GetStatusesData<TData>> {
+): Promise<
+  ReadonlyArray<TData & { _meta: Awaited<ReturnType<typeof getStatus>> }>
+> {
   const [fulfilled] = await promiseAllSettledUnion(
     items.map(async (item) => ({
       ...item,

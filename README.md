@@ -15,7 +15,6 @@ TagsForDays extends traditional bookmarking with advanced organization and searc
 
 ### MVP
 
-- TODO: Finalize bookmark mapped types (with favicon, with status, etc.)
 - TODO: Add database writes/resets (seeding, testing)
 - TODO: Add database "Collection" model (grouped bookmarks, relations, other)
 - Complete all TODOs found in codebase

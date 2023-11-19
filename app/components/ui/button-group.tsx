@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
 export const buttonGroupItemVariants = cva(
-  "inline-flex h-full cursor-pointer items-center justify-center gap-2 rounded-sm border border-transparent px-3 py-1 text-sm font-medium text-black transition-all hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-600",
+  "inline-flex h-full grow cursor-pointer items-center justify-center gap-2 rounded-sm border border-transparent px-3 py-1 text-sm font-medium text-black transition-all hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-600",
   {
     variants: {
       variant: {

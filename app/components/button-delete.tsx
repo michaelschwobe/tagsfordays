@@ -23,7 +23,7 @@ export const ButtonDelete = forwardRef<
   ButtonDeleteProps
 >(
   (
-    { className, formAction, idsSelected, label, size, variant, ...props },
+    { formAction, idsSelected, label, size, variant, ...props },
     forwardedRef,
   ) => {
     const doubleCheck = useDoubleCheck();

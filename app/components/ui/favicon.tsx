@@ -12,15 +12,17 @@ export interface FaviconProps
 
 export const Favicon = forwardRef<React.ElementRef<"img">, FaviconProps>(
   ({ className, src, ...props }, forwardedRef) => {
+    const classNames = cn("h-4 w-4", className);
+
     if (!src) {
-      return <Icon className={cn("h-4 w-4", className)} type="bookmark" />;
+      return <Icon className={classNames} type="bookmark" />;
     }
 
     return (
       <img
         alt=""
         {...props}
-        className={cn("h-4 w-4", className)}
+        className={classNames}
         src={src}
         width={16}
         height={16}

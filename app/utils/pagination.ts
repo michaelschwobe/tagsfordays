@@ -36,7 +36,7 @@ export function toPaginationValues({
 
   const skipPageNumbers: number[] = [];
   if (pagesTotal <= pagesMax) {
-    for (let i = 1; i <= pagesTotal; i++) {
+    for (let i = 1; i <= pagesTotal; i += 1) {
       skipPageNumbers.push(i);
     }
   } else {
@@ -50,7 +50,7 @@ export function toPaginationValues({
       startPage -= endPage - pagesTotal;
       endPage = pagesTotal;
     }
-    for (let i = startPage; i <= endPage; i++) {
+    for (let i = startPage; i <= endPage; i += 1) {
       skipPageNumbers.push(i);
     }
   }

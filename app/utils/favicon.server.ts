@@ -16,23 +16,34 @@ export async function getFavicon(input: string, timeout = 300) {
     if (!response.ok) {
       throw new Error(`${response.status}: ${faviconServiceUrl}`);
     }
-    return { faviconSrc: faviconServiceUrl };
+    const blob = await response.arrayBuffer();
+    const contentType = response.headers.get("content-type");
+    const bufferStr = Buffer.from(blob).toString("base64");
+    const base64Str = `data:${contentType};base64,${bufferStr}`;
+    return base64Str;
   } catch (error) {
-    return { faviconSrc: null };
+    return null;
   }
 }
 
-export async function getFavicons<TData extends { url: string }>(
-  items: TData[],
+export async function getFavicons<TItem extends { url: string }>(
+  items: TItem[],
   timeout?: number,
 ): Promise<
-  ReadonlyArray<TData & { _meta: Awaited<ReturnType<typeof getFavicon>> }>
+  ReadonlyArray<
+    TItem & { _meta: { faviconSrc: Awaited<ReturnType<typeof getFavicon>> } }
+  >
 > {
-  const [fulfilled] = await promiseAllSettledUnion(
-    items.map(async (item) => ({
-      ...item,
-      _meta: await getFavicon(item.url, timeout),
+  // The order of the responses is not guaranteed.
+  const [responses] = await promiseAllSettledUnion(
+    items.map(async ({ url }) => ({
+      url,
+      src: await getFavicon(url, timeout),
     })),
   );
-  return fulfilled;
+  // Re-sorted based on the original order.
+  return items.map((item) => {
+    const response = responses.find(({ url }) => url === item.url);
+    return { ...item, _meta: { faviconSrc: response?.src ?? null } };
+  });
 }

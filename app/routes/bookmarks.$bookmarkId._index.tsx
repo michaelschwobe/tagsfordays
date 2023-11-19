@@ -15,7 +15,7 @@ import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import { getBookmark } from "~/models/bookmark.server";
-import { getFavicons } from "~/utils/favicon.server";
+import { getFavicon } from "~/utils/favicon.server";
 import { generateSocialMeta } from "~/utils/meta";
 import {
   asyncShare,
@@ -29,13 +29,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
   invariant(params["bookmarkId"], "bookmarkId not found");
   const { bookmarkId: id } = params;
 
-  const bookmarkResult = await getBookmark({ id });
-  invariantResponse(bookmarkResult, "Not Found", { status: 404 });
+  const bookmark = await getBookmark({ id });
+  invariantResponse(bookmark, "Not Found", { status: 404 });
 
-  const [bookmark] = await getFavicons([bookmarkResult]);
-  invariant(bookmark, "bookmark not found");
+  const faviconSrc = await getFavicon(bookmark.url);
 
-  return json({ bookmark });
+  const bookmarkWithMeta = { ...bookmark, _meta: { faviconSrc } };
+
+  return json({ bookmark: bookmarkWithMeta });
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -82,11 +83,10 @@ export default function BookmarkDetailPage() {
               to={loaderData.bookmark.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="justify-between overflow-hidden max-sm:w-full"
+              className="justify-start overflow-hidden max-sm:w-full"
             >
-              <Favicon src={loaderData.bookmark._meta.faviconSrc} />
-              <span className="truncate">{loaderData.bookmark.url}</span>
               <Icon type="external-link" />
+              <span className="truncate">{loaderData.bookmark.url}</span>
             </LinkButton>{" "}
             <Button
               type="button"
@@ -102,7 +102,8 @@ export default function BookmarkDetailPage() {
         <FormItem>
           <div className="text-sm font-medium">Title</div>
           <FormControl className="py-2">
-            <H2>
+            <H2 className="flex items-center gap-3">
+              <Favicon src={loaderData.bookmark._meta.faviconSrc} />
               {loaderData.bookmark.title ? (
                 <span>{loaderData.bookmark.title}</span>
               ) : (

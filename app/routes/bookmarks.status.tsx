@@ -106,7 +106,7 @@ export default function BookmarksStatusPage() {
           data={loaderData.data}
         >
           {loaderData.hasPagination ? (
-            <FormPaginate className="grid grid-cols-9 gap-2 max-sm:-order-1">
+            <FormPaginate className="flex gap-2 max-sm:-order-1">
               {loaderData.paginationSearchParams.map(([name, value]) => (
                 <input key={name} type="hidden" name={name} value={value} />
               ))}
@@ -115,12 +115,14 @@ export default function BookmarksStatusPage() {
                 value={0}
                 disabled={isPending || !loaderData.paginationValues.hasPrevPage}
                 size="sm-icon"
+                className="grow"
               />
               <ButtonPrev
                 name="skip"
                 value={loaderData.paginationValues.prevPageValue}
                 disabled={isPending || !loaderData.paginationValues.hasPrevPage}
                 size="sm-icon"
+                className="grow"
               />
               {loaderData.paginationValues.skipPages.map((el) => (
                 <ButtonPage
@@ -132,6 +134,7 @@ export default function BookmarksStatusPage() {
                   disabled={isPending || !el.isSkipPage}
                   size="sm-icon"
                   variant={el.isCurrPage ? "ghost" : undefined}
+                  className="grow"
                 />
               ))}
               <ButtonNext
@@ -139,12 +142,14 @@ export default function BookmarksStatusPage() {
                 value={loaderData.paginationValues.nextPageValue}
                 disabled={isPending || !loaderData.paginationValues.hasNextPage}
                 size="sm-icon"
+                className="grow"
               />
               <ButtonLast
                 name="skip"
                 value={loaderData.paginationValues.lastPageValue}
                 disabled={isPending || !loaderData.paginationValues.hasNextPage}
                 size="sm-icon"
+                className="grow"
               />
             </FormPaginate>
           ) : null}

@@ -1,8 +1,13 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { getBookmarks } from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
 import type { BookmarkExportFileExtension } from "~/utils/bookmark";
-import { DateTimeFormatMMDDYY, DateTimeFormatReadable } from "~/utils/misc";
+import {
+  DateTimeFormatMMDDYY,
+  DateTimeFormatReadable,
+  safeRedirect,
+} from "~/utils/misc";
 
 type GetBookmarksData = Awaited<ReturnType<typeof getBookmarks>>;
 
@@ -10,9 +15,11 @@ export function createExportLoader(fileExtension: BookmarkExportFileExtension) {
   return async function loader({ request }: LoaderFunctionArgs) {
     await requireUserId(request);
 
-    const bookmarks = await getBookmarks();
+    const url = new URL(request.url);
+    const to = url.pathname.replace(`.${fileExtension}`, "");
+    const safeRedirectTo = safeRedirect(to);
 
-    return exportResponse({ data: bookmarks, fileExtension });
+    return redirect(safeRedirectTo);
   };
 }
 
@@ -25,15 +32,13 @@ export function createExportAction(fileExtension: BookmarkExportFileExtension) {
       .split(",")
       .filter(Boolean);
 
-    const bookmarks = await getBookmarks();
+    const items = await getBookmarks();
+    const data =
+      idsSelected.length > 0
+        ? items.filter((item) => idsSelected.includes(item.id))
+        : items;
 
-    return exportResponse({
-      data:
-        idsSelected.length > 0
-          ? bookmarks.filter((el) => idsSelected.includes(el.id))
-          : bookmarks,
-      fileExtension,
-    });
+    return exportResponse({ data, fileExtension });
   };
 }
 

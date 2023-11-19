@@ -2,6 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { getBookmarks } from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
 import type { BookmarkExportFileExtension } from "~/utils/bookmark";
+import { DateTimeFormatMMDDYY, DateTimeFormatReadable } from "~/utils/misc";
 
 type GetBookmarksData = Awaited<ReturnType<typeof getBookmarks>>;
 
@@ -52,17 +53,12 @@ export function exportResponse({
   fileExtension: BookmarkExportFileExtension;
 }) {
   const { body, mimeType } = mappedExportFunctions[fileExtension](data);
-  const filename = `bookmarks_${new Date()
-    .toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "2-digit",
-    })
-    .replace(/\//g, "_")}.${fileExtension}`;
+  const fileDate = DateTimeFormatMMDDYY.format(new Date()).replace(/\//g, "_");
+  const fileName = `bookmarks_${fileDate}.${fileExtension}`;
   return new Response(body, {
     status: 200,
     headers: {
-      "Content-Disposition": `attachment; filename=${filename}`,
+      "Content-Disposition": `attachment; filename=${fileName}`,
       "Content-Type": `${mimeType}; charset=utf-8`,
     },
   });
@@ -74,7 +70,7 @@ export function formatExportAsCsv(data: GetBookmarksData) {
   const rows = data.map(({ createdAt, title, url }) => {
     const text = title ? `"${title.replaceAll(`"`, `""`)}"` : "Untitled";
     const href = url;
-    const date = `"${createdAt.toUTCString()}"`;
+    const date = `"${DateTimeFormatReadable.format(createdAt)}"`;
     const row = [text, href, date].join(",");
     return row;
   });
@@ -123,7 +119,7 @@ export function formatExportAsMarkdown(data: GetBookmarksData) {
   const rows = data.map(({ createdAt, title, url }) => {
     const text = `**${title ?? "Untitled"}**`;
     const href = `<${url}>`;
-    const date = createdAt.toUTCString();
+    const date = DateTimeFormatReadable.format(createdAt);
     const row = "- ".concat([text, href, date].filter(Boolean).join("<br />"));
     return row;
   });
@@ -137,7 +133,7 @@ export function formatExportAsText(data: GetBookmarksData) {
   const rows = data.map(({ createdAt, title, url }) => {
     const text = title ?? "Untitled";
     const href = url;
-    const date = createdAt.toUTCString();
+    const date = DateTimeFormatReadable.format(createdAt);
     const row = [text, href, date].filter(Boolean).join("\n");
     return row;
   });

@@ -9,7 +9,7 @@ import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
 import type { loader as loaderBookmarks } from "~/routes/bookmarks._index";
 import type { loader as loaderBookmarksStatus } from "~/routes/bookmarks.status";
-import { cn } from "~/utils/misc";
+import { DateTimeFormatMMDDYYYY, cn } from "~/utils/misc";
 
 type BookmarksData = Awaited<
   ReturnType<Awaited<ReturnType<typeof loaderBookmarks>>["json"]>
@@ -80,7 +80,10 @@ export const columnCreatedAt = createColumnHelper<{
   ),
   cell: ({ getValue }) => (
     <span className="whitespace-nowrap">
-      {new Date(getValue()).toLocaleDateString()}
+      {DateTimeFormatMMDDYYYY.format(new Date(getValue()))
+        .split("/")
+        .reverse()
+        .join("-")}
     </span>
   ),
   footer: ({ column }) => column.id,

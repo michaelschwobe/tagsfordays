@@ -165,8 +165,8 @@ test.describe("Unauthenticated", () => {
 
   test("User can NOT (un)favorite a bookmark", async ({ page }) => {
     await page
+      .getByRole("row", { name: "Conform" })
       .getByRole("button", { name: "Unfavorite bookmark", exact: true })
-      .first()
       .click();
 
     await expect(page).toHaveURL(
@@ -197,8 +197,8 @@ test.describe("Authenticated", () => {
   test("User can (un)favorite a bookmark", async ({ page }) => {
     await expect(
       page
-        .getByRole("button", { name: "Unfavorite bookmark", exact: true })
-        .first(),
+        .getByRole("row", { name: "Conform" })
+        .getByRole("button", { name: "Unfavorite bookmark", exact: true }),
     ).toBeVisible();
   });
 });

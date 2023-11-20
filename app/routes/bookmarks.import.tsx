@@ -105,10 +105,10 @@ export default function BookmarksImportPage() {
       </div>
 
       <Form
-        className="flex flex-col gap-4"
+        {...form.props}
         method="POST"
         encType="multipart/form-data"
-        {...form.props}
+        className="flex flex-col gap-4"
       >
         <FormMessage id={form.errorId}>{form.error}</FormMessage>
 

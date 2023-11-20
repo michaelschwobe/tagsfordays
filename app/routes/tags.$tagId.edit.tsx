@@ -135,7 +135,7 @@ export default function EditTagPage() {
         <ButtonCancel />
       </div>
 
-      <Form className="flex flex-col gap-4" method="POST" {...form.props}>
+      <Form {...form.props} method="POST" className="flex flex-col gap-4">
         <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
         <input

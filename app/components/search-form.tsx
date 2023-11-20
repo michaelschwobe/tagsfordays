@@ -50,10 +50,11 @@ export function SearchForm({
 
   return (
     <Form
-      className={cn("flex flex-col gap-2 sm:flex-row", className)}
-      method="GET"
-      data-testid="search-form"
       {...form.props}
+      method="GET"
+      replace
+      className={cn("flex flex-col gap-2 sm:flex-row", className)}
+      data-testid="search-form"
     >
       <FormItem className="relative grow">
         <FormLabel

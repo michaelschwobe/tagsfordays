@@ -69,7 +69,7 @@ export default function TagsIndexPage() {
       </div>
 
       {loaderData.tags.length > 1 ? (
-        <Form method="GET">
+        <Form method="GET" replace>
           <div className="sr-only">Order By</div>
           <ButtonGroup>
             <ButtonGroupButton

@@ -129,10 +129,10 @@ export const HeaderNavButtonTheme = ({
 
   return (
     <fetcher.Form
-      className={cn(className)}
+      {...form.props}
       method="POST"
       action="/"
-      {...form.props}
+      className={cn(className)}
     >
       <input type="hidden" name={conform.INTENT} value="update-theme" />
       <input type="hidden" name="theme" value={nextTheme} />

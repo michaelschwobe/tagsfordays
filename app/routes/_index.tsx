@@ -7,14 +7,14 @@ import { CardQuickBookmark } from "~/components/card-quick-bookmark";
 import { CardQuickTag } from "~/components/card-quick-tag";
 import { Intro } from "~/components/intro";
 import { Main } from "~/components/main";
-import { getLatestBookmarks } from "~/models/bookmark.server";
+import { getBookmarksLatest } from "~/models/bookmark.server";
 import { getLatestTags } from "~/models/tag.server";
 import { getFavicons } from "~/utils/favicon.server";
 import { generateSocialMeta } from "~/utils/meta";
 
 export async function loader() {
   const [latestBookmarksResults, latestTags] = await Promise.all([
-    getLatestBookmarks(),
+    getBookmarksLatest(),
     getLatestTags({ take: 9 }),
   ]);
   const latestBookmarks = await getFavicons(latestBookmarksResults);

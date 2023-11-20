@@ -117,10 +117,10 @@ describe("formatExportAsCsv", () => {
     ];
     const result = formatExportAsCsv(data);
     expect(result.body.split("\n")[1]).toEqual(
-      `"Example 0",https://example.com/0,"Thu, 01 Jan 1970 00:00:00 GMT"`,
+      `"Example 0",https://example.com/0,"Wednesday, December 31, 1969 at 6:00:00 PM CST"`,
     );
     expect(result.body.split("\n")[2]).toEqual(
-      `"Example 1",https://example.com/1,"Thu, 01 Jan 1970 00:00:00 GMT"`,
+      `"Example 1",https://example.com/1,"Wednesday, December 31, 1969 at 6:00:00 PM CST"`,
     );
   });
 
@@ -153,7 +153,7 @@ describe("formatExportAsCsv", () => {
     ];
     const result = formatExportAsCsv(data);
     expect(result.body.split("\n")[1]).toEqual(
-      `"Example, with comma and ""quotes""",https://example.com,"Thu, 01 Jan 1970 00:00:00 GMT"`,
+      `"Example, with comma and ""quotes""",https://example.com,"Wednesday, December 31, 1969 at 6:00:00 PM CST"`,
     );
   });
 });
@@ -370,8 +370,8 @@ describe("formatExportAsMarkdown", () => {
     const result = formatExportAsMarkdown(data);
     expect(result.body).toContain(
       [
-        "- **Example 0**<br /><https://example.com/0><br />Thu, 01 Jan 1970 00:00:00 GMT",
-        "- **Example 1**<br /><https://example.com/1><br />Thu, 01 Jan 1970 00:00:00 GMT",
+        "- **Example 0**<br /><https://example.com/0><br />Wednesday, December 31, 1969 at 6:00:00 PM CST",
+        "- **Example 1**<br /><https://example.com/1><br />Wednesday, December 31, 1969 at 6:00:00 PM CST",
       ].join("\n"),
     );
   });
@@ -389,7 +389,7 @@ describe("formatExportAsMarkdown", () => {
     ];
     const result = formatExportAsMarkdown(data);
     expect(result.body).toContain(
-      "- **Untitled**<br /><https://example.com><br />Thu, 01 Jan 1970 00:00:00 GMT",
+      "- **Untitled**<br /><https://example.com><br />Wednesday, December 31, 1969 at 6:00:00 PM CST",
     );
   });
 });
@@ -444,8 +444,8 @@ describe("formatExportAsText", () => {
     const result = formatExportAsText(data);
     expect(result.body).toContain(
       [
-        "Example 0\nhttps://example.com/0\nThu, 01 Jan 1970 00:00:00 GMT",
-        "Example 1\nhttps://example.com/1\nThu, 01 Jan 1970 00:00:00 GMT",
+        "Example 0\nhttps://example.com/0\nWednesday, December 31, 1969 at 6:00:00 PM CST",
+        "Example 1\nhttps://example.com/1\nWednesday, December 31, 1969 at 6:00:00 PM CST",
       ].join("\n\n"),
     );
   });

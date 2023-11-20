@@ -35,7 +35,7 @@ import {
   deleteBookmark,
   favoriteBookmark,
   getBookmark,
-  getBookmarkByUrl,
+  getBookmarkId,
   updateBookmark,
 } from "~/models/bookmark.server";
 import { getTags } from "~/models/tag.server";
@@ -98,7 +98,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     schema: (intent) =>
       toUpdateBookmarkFormSchema(intent, {
         async isBookmarkUrlUnique(url) {
-          const result = await getBookmarkByUrl({ url });
+          const result = await getBookmarkId({ url });
           return result === null || result.id === id;
         },
       }),

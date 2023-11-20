@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { getBookmarks } from "~/models/bookmark.server";
+import { getBookmarksExport } from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
 import type { BookmarkExportFileExtension } from "~/utils/bookmark";
 import {
@@ -9,7 +9,7 @@ import {
   safeRedirect,
 } from "~/utils/misc";
 
-type GetBookmarksData = Awaited<ReturnType<typeof getBookmarks>>;
+type GetBookmarksExportData = Awaited<ReturnType<typeof getBookmarksExport>>;
 
 export function createExportLoader(fileExtension: BookmarkExportFileExtension) {
   return async function loader({ request }: LoaderFunctionArgs) {
@@ -32,7 +32,7 @@ export function createExportAction(fileExtension: BookmarkExportFileExtension) {
       .split(",")
       .filter(Boolean);
 
-    const items = await getBookmarks();
+    const items = await getBookmarksExport();
     const data =
       idsSelected.length > 0
         ? items.filter((item) => idsSelected.includes(item.id))
@@ -54,7 +54,7 @@ export function exportResponse({
   data,
   fileExtension,
 }: {
-  data: GetBookmarksData;
+  data: GetBookmarksExportData;
   fileExtension: BookmarkExportFileExtension;
 }) {
   const { body, mimeType } = mappedExportFunctions[fileExtension](data);
@@ -69,7 +69,7 @@ export function exportResponse({
   });
 }
 
-export function formatExportAsCsv(data: GetBookmarksData) {
+export function formatExportAsCsv(data: GetBookmarksExportData) {
   const head = ["text", "href", "date"].join(",");
 
   const rows = data.map(({ createdAt, title, url }) => {
@@ -85,7 +85,7 @@ export function formatExportAsCsv(data: GetBookmarksData) {
   return { body, mimeType: "text/csv" };
 }
 
-export function formatExportAsHtml(data: GetBookmarksData) {
+export function formatExportAsHtml(data: GetBookmarksExportData) {
   const rows = data.map(({ createdAt, title, url }) => {
     const text = title ?? "Untitled";
     const href = url;
@@ -110,7 +110,7 @@ export function formatExportAsHtml(data: GetBookmarksData) {
   return { body, mimeType: "text/html" };
 }
 
-export function formatExportAsJson(data: GetBookmarksData) {
+export function formatExportAsJson(data: GetBookmarksExportData) {
   const rows = data.map(({ createdAt, title, url }) => {
     return { createdAt, title, url };
   });
@@ -120,7 +120,7 @@ export function formatExportAsJson(data: GetBookmarksData) {
   return { body, mimeType: "application/json" };
 }
 
-export function formatExportAsMarkdown(data: GetBookmarksData) {
+export function formatExportAsMarkdown(data: GetBookmarksExportData) {
   const rows = data.map(({ createdAt, title, url }) => {
     const text = `**${title ?? "Untitled"}**`;
     const href = `<${url}>`;
@@ -134,7 +134,7 @@ export function formatExportAsMarkdown(data: GetBookmarksData) {
   return { body, mimeType: "text/markdown" };
 }
 
-export function formatExportAsText(data: GetBookmarksData) {
+export function formatExportAsText(data: GetBookmarksExportData) {
   const rows = data.map(({ createdAt, title, url }) => {
     const text = title ?? "Untitled";
     const href = url;

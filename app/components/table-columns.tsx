@@ -256,8 +256,6 @@ export const columnsBookmarksStatus: ColumnDef<BookmarksStatusItem>[] = [
   // @ts-expect-error - see comment above
   columnBookmarkStatus,
   // @ts-expect-error - see comment above
-  columnBookmarkTitle,
-  // @ts-expect-error - see comment above
   columnBookmarkUrl,
   // @ts-expect-error - see comment above
   columnBookmarksDelete,

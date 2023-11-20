@@ -11,14 +11,7 @@ export async function getBookmark({ id }: Pick<Bookmark, "id">) {
       content: true,
       favorite: true,
       tags: {
-        include: {
-          tag: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
+        include: { tag: { select: { id: true, name: true } } },
         orderBy: { tag: { name: "asc" } },
       },
     },
@@ -26,7 +19,7 @@ export async function getBookmark({ id }: Pick<Bookmark, "id">) {
   });
 }
 
-export async function getBookmarkByUrl({ url }: Pick<Bookmark, "url">) {
+export async function getBookmarkId({ url }: Pick<Bookmark, "url">) {
   return prisma.bookmark.findUnique({
     select: { id: true },
     where: { url },
@@ -40,21 +33,14 @@ export async function getBookmarksCount({
   searchKey?: BookmarkSearchKey | null;
   searchValue?: string | null;
 } = {}) {
-  if (searchValue && searchKey === "tags") {
-    return prisma.bookmark.count({
-      where: {
-        tags: { some: { tag: { name: { contains: searchValue } } } },
-      },
-    });
-  }
-
-  if (searchValue && searchKey) {
-    return prisma.bookmark.count({
-      where: { [searchKey]: { contains: searchValue } },
-    });
-  }
-
-  return prisma.bookmark.count();
+  return prisma.bookmark.count({
+    where:
+      !!searchValue && searchKey === "tags"
+        ? { tags: { some: { tag: { name: { contains: searchValue } } } } }
+        : !!searchValue && !!searchKey
+          ? { [searchKey]: { contains: searchValue } }
+          : {},
+  });
 }
 
 export async function getBookmarks({
@@ -70,52 +56,7 @@ export async function getBookmarks({
   skip?: number | null;
   take?: number | null;
 } = {}) {
-  const pagination = {
-    ...(skip ? { skip } : {}),
-    ...(take ? { take } : {}),
-    ...(cursorId ? { cursor: { id: cursorId } } : {}),
-  };
-
-  if (searchValue && searchKey === "tags") {
-    return prisma.bookmark.findMany({
-      ...pagination,
-      select: {
-        id: true,
-        url: true,
-        title: true,
-        favorite: true,
-        createdAt: true,
-        _count: { select: { tags: true } },
-      },
-      where: {
-        tags: { some: { tag: { name: { contains: searchValue } } } },
-      },
-      orderBy: [
-        { tags: { _count: "asc" } },
-        { createdAt: "desc" },
-        { title: "asc" },
-      ],
-    });
-  }
-
-  if (searchValue && searchKey) {
-    return prisma.bookmark.findMany({
-      ...pagination,
-      select: {
-        id: true,
-        url: true,
-        title: true,
-        favorite: true,
-        createdAt: true,
-        _count: { select: { tags: true } },
-      },
-      where: { [searchKey]: { contains: searchValue } },
-      orderBy: [{ [searchKey]: "asc" }, { createdAt: "desc" }],
-    });
-  }
-
   return prisma.bookmark.findMany({
-    ...pagination,
     select: {
       id: true,
       url: true,
@@ -124,20 +65,43 @@ export async function getBookmarks({
       createdAt: true,
       _count: { select: { tags: true } },
     },
+    where:
+      !!searchValue && searchKey === "tags"
+        ? { tags: { some: { tag: { name: { contains: searchValue } } } } }
+        : !!searchValue && !!searchKey
+          ? { [searchKey]: { contains: searchValue } }
+          : {},
+    orderBy:
+      !!searchValue && searchKey === "tags"
+        ? [{ tags: { _count: "asc" } }, { createdAt: "desc" }, { title: "asc" }]
+        : [{ createdAt: "desc" }, { title: "asc" }],
+    ...(take ? { take } : {}),
+    ...(skip ? { skip } : {}),
+    ...(cursorId ? { cursor: { id: cursorId } } : {}),
+  });
+}
+
+export async function getBookmarksExport() {
+  return prisma.bookmark.findMany({
+    select: { id: true, url: true, title: true, createdAt: true },
     orderBy: [{ createdAt: "desc" }, { title: "asc" }],
   });
 }
 
-export async function getLatestBookmarks({ take = 3 }: { take?: number } = {}) {
+export async function getBookmarksLatest({ take = 3 }: { take?: number } = {}) {
   return prisma.bookmark.findMany({
     select: { id: true, url: true, title: true },
     orderBy: [{ createdAt: "desc" }, { title: "asc" }],
     take,
   });
 }
-export type GetLatestBookmarksData = Awaited<
-  ReturnType<typeof getLatestBookmarks>
->;
+
+export async function getBookmarksStatus() {
+  return prisma.bookmark.findMany({
+    select: { id: true, url: true },
+    orderBy: [{ createdAt: "desc" }, { url: "asc" }],
+  });
+}
 
 export async function createBookmark({
   url,
@@ -166,9 +130,7 @@ export async function createBookmark({
           },
         })),
       },
-      user: {
-        connect: { id: userId },
-      },
+      user: { connect: { id: userId } },
     },
   });
 }
@@ -186,9 +148,7 @@ export async function importBookmark({
       url,
       title,
       createdAt,
-      user: {
-        connect: { id: userId },
-      },
+      user: { connect: { id: userId } },
     },
     select: { id: true, url: true },
   });

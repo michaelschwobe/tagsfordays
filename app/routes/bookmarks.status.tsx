@@ -15,7 +15,7 @@ import { TableSelectable } from "~/components/table-selectable";
 import { Badge } from "~/components/ui/badge";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
-import { getBookmarks } from "~/models/bookmark.server";
+import { getBookmarksStatus } from "~/models/bookmark.server";
 import { parseBookmarkSearchParams } from "~/utils/bookmark-validation";
 import { cn, formatMetaTitle } from "~/utils/misc";
 import {
@@ -28,7 +28,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { searchParams } = new URL(request.url);
   const { skip, take } = parseBookmarkSearchParams(searchParams);
 
-  const bookmarks = await getBookmarks();
+  const bookmarks = await getBookmarksStatus();
   const count = bookmarks.length;
   const data = await getStatuses(bookmarks.slice(skip, skip + take), 60000 * 2);
 

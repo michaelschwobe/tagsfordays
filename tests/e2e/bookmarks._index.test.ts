@@ -1,24 +1,15 @@
-import {
-  encodeUrl,
-  expect,
-  login,
-  logout,
-  test,
-} from "../utils/playwright-test-utils";
+import { encodeUrl, expect, test } from "../utils/playwright-test-utils";
 
 test.describe("Unauthenticated", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.route("https://icons.duckduckgo.com/ip3/**", async (route) => {
-      route.abort();
-    });
-    await page.goto("/bookmarks");
-  });
-
   test("User can view the page title", async ({ page }) => {
+    await page.goto("/bookmarks");
+
     await expect(page).toHaveTitle(/^Bookmarks \|/);
   });
 
   test("User can view bookmarks", async ({ page }) => {
+    await page.goto("/bookmarks");
+
     await expect(
       page.getByRole("link", { name: "https://www.typescriptlang.org" }),
     ).toBeVisible();
@@ -40,6 +31,8 @@ test.describe("Unauthenticated", () => {
   });
 
   test("User can search bookmarks by keyword", async ({ page }) => {
+    await page.goto("/bookmarks");
+
     await page.getByPlaceholder("Search for…").fill("mix");
     await page.getByPlaceholder("Search for…").press("Enter");
 
@@ -71,6 +64,8 @@ test.describe("Unauthenticated", () => {
   test("User can search bookmarks by keyword and column name", async ({
     page,
   }) => {
+    await page.goto("/bookmarks");
+
     await page.getByPlaceholder("Search for…").fill("mix");
     await page.getByRole("button", { name: "Content" }).press("Enter");
 
@@ -119,6 +114,8 @@ test.describe("Unauthenticated", () => {
   });
 
   test("User can go to a bookmark's detail page", async ({ page }) => {
+    await page.goto("/bookmarks");
+
     await page.getByRole("link", { name: "Remix", exact: true }).click();
 
     await expect(page).toHaveTitle(/^Remix \|/);
@@ -128,6 +125,8 @@ test.describe("Unauthenticated", () => {
   test("User can NOT view bookmarks if bookmarks data is missing", async ({
     page,
   }) => {
+    await page.goto("/bookmarks");
+
     await page.getByPlaceholder("Search for…").fill("badvalue");
     await page
       .getByRole("main")
@@ -146,6 +145,8 @@ test.describe("Unauthenticated", () => {
   test("User can NOT search bookmarks if keyword is invalid", async ({
     page,
   }) => {
+    await page.goto("/bookmarks");
+
     await page.getByPlaceholder("Search for…").fill("x");
     await page.getByPlaceholder("Search for…").press("Enter");
 
@@ -158,12 +159,16 @@ test.describe("Unauthenticated", () => {
   });
 
   test("User can NOT add a bookmark", async ({ page }) => {
+    await page.goto("/bookmarks");
+
     await page.getByRole("link", { name: "Add bookmark", exact: true }).click();
 
     await expect(page).toHaveURL("/login?redirectTo=/bookmarks/new");
   });
 
   test("User can NOT (un)favorite a bookmark", async ({ page }) => {
+    await page.goto("/bookmarks");
+
     await page
       .getByRole("row", { name: "Conform" })
       .getByRole("button", { name: "Unfavorite bookmark", exact: true })
@@ -176,25 +181,17 @@ test.describe("Unauthenticated", () => {
 });
 
 test.describe("Authenticated", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.route("https://icons.duckduckgo.com/ip3/**", async (route) => {
-      route.abort();
-    });
-    const { redirectTo } = await login({ page, to: "/bookmarks" });
-    await page.waitForURL(redirectTo);
-  });
+  test("User can add a bookmark", async ({ page, login }) => {
+    await login("/bookmarks");
 
-  test.afterEach(async ({ page }) => {
-    await logout({ page });
-  });
-
-  test("User can add a bookmark", async ({ page }) => {
     await page.getByRole("link", { name: "Add bookmark", exact: true }).click();
 
     await page.waitForURL("/bookmarks/new");
   });
 
-  test("User can (un)favorite a bookmark", async ({ page }) => {
+  test("User can (un)favorite a bookmark", async ({ page, login }) => {
+    await login("/bookmarks");
+
     await expect(
       page
         .getByRole("row", { name: "Conform" })

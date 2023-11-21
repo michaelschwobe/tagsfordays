@@ -136,7 +136,7 @@ function Document({
   theme,
 }: {
   children: React.ReactNode;
-  env?: Record<string, string>;
+  env?: Record<string, boolean | number | string>;
   theme?: Theme;
 }) {
   return (

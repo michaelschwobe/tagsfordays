@@ -3,4 +3,5 @@ export default {
   ignoredRouteFiles: ["**/.*"],
   serverModuleFormat: "esm",
   tailwind: true,
+  watchPaths: ["tests/mocks/**/*"],
 };

@@ -6,6 +6,7 @@ import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import type { SpyInstance } from "vitest";
 import { afterEach, beforeEach, vi } from "vitest";
+import { server } from "../mocks/node";
 
 installGlobals();
 global.ENV = getEnv();
@@ -24,10 +25,19 @@ function mockConsoleError() {
   );
 }
 
+beforeAll(() => {
+  server.listen();
+});
+
 beforeEach(() => {
   mockConsoleError();
 });
 
 afterEach(() => {
+  server.resetHandlers();
   cleanup();
+});
+
+afterAll(() => {
+  server.close();
 });

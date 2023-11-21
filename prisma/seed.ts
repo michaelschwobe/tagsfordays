@@ -18,7 +18,7 @@ async function seed() {
     createMoreBookmarks: "🔁 Created MORE bookmarks",
   } as const satisfies Record<string, string>;
 
-  console.log(["\n", MESSAGES.initialize, "\n"].join(""));
+  console.info(["\n", MESSAGES.initialize, "\n"].join(""));
   console.time(MESSAGES.createData);
 
   console.time(MESSAGES.deleteData);

@@ -5,6 +5,7 @@ const schema = z.object({
   NODE_ENV: z.enum(["production", "development", "test"] as const),
   DATABASE_URL: z.string(),
   SESSION_SECRET: z.string(),
+  MOCKS: z.enum(["true", "false"] as const).optional(),
 });
 
 declare global {
@@ -38,6 +39,8 @@ export function init() {
 export function getEnv() {
   return {
     MODE: process.env.NODE_ENV,
+
+    MOCKS: process.env.MOCKS === "true",
 
     APP_VERSION: packageJSON.version,
 

@@ -10,10 +10,23 @@ import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { PassThrough } from "node:stream";
 import { renderToPipeableStream } from "react-dom/server";
+import { server } from "../tests/mocks/node";
 import { getEnv, init } from "./utils/env.server";
 
+// Initialize typesafe environment variables and global ENV object.
 init();
 global.ENV = getEnv();
+
+// Enable API mocking.
+if (ENV.MOCKS) {
+  server.listen();
+  console.info("[MSW] Mocking enabled.");
+  if (ENV.MODE === "development") {
+    server.events.on("request:start", ({ request }) => {
+      console.info(request.method, "[MSW]", request.url);
+    });
+  }
+}
 
 const ABORT_DELAY = 5_000;
 

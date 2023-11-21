@@ -19,3 +19,6 @@ pnpm-*.yaml
 
 # prisma
 /prisma/migrations
+
+# msw
+/public/mockServiceWorker.*

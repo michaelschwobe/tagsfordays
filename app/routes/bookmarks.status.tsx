@@ -16,6 +16,7 @@ import { Badge } from "~/components/ui/badge";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { getBookmarksStatus } from "~/models/bookmark.server";
+import { requireUserId } from "~/utils/auth.server";
 import { parseBookmarkSearchParams } from "~/utils/bookmark-validation";
 import { cn, formatMetaTitle } from "~/utils/misc";
 import {
@@ -25,6 +26,8 @@ import {
 import { getStatuses } from "~/utils/status.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  await requireUserId(request);
+
   const { searchParams } = new URL(request.url);
   const { skip, take } = parseBookmarkSearchParams(searchParams);
 

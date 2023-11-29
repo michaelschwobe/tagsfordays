@@ -19,7 +19,7 @@ ENV NODE_ENV="production"
 # If changing this, match the same values from:
 # - `/.github/workflows/deploy.yml`
 # - `/package.json`
-ARG PNPM_VERSION=8.10.5
+ARG PNPM_VERSION=8.11.0
 RUN npm install -g pnpm@$PNPM_VERSION
 
 

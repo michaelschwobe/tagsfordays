@@ -25,7 +25,7 @@ jobs:
         # - `/Dockerfile`
         # - `/package.json`
         node-version: [21.2.0]
-        pnpm-version: [8.10.5]
+        pnpm-version: [8.11.0]
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -59,7 +59,7 @@ jobs:
         # - `/Dockerfile`
         # - `/package.json`
         node-version: [21.2.0]
-        pnpm-version: [8.10.5]
+        pnpm-version: [8.11.0]
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -93,7 +93,7 @@ jobs:
         # - `/Dockerfile`
         # - `/package.json`
         node-version: [21.2.0]
-        pnpm-version: [8.10.5]
+        pnpm-version: [8.11.0]
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -131,7 +131,7 @@ jobs:
         # - `/Dockerfile`
         # - `/package.json`
         node-version: [21.2.0]
-        pnpm-version: [8.10.5]
+        pnpm-version: [8.11.0]
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -194,7 +194,7 @@ jobs:
       matrix:
         # If changing this, match the same value from:
         # - Running `flyctl version` on your local machine
-        flyctl-version: [0.1.127]
+        flyctl-version: [0.1.129]
     if: ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev') && github.event_name == 'push' }}
     steps:
       - name: ⬇️ Checkout repo

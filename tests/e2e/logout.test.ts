@@ -1,19 +1,23 @@
 import { expect, test } from "../utils/playwright-test-utils";
 
-test("User is redirected to the homepage by default", async ({ page }) => {
+test("User is redirected to the homepage if `redirectTo` search param is INVALID/MISSING", async ({
+  page,
+}) => {
   await page.goto("/logout");
 
   await expect(page).toHaveURL("/");
 });
 
-test("User is redirected to page the request came from", async ({ page }) => {
+test("User is redirected to specified page if `redirectTo` search param is VALID", async ({
+  page,
+}) => {
   const redirectTo = "/tags";
   await page.goto(`/logout?redirectTo=${redirectTo}`);
 
   await expect(page).toHaveURL(redirectTo);
 });
 
-test("User session is NOT destroyed when a GET request is sent", async ({
+test("User session is NOT destroyed if request method is GET", async ({
   page,
   login,
 }) => {
@@ -31,7 +35,7 @@ test("User session is NOT destroyed when a GET request is sent", async ({
   ).toBeVisible();
 });
 
-test("User session is destroyed when a POST request is sent", async ({
+test("User session is destroyed if request method is POST", async ({
   page,
   login,
 }) => {

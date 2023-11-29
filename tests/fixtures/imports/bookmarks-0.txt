@@ -1,0 +1,33 @@
+example 0 secure
+https://example.com/0
+
+example 1 secure
+https://example.com/1
+
+example 2 secure
+https://example.com/2
+
+example 1 secure DUPE
+https://example.com/1
+
+example 0 secure DUPE
+https://example.com/0
+
+example 0 insecure
+http://example.com/insecure/0
+
+example 1 insecure
+http://example.com/insecure/1
+
+example 2 insecure
+http://example.com/insecure/2
+
+example 1 insecure DUPE
+http://example.com/insecure/1
+
+example 0 insecure DUPE
+http://example.com/insecure/0
+
+example date secure
+https://example.com/d
+Sunday, November 19, 2023 at 12:28:36 PM CST

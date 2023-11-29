@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 import type { BookmarkExportFileExtension } from "~/utils/bookmark";
-import { BOOKMARK_EXPORT_LABEL_MAP } from "~/utils/bookmark";
+import { BOOKMARK_EXPORT_FILE_TYPE_MAP } from "~/utils/bookmark";
 
 export interface ButtonExportProps
   extends Omit<
@@ -17,12 +17,13 @@ export const ButtonExport = forwardRef<
   React.ElementRef<typeof Button>,
   ButtonExportProps
 >(({ fileExtension, ...props }, forwardedRef) => {
-  const ext = BOOKMARK_EXPORT_LABEL_MAP[fileExtension];
+  const fileType = BOOKMARK_EXPORT_FILE_TYPE_MAP[fileExtension];
   return (
     <Button {...props} size="sm" ref={forwardedRef}>
       <Icon type="download" />
-      <span className="sr-only">Export {ext} file</span>
-      <span aria-hidden>{ext}</span>
+      <span className="sr-only">Export data to a </span>
+      {fileType}
+      <span className="sr-only"> file</span>
     </Button>
   );
 });

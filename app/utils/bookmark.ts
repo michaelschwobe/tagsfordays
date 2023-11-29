@@ -9,7 +9,7 @@ export const BOOKMARK_EXPORT_FILE_EXTENSIONS = [
 export type BookmarkExportFileExtension =
   (typeof BOOKMARK_EXPORT_FILE_EXTENSIONS)[number];
 
-export const BOOKMARK_EXPORT_LABEL_MAP = {
+export const BOOKMARK_EXPORT_FILE_TYPE_MAP = {
   csv: "CSV",
   html: "HTML",
   json: "JSON",

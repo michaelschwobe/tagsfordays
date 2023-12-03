@@ -41,7 +41,7 @@ export const ButtonDelete = forwardRef<
     const nextValue = isMultiple ? idsSelected : "";
 
     // Icon props
-    const icon = isClick2 ? "loader" : isClick1 ? "alert-triangle" : "trash-2";
+    const icon = isClick2 ? "loader" : isClick1 ? "alert-triangle" : "trash";
 
     // Text props
     const isIconOnly = size?.includes("icon") ?? false;

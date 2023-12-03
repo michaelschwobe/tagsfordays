@@ -195,7 +195,7 @@ export const columnBookmarksDelete = createColumnHelper<{
   enableSorting: false,
   header: () => (
     <>
-      <Icon className="mx-auto" type="trash-2" />
+      <Icon className="mx-auto" type="trash" />
       <span className="sr-only">Delete</span>
     </>
   ),

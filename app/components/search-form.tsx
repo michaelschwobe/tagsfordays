@@ -13,7 +13,7 @@ import { LinkButton } from "~/components/ui/link-button";
 import { cn, getFieldError } from "~/utils/misc";
 import { toSearchFormSchema } from "~/utils/misc-validation";
 
-export interface SearchFormProps {
+interface SearchFormProps {
   /** Sets the `class` attribute. */
   className?: string | undefined;
   /** Sets the default checked radio. */

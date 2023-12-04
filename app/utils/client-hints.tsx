@@ -6,7 +6,7 @@ import { useRevalidator } from "@remix-run/react";
 import { useEffect } from "react";
 import { useRequestInfo } from "~/utils/request-info";
 
-export const clientHints = {
+const clientHints = {
   theme: {
     cookieName: "CH-prefers-color-scheme",
     getValueCode: `window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'`,

@@ -2,8 +2,7 @@ import { forwardRef } from "react";
 import { Icon } from "~/components/ui/icon";
 import { cn } from "~/utils/misc";
 
-export interface FormMessageProps
-  extends React.ComponentPropsWithoutRef<"div"> {
+interface FormMessageProps extends React.ComponentPropsWithoutRef<"div"> {
   /** Sets the content. **Required** */
   children: React.ReactNode | null;
   /** Sets the `class` attribute. */

@@ -1,6 +1,6 @@
 import { promiseAllSettledUnion } from "~/utils/misc";
 
-export async function getStatus(input: string, timeout: number) {
+async function getStatus(input: string, timeout: number) {
   try {
     const { ok, status, statusText } = await fetch(input, {
       method: "HEAD",

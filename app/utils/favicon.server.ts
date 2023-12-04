@@ -1,6 +1,6 @@
 import { promiseAllSettledUnion } from "~/utils/misc";
 
-export function toFaviconServiceUrl(url: string) {
+function toFaviconServiceUrl(url: string) {
   const { hostname } = new URL(url);
   const faviconServiceUrl = new URL("https://icons.duckduckgo.com/ip3");
   faviconServiceUrl.pathname += `/${hostname}.ico`;

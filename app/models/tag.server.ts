@@ -53,7 +53,6 @@ export async function getLatestTags({ take = 3 }: { take?: number } = {}) {
     take,
   });
 }
-export type GetLatestTagsData = Awaited<ReturnType<typeof getLatestTags>>;
 
 export async function createTag({
   name,
@@ -119,15 +118,6 @@ export async function deleteTag({
 }: Pick<Tag, "id"> & { userId: User["id"] }) {
   return prisma.tag.deleteMany({
     where: { id, userId },
-  });
-}
-
-export async function deleteTagByName({
-  name,
-  userId,
-}: Pick<Tag, "name"> & { userId: User["id"] }) {
-  return prisma.tag.deleteMany({
-    where: { name, userId },
   });
 }
 

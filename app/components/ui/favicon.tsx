@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { Icon } from "~/components/ui/icon";
 import { cn } from "~/utils/misc";
 
-export interface FaviconProps
+interface FaviconProps
   extends Omit<React.ComponentPropsWithoutRef<"img">, "children" | "src"> {
   /** Sets the `class` attribute. */
   className?: string | undefined;

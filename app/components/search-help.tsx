@@ -12,7 +12,7 @@ type FormatItemsFoundByCountProps = Parameters<
   typeof formatItemsFoundByCount
 >[0];
 
-export interface SearchHelpProps
+interface SearchHelpProps
   extends React.ComponentPropsWithoutRef<"div">,
     FormatItemsFoundByCountProps {
   /** Sets the content. */

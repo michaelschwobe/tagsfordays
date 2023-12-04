@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import { buttonVariants, type ButtonVariants } from "~/components/ui/button";
 import { cn } from "~/utils/misc";
 
-export interface LinkButtonProps extends LinkProps, ButtonVariants {
+interface LinkButtonProps extends LinkProps, ButtonVariants {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */

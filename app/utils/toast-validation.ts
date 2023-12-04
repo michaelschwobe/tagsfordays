@@ -6,15 +6,15 @@ export type RegularToast = z.infer<typeof ToastSchema>;
 export type OptionalToast = Omit<RegularToast, "id" | "type"> &
   Partial<Pick<RegularToast, "id" | "type">>;
 
-export const toastTypes = ["message", "success", "error"] as const;
+const toastTypes = ["message", "success", "error"] as const;
 
-export const ToastIdSchema = z.union([z.string(), z.number()]);
+const ToastIdSchema = z.union([z.string(), z.number()]);
 
-export const ToastTypeSchema = z.enum(toastTypes);
+const ToastTypeSchema = z.enum(toastTypes);
 
-export const ToastTitleSchema = z.string();
+const ToastTitleSchema = z.string();
 
-export const ToastDescriptionSchema = z.string();
+const ToastDescriptionSchema = z.string();
 
 export const ToastSchema = z.object({
   id: ToastIdSchema.default(() => cuid()),

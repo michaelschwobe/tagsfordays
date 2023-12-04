@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-export interface MainProps extends React.ComponentPropsWithoutRef<"main"> {
+interface MainProps extends React.ComponentPropsWithoutRef<"main"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */

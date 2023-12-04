@@ -26,8 +26,6 @@ export const BOOKMARK_SEARCH_KEYS = [
 
 export type BookmarkSearchKey = (typeof BOOKMARK_SEARCH_KEYS)[number];
 
-export const DEFAULT_BOOKMARK_SEARCH_KEY = "url" as BookmarkSearchKey;
-
 export const BOOKMARK_SEARCH_KEYS_LABEL_MAP = {
   url: "URL",
   title: "Title",

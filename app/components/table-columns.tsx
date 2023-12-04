@@ -29,7 +29,7 @@ type BookmarksStatusItem = StringifyDate<BookmarksStatusData[0]>;
 // const columnHelperBookmarks = createColumnHelper<BookmarksItem>();
 // const columnHelperBookmarksStatus = createColumnHelper<BookmarksStatusItem>();
 
-export const columnSelectable = createColumnHelper<{
+const columnSelectable = createColumnHelper<{
   id: string;
 }>().display({
   id: "select",
@@ -68,7 +68,7 @@ export const columnSelectable = createColumnHelper<{
   footer: ({ column }) => column.id,
 });
 
-export const columnCreatedAt = createColumnHelper<{
+const columnCreatedAt = createColumnHelper<{
   createdAt: string;
 }>().accessor("createdAt", {
   sortingFn: "datetime",
@@ -89,7 +89,7 @@ export const columnCreatedAt = createColumnHelper<{
   footer: ({ column }) => column.id,
 });
 
-export const columnTagRelations = createColumnHelper<{
+const columnTagRelations = createColumnHelper<{
   _count: {
     tags: number;
   };
@@ -106,7 +106,7 @@ export const columnTagRelations = createColumnHelper<{
   footer: ({ column }) => column.id,
 });
 
-export const columnBookmarkStatus = createColumnHelper<{
+const columnBookmarkStatus = createColumnHelper<{
   id: string;
   _meta: { ok: boolean; status: number; statusText: string };
 }>().accessor((row) => row._meta.status, {
@@ -135,7 +135,7 @@ export const columnBookmarkStatus = createColumnHelper<{
   footer: ({ column }) => column.id,
 });
 
-export const columnBookmarkTitle = createColumnHelper<{
+const columnBookmarkTitle = createColumnHelper<{
   id: string;
   title: string;
   _meta?: { faviconSrc: string | null };
@@ -164,7 +164,7 @@ export const columnBookmarkTitle = createColumnHelper<{
   footer: ({ column }) => column.id,
 });
 
-export const columnBookmarkUrl = createColumnHelper<{
+const columnBookmarkUrl = createColumnHelper<{
   id: string;
   url: string;
 }>().accessor("url", {
@@ -188,7 +188,7 @@ export const columnBookmarkUrl = createColumnHelper<{
   footer: ({ column }) => column.id,
 });
 
-export const columnBookmarkDelete = createColumnHelper<{
+const columnBookmarkDelete = createColumnHelper<{
   id: string;
 }>().accessor("id", {
   id: "delete",
@@ -210,7 +210,7 @@ export const columnBookmarkDelete = createColumnHelper<{
   footer: ({ column }) => column.id,
 });
 
-export const columnBookmarkFavorite = createColumnHelper<{
+const columnBookmarkFavorite = createColumnHelper<{
   id: string;
   favorite: boolean;
 }>().accessor("favorite", {

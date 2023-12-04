@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import { Icon } from "~/components/ui/icon";
 import { cn } from "~/utils/misc";
 
-export interface CheckboxProps
+interface CheckboxProps
   extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
   /** Sets the `class` attribute. */
   className?: string | undefined;

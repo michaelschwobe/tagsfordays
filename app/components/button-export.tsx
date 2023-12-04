@@ -4,7 +4,7 @@ import { Icon } from "~/components/ui/icon";
 import type { BookmarkExportFileExtension } from "~/utils/bookmark";
 import { BOOKMARK_EXPORT_FILE_TYPE_MAP } from "~/utils/bookmark";
 
-export interface ButtonExportProps
+interface ButtonExportProps
   extends Omit<
     React.ComponentPropsWithoutRef<typeof Button>,
     "children" | "size" | "value" | "variant"

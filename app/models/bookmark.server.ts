@@ -26,23 +26,6 @@ export async function getBookmarkId({ url }: Pick<Bookmark, "url">) {
   });
 }
 
-export async function getBookmarksCount({
-  searchKey,
-  searchValue,
-}: {
-  searchKey?: BookmarkSearchKey | null;
-  searchValue?: string | null;
-} = {}) {
-  return prisma.bookmark.count({
-    where:
-      !!searchValue && searchKey === "tags"
-        ? { tags: { some: { tag: { name: { contains: searchValue } } } } }
-        : !!searchValue && !!searchKey
-          ? { [searchKey]: { contains: searchValue } }
-          : {},
-  });
-}
-
 export async function getBookmarks({
   searchKey,
   searchValue,

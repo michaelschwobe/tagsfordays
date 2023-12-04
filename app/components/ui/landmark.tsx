@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-export interface LandmarkProps {
+interface LandmarkProps {
   /** Sets the `class` attribute. */
   className?: string | undefined;
   /** Sets the content. **Required** */

@@ -3,9 +3,9 @@ import { forwardRef } from "react";
 import { Icon } from "~/components/ui/icon";
 import { cn } from "~/utils/misc";
 
-export const Select = SelectPrimitive.Root;
+const Select = SelectPrimitive.Root;
 
-export const SelectTrigger = forwardRef<
+const SelectTrigger = forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => (
@@ -28,9 +28,9 @@ export const SelectTrigger = forwardRef<
 
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
-export const SelectValue = SelectPrimitive.Value;
+const SelectValue = SelectPrimitive.Value;
 
-export const SelectContent = forwardRef<
+const SelectContent = forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
 >(({ className, children, position = "popper", ...props }, ref) => (
@@ -85,7 +85,7 @@ export const SelectItem = forwardRef<
 
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
-export interface SimpleSelectProps extends SelectPrimitive.SelectProps {
+interface SimpleSelectProps extends SelectPrimitive.SelectProps {
   /** Sets the content. **Required** */
   children: SelectPrimitive.SelectContentProps["children"];
   /** Sets the `class` attribute. */

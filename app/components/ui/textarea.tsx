@@ -1,8 +1,7 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-export interface TextareaProps
-  extends React.ComponentPropsWithoutRef<"textarea"> {
+interface TextareaProps extends React.ComponentPropsWithoutRef<"textarea"> {
   /** Sets the `class` attribute. */
   className?: string | undefined;
   /** Sets the `name` attribute. **Required** */

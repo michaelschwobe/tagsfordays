@@ -12,7 +12,7 @@ import type { loader as loaderIndex } from "~/routes/_index";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
-export interface CardLatestTagsProps
+interface CardLatestTagsProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
   /** Sets the `class` attribute. */
   className?: string | undefined;

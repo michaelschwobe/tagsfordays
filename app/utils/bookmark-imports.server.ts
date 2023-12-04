@@ -1,32 +1,32 @@
 import { Window } from "happy-dom";
 
-export interface AnchorImport {
+interface AnchorImport {
   href: string;
   innerHtml: string;
   addDate: string;
 }
 
-export interface BookmarkImportMaybe {
+interface BookmarkImportMaybe {
   url: string | null;
   title: string;
   createdAt: Date;
 }
 
-export interface BookmarkImport {
+interface BookmarkImport {
   url: string;
   title: string;
   createdAt: Date;
 }
 
-export const REG_EXP_MULTIPLE_SPACES = /\s\s+/g;
+const REG_EXP_MULTIPLE_SPACES = /\s\s+/g;
 
-export const REG_EXP_TRAILING_SLASH = /\/$/;
+const REG_EXP_TRAILING_SLASH = /\/$/;
 
-export const ALLOWED_PROTOCOLS = ["https"] as const;
+const ALLOWED_PROTOCOLS = ["https"] as const;
 
-export const BLOCKED_HOSTNAMES = ["mail.google.com"] as const;
+const BLOCKED_HOSTNAMES = ["mail.google.com"] as const;
 
-export const BLOCKED_SEARCH_PARAMS = [
+const BLOCKED_SEARCH_PARAMS = [
   "affiliate_id",
   "browser",
   "cid",

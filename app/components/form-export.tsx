@@ -2,7 +2,7 @@ import { Form } from "@remix-run/react";
 import { forwardRef } from "react";
 import type { BookmarkExportFileExtension } from "~/utils/bookmark";
 
-export interface FormExportProps
+interface FormExportProps
   extends Omit<
     React.ComponentPropsWithoutRef<typeof Form>,
     "action" | "method" | "reloadDocument"

@@ -4,7 +4,7 @@ import type { ButtonProps } from "~/components/ui/button";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
-export interface ButtonCancelProps
+interface ButtonCancelProps
   extends Omit<
     ButtonProps,
     "children" | "onClick" | "size" | "type" | "variant"

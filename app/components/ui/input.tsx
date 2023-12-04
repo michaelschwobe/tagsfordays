@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-export interface InputProps extends React.ComponentPropsWithoutRef<"input"> {
+interface InputProps extends React.ComponentPropsWithoutRef<"input"> {
   /** Sets the `class` attribute. */
   className?: string | undefined;
   /** Sets the `name` attribute. **Required** */

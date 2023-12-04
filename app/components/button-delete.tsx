@@ -5,7 +5,7 @@ import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 import { useDoubleCheck } from "~/utils/misc";
 
-export interface ButtonDeleteProps
+interface ButtonDeleteProps
   extends Omit<
     React.ComponentPropsWithoutRef<typeof Button>,
     "children" | "disabled" | "type" | "value"

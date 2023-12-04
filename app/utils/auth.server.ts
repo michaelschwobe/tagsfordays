@@ -7,7 +7,7 @@ import { USER_LOGIN_ROUTE } from "~/utils/user";
 const USER_SESSION_KEY = "userId";
 const USER_SESSION_AGE = 60 * 60 * 24 * 7; // 7 days
 
-export const sessionStorage = createCookieSessionStorage({
+const sessionStorage = createCookieSessionStorage({
   cookie: {
     name: "__session",
     httpOnly: true,
@@ -18,7 +18,7 @@ export const sessionStorage = createCookieSessionStorage({
   },
 });
 
-export async function getSessionFromRequest(request: Request) {
+async function getSessionFromRequest(request: Request) {
   const cookie = request.headers.get("Cookie");
   const session = await sessionStorage.getSession(cookie);
   return session;
@@ -56,17 +56,6 @@ export async function requireUserId(
     throw redirect(`${USER_LOGIN_ROUTE}?${searchParams}`);
   }
   return userId;
-}
-
-export async function requireUser(request: Request) {
-  const userId = await requireUserId(request);
-
-  const user = await getUserById(userId);
-  if (user) {
-    return user;
-  }
-
-  throw await logout(request);
 }
 
 export async function createUserSession({

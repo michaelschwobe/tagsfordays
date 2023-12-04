@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-export interface FormItemProps extends React.ComponentPropsWithoutRef<"div"> {
+interface FormItemProps extends React.ComponentPropsWithoutRef<"div"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */

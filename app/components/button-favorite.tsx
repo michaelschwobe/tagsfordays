@@ -5,7 +5,7 @@ import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 import { cn } from "~/utils/misc";
 
-export interface ButtonFavoriteProps
+interface ButtonFavoriteProps
   extends Omit<
     React.ComponentPropsWithoutRef<typeof Button>,
     "children" | "type" | "value"

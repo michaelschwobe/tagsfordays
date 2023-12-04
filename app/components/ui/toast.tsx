@@ -5,7 +5,7 @@ import { Icon } from "~/components/ui/icon";
 import { cn } from "~/utils/misc";
 import type { RegularToast } from "~/utils/toast-validation";
 
-export const toastVariants = cva(
+const toastVariants = cva(
   "flex w-full items-center gap-2 rounded-lg border border-slate-200 bg-white p-3 shadow-lg dark:border-slate-700 dark:bg-slate-900 sm:w-[--width]",
   {
     variants: {
@@ -21,9 +21,9 @@ export const toastVariants = cva(
   },
 );
 
-export type ToastVariants = VariantProps<typeof toastVariants>;
+type ToastVariants = VariantProps<typeof toastVariants>;
 
-export interface ToastProps
+interface ToastProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children" | "title">,
     ToastVariants {
   /** Sets the `class` attribute. */

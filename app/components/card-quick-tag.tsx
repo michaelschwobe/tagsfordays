@@ -19,7 +19,7 @@ import { LinkButton } from "~/components/ui/link-button";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE, useOptionalUser } from "~/utils/user";
 
-export interface CardQuickTagProps
+interface CardQuickTagProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
   /** Sets the `class` attribute. */
   className?: string | undefined;

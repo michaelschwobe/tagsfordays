@@ -8,7 +8,7 @@ const UniqueEnforcerBookmarkUrl = new UniqueEnforcer();
 const UniqueEnforcerTagId = new UniqueEnforcer();
 const UniqueEnforcerTagName = new UniqueEnforcer();
 
-export function generateNumberArray({
+function generateNumberArray({
   length,
   start = 0,
 }: {
@@ -18,7 +18,7 @@ export function generateNumberArray({
   return [...Array(length + start).keys()].slice(start);
 }
 
-export function generateUser({
+function generateUser({
   username,
   password,
 }: {
@@ -31,7 +31,7 @@ export function generateUser({
   } as const;
 }
 
-export function generateTag({
+function generateTag({
   id,
   name,
   createdAt,
@@ -51,7 +51,7 @@ export function generateTag({
   } as const;
 }
 
-export function generateTags({
+function generateTags({
   items,
   length,
   start,
@@ -75,7 +75,7 @@ export function generateTags({
     : generateNumberArray({ length, start }).map(() => generateTag());
 }
 
-export function generateBookmark({
+function generateBookmark({
   id,
   url,
   title,

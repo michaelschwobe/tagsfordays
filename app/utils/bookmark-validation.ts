@@ -9,27 +9,27 @@ import {
 } from "~/utils/pagination-validation";
 import { TagNameSchema } from "~/utils/tag-validation";
 
-export const BookmarkIdSchema = IdSchema;
+const BookmarkIdSchema = IdSchema;
 
-export const BookmarkUrlSchema = UrlSchema.min(12, {
+const BookmarkUrlSchema = UrlSchema.min(12, {
   message: "URL is too short",
 }).max(2000, { message: "URL is too long" });
 
-export const BookmarkTitleSchema = z
+const BookmarkTitleSchema = z
   .string()
   .min(2, { message: "Title is too short" })
   .max(45, { message: "Title is too long" });
 
-export const BookmarkContentSchema = z
+const BookmarkContentSchema = z
   .string()
   .min(2, { message: "Content is too short" })
   .max(255, { message: "Content is too long" });
 
-export const BookmarkFavoriteSchema = CheckboxSchema;
+const BookmarkFavoriteSchema = CheckboxSchema;
 
-export const BookmarkTagsSchema = z.array(TagNameSchema);
+const BookmarkTagsSchema = z.array(TagNameSchema);
 
-export const BookmarkFilesSchema = z
+const BookmarkFilesSchema = z
   .array(z.instanceof(File))
   .min(1, "At least 1 file is required")
   .refine(
@@ -96,12 +96,12 @@ export const FavoriteBookmarkFormSchema = z.object({
   favorite: BookmarkFavoriteSchema.optional(),
 });
 
-export const BookmarkSearchKeySchema = z
+const BookmarkSearchKeySchema = z
   .enum(BOOKMARK_SEARCH_KEYS)
   .nullable()
   .catch(null);
 
-export const BookmarkSearchParamsSchema = z.object({
+const BookmarkSearchParamsSchema = z.object({
   searchKey: BookmarkSearchKeySchema,
   searchValue: SearchValueSchema,
   skip: SkipSchema,

@@ -17,7 +17,7 @@ import {
   useOptionalUser,
 } from "~/utils/user";
 
-export const headerNavLinkVariants = cva(
+const headerNavLinkVariants = cva(
   "inline-flex h-14 w-14 items-center justify-center gap-2 whitespace-nowrap border border-transparent font-medium transition-colors focus-visible:border-pink-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-pink-400 dark:focus-visible:border-pink-500 dark:focus-visible:ring-pink-500 sm:rounded-md",
   {
     variants: {
@@ -33,9 +33,9 @@ export const headerNavLinkVariants = cva(
   },
 );
 
-export type HeaderNavLinkVariants = VariantProps<typeof headerNavLinkVariants>;
+type HeaderNavLinkVariants = VariantProps<typeof headerNavLinkVariants>;
 
-export interface HeaderNavLinkProps extends Omit<NavLinkProps, "className"> {
+interface HeaderNavLinkProps extends Omit<NavLinkProps, "className"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */
@@ -44,7 +44,7 @@ export interface HeaderNavLinkProps extends Omit<NavLinkProps, "className"> {
   iconType: IconType;
 }
 
-export const HeaderNavLink = forwardRef<
+const HeaderNavLink = forwardRef<
   React.ElementRef<typeof NavLink>,
   HeaderNavLinkProps
 >(({ children, className, iconType, to, ...props }, forwardedRef) => {
@@ -63,7 +63,7 @@ export const HeaderNavLink = forwardRef<
 
 HeaderNavLink.displayName = "HeaderNavLink";
 
-export interface HeaderButtonProps
+interface HeaderButtonProps
   extends React.ComponentPropsWithoutRef<"button">,
     HeaderNavLinkVariants {
   /** Sets the content. **Required** */
@@ -76,7 +76,7 @@ export interface HeaderButtonProps
   type: "button" | "submit";
 }
 
-export const HeaderNavButton = forwardRef<
+const HeaderNavButton = forwardRef<
   React.ElementRef<"button">,
   HeaderButtonProps
 >(({ children, className, iconType, type, ...props }, forwardedRef) => {
@@ -95,14 +95,14 @@ export const HeaderNavButton = forwardRef<
 
 HeaderNavButton.displayName = "HeaderNavButton";
 
-export interface HeaderNavButtonThemeProps {
+interface HeaderNavButtonThemeProps {
   /** Sets the `class` attribute. */
   className?: string | undefined;
   /** Sets the default theme. */
   userTheme?: Theme | null | undefined;
 }
 
-export const HeaderNavButtonTheme = ({
+const HeaderNavButtonTheme = ({
   className,
   userTheme,
 }: HeaderNavButtonThemeProps) => {
@@ -143,7 +143,7 @@ export const HeaderNavButtonTheme = ({
   );
 };
 
-export interface HeaderProps
+interface HeaderProps
   extends Omit<React.ComponentPropsWithoutRef<"header">, "children">,
     Pick<HeaderNavButtonThemeProps, "userTheme"> {
   /** Sets the `class` attribute. */

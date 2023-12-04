@@ -3,7 +3,7 @@ import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 import { cn } from "~/utils/misc";
 
-export interface ButtonColumnSortProps
+interface ButtonColumnSortProps
   extends Omit<
     React.ComponentPropsWithoutRef<typeof Button>,
     "onClick" | "size" | "type" | "variant"

@@ -21,12 +21,12 @@ export function MainError({ children }: { children: React.ReactNode }) {
   );
 }
 
-export type StatusHandler = (info: {
+type StatusHandler = (info: {
   error: ErrorResponse;
   params: Record<string, string | undefined>;
 }) => JSX.Element | null;
 
-export interface GeneralErrorBoundaryProps {
+interface GeneralErrorBoundaryProps {
   defaultStatusHandler?: StatusHandler;
   statusHandlers?: Record<number, StatusHandler>;
   unexpectedErrorHandler?: (error: unknown) => JSX.Element | null;

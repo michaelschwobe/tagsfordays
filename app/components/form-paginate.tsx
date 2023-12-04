@@ -2,7 +2,7 @@ import { Form } from "@remix-run/react";
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-export interface FormPaginateProps
+interface FormPaginateProps
   extends Omit<
     React.ComponentPropsWithoutRef<typeof Form>,
     "method" | "preventScrollReset" | "replace"

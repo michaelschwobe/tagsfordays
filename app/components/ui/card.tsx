@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-export interface CardHeaderProps extends React.ComponentPropsWithoutRef<"div"> {
+interface CardHeaderProps extends React.ComponentPropsWithoutRef<"div"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */
@@ -20,8 +20,7 @@ export const CardHeader = forwardRef<React.ElementRef<"div">, CardHeaderProps>(
 
 CardHeader.displayName = "CardHeader";
 
-export interface CardContentProps
-  extends React.ComponentPropsWithoutRef<"div"> {
+interface CardContentProps extends React.ComponentPropsWithoutRef<"div"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */
@@ -41,7 +40,7 @@ export const CardContent = forwardRef<
 
 CardContent.displayName = "CardContent";
 
-export interface CardFooterProps extends React.ComponentPropsWithoutRef<"div"> {
+interface CardFooterProps extends React.ComponentPropsWithoutRef<"div"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */
@@ -67,7 +66,7 @@ export const CardFooter = forwardRef<React.ElementRef<"div">, CardFooterProps>(
 
 CardFooter.displayName = "CardFooter";
 
-export interface CardProps extends React.ComponentPropsWithoutRef<"div"> {
+interface CardProps extends React.ComponentPropsWithoutRef<"div"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */

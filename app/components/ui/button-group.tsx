@@ -2,7 +2,7 @@ import { cva } from "class-variance-authority";
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-export const buttonGroupItemVariants = cva(
+const buttonGroupItemVariants = cva(
   "inline-flex h-full grow cursor-pointer items-center justify-center gap-2 rounded-sm border border-transparent px-3 py-1 text-sm font-medium text-black transition-all hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-600",
   {
     variants: {
@@ -16,7 +16,7 @@ export const buttonGroupItemVariants = cva(
   },
 );
 
-export interface ButtonGroupButtonProps
+interface ButtonGroupButtonProps
   extends React.ComponentPropsWithoutRef<"button"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
@@ -52,7 +52,7 @@ export const ButtonGroupButton = forwardRef<
 
 ButtonGroupButton.displayName = "ButtonGroupButton";
 
-export interface ButtonGroupInputProps
+interface ButtonGroupInputProps
   extends React.ComponentPropsWithoutRef<"input"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
@@ -85,8 +85,7 @@ export const ButtonGroupInput = forwardRef<
 
 ButtonGroupInput.displayName = "ButtonGroupInput";
 
-export interface ButtonGroupProps
-  extends React.ComponentPropsWithoutRef<"div"> {
+interface ButtonGroupProps extends React.ComponentPropsWithoutRef<"div"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */

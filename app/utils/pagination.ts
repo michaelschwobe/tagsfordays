@@ -1,4 +1,4 @@
-export type InputHiddenEntries = Array<[name: string, value: string]>;
+type InputHiddenEntries = Array<[name: string, value: string]>;
 
 export function toPaginationSearchParams({
   searchParams,

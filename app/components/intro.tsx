@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { Code } from "~/components/ui/code";
 import { cn } from "~/utils/misc";
 
-export interface IntroProps
+interface IntroProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
   /** Sets the `class` attribute. */
   className?: string | undefined;

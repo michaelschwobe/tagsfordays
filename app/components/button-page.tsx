@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { Button } from "~/components/ui/button";
 
-export interface ButtonPageProps
+interface ButtonPageProps
   extends Omit<
     React.ComponentPropsWithoutRef<typeof Button>,
     "children" | "type"

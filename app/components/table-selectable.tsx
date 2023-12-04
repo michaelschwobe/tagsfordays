@@ -18,12 +18,12 @@ import {
 } from "~/components/ui/table";
 import { cn } from "~/utils/misc";
 
-export interface RenderProps {
+interface RenderProps {
   idsNotSelected: string[];
   idsSelected: string[];
 }
 
-export interface TableSelectableProps<TData, TValue>
+interface TableSelectableProps<TData, TValue>
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
   /** Sets the tfoot tr content. */
   children?: React.ReactNode | ((props: RenderProps) => React.ReactNode);

@@ -21,7 +21,7 @@ const badgeVariants = cva(
 
 type BadgeVariants = VariantProps<typeof badgeVariants>;
 
-export interface BadgeProps
+interface BadgeProps
   extends React.ComponentPropsWithoutRef<"span">,
     BadgeVariants {
   /** Sets the content. **Required** */

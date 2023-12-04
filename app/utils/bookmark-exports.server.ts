@@ -42,7 +42,7 @@ export function createExportAction(fileExtension: BookmarkExportFileExtension) {
   };
 }
 
-export const mappedExportFunctions = {
+const mappedExportFunctions = {
   csv: formatExportAsCsv,
   html: formatExportAsHtml,
   json: formatExportAsJson,

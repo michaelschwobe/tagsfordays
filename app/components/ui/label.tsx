@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-export interface LabelProps extends React.ComponentPropsWithoutRef<"label"> {
+interface LabelProps extends React.ComponentPropsWithoutRef<"label"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */

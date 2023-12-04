@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-export interface CodeProps extends React.ComponentPropsWithoutRef<"code"> {
+interface CodeProps extends React.ComponentPropsWithoutRef<"code"> {
   /** Sets the content. **Required** */
   children: React.ReactNode;
   /** Sets the `class` attribute. */

@@ -1,6 +1,6 @@
 import type { MetaDescriptor } from "@remix-run/node";
 
-export function generateSocialImageMeta(props: {
+function generateSocialImageMeta(props: {
   vendor: "twitter" | "og";
   src: string;
   alt?: string | undefined;

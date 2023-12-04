@@ -2,7 +2,7 @@ import { refine } from "@conform-to/zod";
 import * as z from "zod";
 import { IdSchema } from "~/utils/misc-validation";
 
-export const TagIdSchema = IdSchema;
+const TagIdSchema = IdSchema;
 
 export const TagNameSchema = z
   .string({ required_error: "Name is required" })
@@ -13,7 +13,7 @@ export const TagNameSchema = z
   })
   .transform((val) => val.replaceAll(/  +/g, " ").trim());
 
-export const TagNamesSchema = z
+const TagNamesSchema = z
   .string({ required_error: "Name is required" })
   .min(2, { message: "Name is too short" })
   .transform((val, ctx) => {

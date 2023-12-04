@@ -41,7 +41,7 @@ export function combineHeaders(
   return combined;
 }
 
-export function dedupe<T>(arr: T[]) {
+function dedupe<T>(arr: T[]) {
   return [...new Set(arr)];
 }
 

@@ -3,9 +3,9 @@ import { combineHeaders } from "~/utils/misc";
 import type { OptionalToast } from "~/utils/toast-validation";
 import { ToastSchema } from "~/utils/toast-validation";
 
-export const TOAST_KEY = "toast";
+const TOAST_KEY = "toast";
 
-export const toastSessionStorage = createCookieSessionStorage({
+const toastSessionStorage = createCookieSessionStorage({
   cookie: {
     name: "en_toast",
     httpOnly: true,

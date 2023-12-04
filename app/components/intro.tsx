@@ -14,7 +14,7 @@ export const Intro = forwardRef<React.ElementRef<"div">, IntroProps>(
       <div
         {...props}
         className={cn(
-          "px-4 pb-4 pt-2 text-center [text-wrap:balance] sm:py-0 sm:text-lg",
+          "p-4 text-center [text-wrap:balance] sm:text-lg",
           className,
         )}
         data-testid="intro"

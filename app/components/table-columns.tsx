@@ -79,7 +79,7 @@ export const columnCreatedAt = createColumnHelper<{
     </span>
   ),
   cell: ({ getValue }) => (
-    <span className="whitespace-nowrap">
+    <span className="whitespace-nowrap px-3">
       {DateTimeFormatMMDDYYYY.format(new Date(getValue()))
         .split("/")
         .reverse()
@@ -188,7 +188,7 @@ export const columnBookmarkUrl = createColumnHelper<{
   footer: ({ column }) => column.id,
 });
 
-export const columnBookmarksDelete = createColumnHelper<{
+export const columnBookmarkDelete = createColumnHelper<{
   id: string;
 }>().accessor("id", {
   id: "delete",
@@ -210,7 +210,7 @@ export const columnBookmarksDelete = createColumnHelper<{
   footer: ({ column }) => column.id,
 });
 
-export const columnBookmarksFavorite = createColumnHelper<{
+export const columnBookmarkFavorite = createColumnHelper<{
   id: string;
   favorite: boolean;
 }>().accessor("favorite", {
@@ -247,7 +247,7 @@ export const columnsBookmarks: ColumnDef<BookmarksItem>[] = [
   // @ts-expect-error - see comment above
   columnTagRelations,
   // @ts-expect-error - see comment above
-  columnBookmarksFavorite,
+  columnBookmarkFavorite,
 ];
 
 export const columnsBookmarksStatus: ColumnDef<BookmarksStatusItem>[] = [
@@ -258,5 +258,5 @@ export const columnsBookmarksStatus: ColumnDef<BookmarksStatusItem>[] = [
   // @ts-expect-error - see comment above
   columnBookmarkUrl,
   // @ts-expect-error - see comment above
-  columnBookmarksDelete,
+  columnBookmarkDelete,
 ];

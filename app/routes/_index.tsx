@@ -38,8 +38,8 @@ export default function HomePage() {
 
   return (
     <Main>
-      <div className="grid gap-2 sm:grid-cols-2 sm:gap-8">
-        <Intro className="sm:col-span-2" />
+      <div className="grid gap-2 lg:grid-cols-2 lg:gap-8">
+        <Intro className="pb-4 pt-2 lg:col-span-2 lg:py-0" />
 
         <CardQuickBookmark redirectTo="/" />
 

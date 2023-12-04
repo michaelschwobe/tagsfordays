@@ -13,9 +13,6 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  },
   "scripts": {
     "build": "remix build",
     "clean": "rm -rf .cache && rm -rf build && rm -rf coverage && rm -rf playwright-report && rm -rf public/build && rm -rf test-results && rm -rf node_modules",
@@ -24,6 +21,7 @@
     "e2e": "pnpm --silent run build && CI=true playwright test",
     "e2e:dev": "playwright test --ui",
     "format": "prettier --ignore-unknown --write .",
+    "knip": "knip",
     "lint": "eslint --ext=.js,.jsx,.ts,.tsx .",
     "setup": "pnpm install && playwright install && pnpm run build && prisma generate && prisma migrate deploy && pnpm run seed:min",
     "seed": "prisma db seed",
@@ -34,7 +32,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "typecheck": "tsc",
-    "validate": "pnpm run typecheck && pnpm run lint && pnpm run coverage && pnpm run e2e"
+    "validate": "pnpm run typecheck && pnpm run lint && pnpm run knip && pnpm run coverage && pnpm run e2e"
   },
   "dependencies": {
     "@conform-to/react": "^0.9.1",
@@ -74,7 +72,6 @@
     "@tailwindcss/typography": "^0.5.10",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.1.2",
-    "@testing-library/user-event": "^14.5.1",
     "@total-typescript/ts-reset": "^0.4.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie": "^0.5.4",
@@ -87,6 +84,7 @@
     "enforce-unique": "^1.2.0",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
+    "knip": "^3.4.0",
     "msw": "^2.0.9",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.4.1",
@@ -101,8 +99,11 @@
     "node": ">=21.2.0",
     "pnpm": ">=8.11.0"
   },
-  "packageManager": "pnpm@8.11.0",
   "msw": {
     "workerDirectory": "public"
+  },
+  "packageManager": "pnpm@8.11.0",
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }

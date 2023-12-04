@@ -1,0 +1,7 @@
+{
+  "$schema": "https://unpkg.com/knip@3/schema.json",
+  "entry": ["prisma/seed.ts"],
+  "project": ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"],
+  "ignore": ["docker-entrypoint.js", "public/mockServiceWorker.js"],
+  "ignoreDependencies": ["@flydotio/dockerfile", "tsx"]
+}

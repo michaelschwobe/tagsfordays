@@ -64,7 +64,7 @@ export default function TagDetailPage() {
         </LinkButton>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="space-y-4 sm:space-y-8">
         <FormItem>
           <div className="text-sm font-medium">Name</div>
           <FormControl className="py-2">

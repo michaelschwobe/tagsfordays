@@ -190,7 +190,13 @@ export default function BookmarksIndexPage() {
               {loaderData.hasPagination ? (
                 <FormPaginate className="flex gap-2 max-sm:-order-1">
                   {loaderData.paginationSearchParams.map(([name, value]) => (
-                    <input key={name} type="hidden" name={name} value={value} />
+                    <input
+                      key={name}
+                      type="hidden"
+                      name={name}
+                      value={value}
+                      hidden
+                    />
                   ))}
                   <ButtonFirst
                     name="skip"

@@ -135,13 +135,14 @@ export default function EditTagPage() {
         <ButtonCancel />
       </div>
 
-      <Form {...form.props} method="POST" className="flex flex-col gap-4">
+      <Form {...form.props} method="POST" className="space-y-4 sm:space-y-8">
         <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
         <input
           type="hidden"
           name={fields.id.name}
           value={fields.id.defaultValue}
+          hidden
         />
 
         <FormItem>

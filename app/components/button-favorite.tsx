@@ -52,8 +52,8 @@ export const ButtonFavorite = forwardRef<
 
     return (
       <fetcher.Form method="POST" action={formAction}>
-        <input type="hidden" name={conform.INTENT} value="favorite" />
-        <input type="hidden" name={nextName} value={nextValue} />
+        <input type="hidden" name={conform.INTENT} value="favorite" hidden />
+        <input type="hidden" name={nextName} value={nextValue} hidden />
         <Button
           {...props}
           type="submit"

@@ -50,8 +50,8 @@ export const ButtonDelete = forwardRef<
 
     return (
       <fetcher.Form method="POST" action={formAction}>
-        <input type="hidden" name={conform.INTENT} value="delete" />
-        <input type="hidden" name="ids-selected" value={nextValue} />
+        <input type="hidden" name={conform.INTENT} value="delete" hidden />
+        <input type="hidden" name="ids-selected" value={nextValue} hidden />
         <Button
           {...doubleCheck.getButtonProps({ ...props })}
           type="submit"

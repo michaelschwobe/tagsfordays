@@ -134,8 +134,8 @@ export const HeaderNavButtonTheme = ({
       action="/"
       className={cn(className)}
     >
-      <input type="hidden" name={conform.INTENT} value="update-theme" />
-      <input type="hidden" name="theme" value={nextTheme} />
+      <input type="hidden" name={conform.INTENT} value="update-theme" hidden />
+      <input type="hidden" name="theme" value={nextTheme} hidden />
       <HeaderNavButton type="submit" iconType={icon}>
         {text} theme
       </HeaderNavButton>

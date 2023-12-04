@@ -33,7 +33,7 @@ export const FormExport = forwardRef<
         reloadDocument
         ref={forwardedRef}
       >
-        <input type="hidden" name="ids-selected" value={idsSelected} />
+        <input type="hidden" name="ids-selected" value={idsSelected} hidden />
         {children}
       </Form>
     );

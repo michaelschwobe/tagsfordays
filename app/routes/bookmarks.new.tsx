@@ -123,7 +123,7 @@ export default function NewBookmarkPage() {
         <ButtonCancel />
       </div>
 
-      <Form {...form.props} method="POST" className="flex flex-col gap-4">
+      <Form {...form.props} method="POST" className="space-y-4 sm:space-y-8">
         <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
         <FormItem>
@@ -188,6 +188,7 @@ export default function NewBookmarkPage() {
                     type="hidden"
                     name={tag.name}
                     value={tag.defaultValue}
+                    hidden
                   />
                   <Button
                     {...list.remove(fields.tags.name, {

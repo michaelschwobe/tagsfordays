@@ -123,7 +123,7 @@ export default function MergeTagPage() {
         <ButtonCancel />
       </div>
 
-      <Form {...form.props} method="POST" className="flex flex-col gap-4">
+      <Form {...form.props} method="POST" className="space-y-4 sm:space-y-8">
         <FormMessage id={form.errorId}>{form.error}</FormMessage>
 
         <FormItem>

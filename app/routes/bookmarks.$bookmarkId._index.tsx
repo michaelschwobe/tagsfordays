@@ -75,7 +75,7 @@ export default function BookmarkDetailPage() {
         </LinkButton>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="space-y-4 sm:space-y-8">
         <FormItem>
           <div className="text-sm font-medium">URL</div>
           <FormControl>

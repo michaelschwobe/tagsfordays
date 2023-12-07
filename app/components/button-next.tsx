@@ -2,18 +2,9 @@ import { forwardRef } from "react";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
-interface ButtonNextProps
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof Button>,
-    "children" | "type"
-  > {
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-}
-
 export const ButtonNext = forwardRef<
   React.ElementRef<typeof Button>,
-  ButtonNextProps
+  Omit<React.ComponentPropsWithoutRef<typeof Button>, "children" | "type">
 >(({ size, ...props }, ref) => {
   const isIconOnly = size?.includes("icon") ?? false;
   return (
@@ -23,5 +14,4 @@ export const ButtonNext = forwardRef<
     </Button>
   );
 });
-
 ButtonNext.displayName = "ButtonNext";

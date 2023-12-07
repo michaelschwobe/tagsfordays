@@ -3,39 +3,33 @@ import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 import { cn } from "~/utils/misc";
 
-interface ButtonColumnSortProps
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof Button>,
-    "onClick" | "size" | "type" | "variant"
-  > {
-  /** Sets the icon type **Required** */
-  isSortedAsc: boolean;
-  /** Sets the icon type **Required** */
-  isSortedDesc: boolean;
-  /** Binds the `click` event handler. **Required** */
-  onClick: ((event: unknown) => void) | undefined;
-}
-
 export const ButtonColumnSort = forwardRef<
   React.ElementRef<typeof Button>,
-  ButtonColumnSortProps
+  Omit<
+    React.ComponentPropsWithoutRef<typeof Button>,
+    "onClick" | "size" | "type" | "variant"
+  > & {
+    isSortedAsc: boolean;
+    isSortedDesc: boolean;
+    onClick: ((event: unknown) => void) | undefined;
+  }
 >(
   (
     { children, className, isSortedAsc, isSortedDesc, onClick, ...props },
-    forwardedRef,
+    ref,
   ) => {
     return (
       <Button
         {...props}
         type="button"
         onClick={onClick}
-        variant="ghost"
         size={children ? "sm" : "sm-icon"}
+        variant="ghost"
         className={cn(
           "flex cursor-pointer select-none overflow-hidden",
           className,
         )}
-        ref={forwardedRef}
+        ref={ref}
       >
         {children}
         <Icon
@@ -51,5 +45,4 @@ export const ButtonColumnSort = forwardRef<
     );
   },
 );
-
 ButtonColumnSort.displayName = "ButtonColumnSort";

@@ -4,22 +4,18 @@ import { Icon } from "~/components/ui/icon";
 import type { BookmarkExportFileExtension } from "~/utils/bookmark";
 import { BOOKMARK_EXPORT_FILE_TYPE_MAP } from "~/utils/bookmark";
 
-interface ButtonExportProps
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof Button>,
-    "children" | "size" | "value" | "variant"
-  > {
-  /** Sets the content and form `action` attribute. **Required** */
-  fileExtension: BookmarkExportFileExtension;
-}
-
 export const ButtonExport = forwardRef<
   React.ElementRef<typeof Button>,
-  ButtonExportProps
->(({ fileExtension, ...props }, forwardedRef) => {
+  Omit<
+    React.ComponentPropsWithoutRef<typeof Button>,
+    "children" | "size" | "value" | "variant"
+  > & {
+    fileExtension: BookmarkExportFileExtension;
+  }
+>(({ fileExtension, ...props }, ref) => {
   const fileType = BOOKMARK_EXPORT_FILE_TYPE_MAP[fileExtension];
   return (
-    <Button {...props} size="sm" ref={forwardedRef}>
+    <Button {...props} size="sm" ref={ref}>
       <Icon type="download" />
       <span className="sr-only">Export data to a </span>
       {fileType}
@@ -27,5 +23,4 @@ export const ButtonExport = forwardRef<
     </Button>
   );
 });
-
 ButtonExport.displayName = "ButtonExport";

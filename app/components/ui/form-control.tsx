@@ -1,26 +1,18 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-interface FormControlProps extends React.ComponentPropsWithoutRef<"div"> {
-  /** Sets the content. **Required** */
-  children: React.ReactNode;
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-}
-
 export const FormControl = forwardRef<
   React.ElementRef<"div">,
-  FormControlProps
->(({ children, className, ...props }, forwardedRef) => {
+  React.ComponentPropsWithoutRef<"div">
+>(({ children, className, ...props }, ref) => {
   return (
     <div
       {...props}
       className={cn("flex min-h-[2.5rem] items-center gap-2", className)}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </div>
   );
 });
-
 FormControl.displayName = "FormControl";

@@ -19,18 +19,12 @@ import { LinkButton } from "~/components/ui/link-button";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE, useOptionalUser } from "~/utils/user";
 
-interface CardQuickTagProps
-  extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the "redirect" path. **Required** */
-  redirectTo: string;
-}
-
 export const CardQuickTag = forwardRef<
   React.ElementRef<"div">,
-  CardQuickTagProps
->(({ className, redirectTo, ...props }, forwardedRef) => {
+  Omit<React.ComponentPropsWithoutRef<"div">, "children"> & {
+    redirectTo: string;
+  }
+>(({ className, redirectTo, ...props }, ref) => {
   const id = useId();
   const location = useLocation();
   const optionalUser = useOptionalUser();
@@ -40,7 +34,7 @@ export const CardQuickTag = forwardRef<
       {...props}
       className={cn(className)}
       data-testid="card-quick-tag"
-      ref={forwardedRef}
+      ref={ref}
     >
       <CardHeader>
         <H2>Quick Tag</H2>
@@ -52,12 +46,12 @@ export const CardQuickTag = forwardRef<
               <FormLabel htmlFor={`${id}-name`}>Name</FormLabel>
               <FormControl>
                 <Input
-                  className="w-full"
                   type="text"
                   id={`${id}-name`}
                   name="name"
                   autoComplete="false"
                   aria-describedby={`${id}-name-description`}
+                  className="w-full"
                 />
                 <Button type="submit" variant="filled">
                   <Icon type="plus" />
@@ -85,5 +79,4 @@ export const CardQuickTag = forwardRef<
     </Card>
   );
 });
-
 CardQuickTag.displayName = "CardQuickTag";

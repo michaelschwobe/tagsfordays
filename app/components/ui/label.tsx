@@ -1,28 +1,19 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-interface LabelProps extends React.ComponentPropsWithoutRef<"label"> {
-  /** Sets the content. **Required** */
-  children: React.ReactNode;
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the `for` attribute. **Required** */
-  htmlFor: string | undefined;
-}
-
-export const Label = forwardRef<React.ElementRef<"label">, LabelProps>(
-  ({ children, className, htmlFor, ...props }, forwardedRef) => {
-    return (
-      <label
-        {...props}
-        className={cn("text-sm font-medium", className)}
-        htmlFor={htmlFor}
-        ref={forwardedRef}
-      >
-        {children}
-      </label>
-    );
-  },
-);
-
+export const Label = forwardRef<
+  React.ElementRef<"label">,
+  React.ComponentPropsWithoutRef<"label">
+>(({ children, className, htmlFor, ...props }, ref) => {
+  return (
+    <label
+      {...props}
+      htmlFor={htmlFor}
+      className={cn("text-sm font-medium", className)}
+      ref={ref}
+    >
+      {children}
+    </label>
+  );
+});
 Label.displayName = "Label";

@@ -1,28 +1,21 @@
 import { forwardRef } from "react";
 import { cn } from "~/utils/misc";
 
-interface H2Props extends React.ComponentPropsWithoutRef<"h2"> {
-  /** Sets the content. **Required** */
-  children: React.ReactNode;
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-}
-
-export const H2 = forwardRef<React.ElementRef<"h2">, H2Props>(
-  ({ children, className, ...props }, forwardedRef) => {
-    return (
-      <h2
-        {...props}
-        className={cn(
-          "text-lg font-medium leading-none text-black dark:text-white",
-          className,
-        )}
-        ref={forwardedRef}
-      >
-        {children}
-      </h2>
-    );
-  },
-);
-
+export const H2 = forwardRef<
+  React.ElementRef<"h2">,
+  React.ComponentPropsWithoutRef<"h2">
+>(({ children, className, ...props }, ref) => {
+  return (
+    <h2
+      {...props}
+      className={cn(
+        "text-lg font-medium leading-none text-black dark:text-white",
+        className,
+      )}
+      ref={ref}
+    >
+      {children}
+    </h2>
+  );
+});
 H2.displayName = "H2";

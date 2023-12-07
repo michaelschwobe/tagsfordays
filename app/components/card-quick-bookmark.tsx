@@ -19,18 +19,12 @@ import { LinkButton } from "~/components/ui/link-button";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE, useOptionalUser } from "~/utils/user";
 
-interface CardQuickBookmarkProps
-  extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the "redirect" path. **Required** */
-  redirectTo: string;
-}
-
 export const CardQuickBookmark = forwardRef<
   React.ElementRef<"div">,
-  CardQuickBookmarkProps
->(({ className, redirectTo, ...props }, forwardedRef) => {
+  Omit<React.ComponentPropsWithoutRef<"div">, "children"> & {
+    redirectTo: string;
+  }
+>(({ className, redirectTo, ...props }, ref) => {
   const id = useId();
   const optionalUser = useOptionalUser();
 
@@ -39,7 +33,7 @@ export const CardQuickBookmark = forwardRef<
       {...props}
       className={cn(className)}
       data-testid="card-quick-bookmark"
-      ref={forwardedRef}
+      ref={ref}
     >
       <CardHeader>
         <H2>Quick Bookmark</H2>
@@ -51,12 +45,12 @@ export const CardQuickBookmark = forwardRef<
               <FormLabel htmlFor={`${id}-url`}>URL</FormLabel>
               <FormControl>
                 <Input
-                  className="w-full"
                   type="text"
                   id={`${id}-url`}
                   name="url"
                   autoComplete="false"
                   aria-describedby={`${id}-url-description`}
+                  className="w-full"
                 />
                 <Button type="submit" variant="filled">
                   <Icon type="plus" />
@@ -84,5 +78,4 @@ export const CardQuickBookmark = forwardRef<
     </Card>
   );
 });
-
 CardQuickBookmark.displayName = "CardQuickBookmark";

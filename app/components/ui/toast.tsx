@@ -21,63 +21,49 @@ const toastVariants = cva(
   },
 );
 
-type ToastVariants = VariantProps<typeof toastVariants>;
-
-interface ToastProps
-  extends Omit<React.ComponentPropsWithoutRef<"div">, "children" | "title">,
-    ToastVariants {
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the "description" content. **Required** */
-  description: RegularToast["description"];
-  /** Binds the "close" button `click` event handler. **Required** */
-  onClickClose: () => void;
-  /** Sets the "title" content. */
-  title?: RegularToast["title"];
-}
-
-export const Toast = forwardRef<React.ElementRef<"div">, ToastProps>(
-  (
-    { className, description, onClickClose, title, variant, ...props },
-    forwardedRef,
-  ) => {
-    return (
-      <div
-        {...props}
-        className={cn(toastVariants({ className, variant }))}
-        ref={forwardedRef}
+export const Toast = forwardRef<
+  React.ElementRef<"div">,
+  Omit<React.ComponentPropsWithoutRef<"div">, "children" | "title"> &
+    VariantProps<typeof toastVariants> & {
+      description: RegularToast["description"];
+      onClickClose: () => void;
+      title?: RegularToast["title"];
+    }
+>(({ className, description, onClickClose, title, variant, ...props }, ref) => {
+  return (
+    <div
+      {...props}
+      className={cn(toastVariants({ className, variant }))}
+      ref={ref}
+    >
+      <button
+        type="button"
+        onClick={onClickClose}
+        className="order-last ml-auto flex h-7 w-7 shrink-0 items-center justify-center rounded hover:bg-black/5"
       >
-        <button
-          type="button"
-          className="order-last ml-auto flex h-7 w-7 shrink-0 items-center justify-center rounded hover:bg-black/5"
-          onClick={onClickClose}
-        >
-          <Icon type="x" />
-          <span className="sr-only">Close toast</span>
-        </button>
+        <Icon type="x" />
+        <span className="sr-only">Close toast</span>
+      </button>
 
-        <div className="flex h-7 w-7 shrink-0 items-center justify-center">
-          <Icon
-            className=""
-            type={
-              variant === "error"
-                ? "alert-triangle"
-                : variant === "success"
-                  ? "check"
-                  : "info"
-            }
-          />
-        </div>
-
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm leading-tight">
-          {title ? <div className="font-semibold">{title}</div> : null}
-          <div className="">{description}</div>
-        </div>
+      <div className="flex h-7 w-7 shrink-0 items-center justify-center">
+        <Icon
+          type={
+            variant === "error"
+              ? "alert-triangle"
+              : variant === "success"
+                ? "check"
+                : "info"
+          }
+        />
       </div>
-    );
-  },
-);
 
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm leading-tight">
+        {title ? <div className="font-semibold">{title}</div> : null}
+        <div>{description}</div>
+      </div>
+    </div>
+  );
+});
 Toast.displayName = "Toast";
 
 function ShowToast({ toast }: { toast: RegularToast }) {

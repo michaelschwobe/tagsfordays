@@ -1,8 +1,7 @@
 import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
-import type { NavLinkProps } from "@remix-run/react";
 import { Form, NavLink, useFetcher, useLocation } from "@remix-run/react";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { forwardRef, useId } from "react";
 import type { IconType } from "~/components/ui/icon";
 import { Icon } from "~/components/ui/icon";
@@ -33,29 +32,25 @@ const headerNavLinkVariants = cva(
   },
 );
 
-type HeaderNavLinkVariants = VariantProps<typeof headerNavLinkVariants>;
-
-interface HeaderNavLinkProps extends Omit<NavLinkProps, "className"> {
-  /** Sets the content. **Required** */
-  children: React.ReactNode;
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the icon type. **Required** */
-  iconType: IconType;
-}
-
 const HeaderNavLink = forwardRef<
   React.ElementRef<typeof NavLink>,
-  HeaderNavLinkProps
->(({ children, className, iconType, to, ...props }, forwardedRef) => {
+  Omit<
+    React.ComponentPropsWithoutRef<typeof NavLink>,
+    "children" | "className"
+  > & {
+    children: React.ReactNode;
+    className?: string | undefined;
+    iconType: IconType;
+  }
+>(({ children, className, iconType, to, ...props }, ref) => {
   return (
     <NavLink
       {...props}
-      className={cn(headerNavLinkVariants({ className, variant: "link" }))}
       to={to}
-      ref={forwardedRef}
+      className={cn(headerNavLinkVariants({ className, variant: "link" }))}
+      ref={ref}
     >
-      <Icon className="max-sm:text-lg" type={iconType} />
+      <Icon type={iconType} className="max-sm:text-lg" />
       <span className="max-sm:sr-only">{children}</span>
     </NavLink>
   );
@@ -63,31 +58,21 @@ const HeaderNavLink = forwardRef<
 
 HeaderNavLink.displayName = "HeaderNavLink";
 
-interface HeaderButtonProps
-  extends React.ComponentPropsWithoutRef<"button">,
-    HeaderNavLinkVariants {
-  /** Sets the content. **Required** */
-  children: React.ReactNode;
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the button svg content. **Required** */
-  iconType: IconType;
-  /** Sets the button `type` attribute. **Required** */
-  type: "button" | "submit";
-}
-
 const HeaderNavButton = forwardRef<
   React.ElementRef<"button">,
-  HeaderButtonProps
->(({ children, className, iconType, type, ...props }, forwardedRef) => {
+  React.ComponentPropsWithoutRef<"button"> & {
+    iconType: IconType;
+    type: "button" | "submit";
+  }
+>(({ children, className, iconType, type, ...props }, ref) => {
   return (
     <button
       {...props}
-      className={cn(headerNavLinkVariants({ className, variant: "button" }))}
       type={type}
-      ref={forwardedRef}
+      className={cn(headerNavLinkVariants({ className, variant: "button" }))}
+      ref={ref}
     >
-      <Icon className="max-sm:text-lg" type={iconType} />
+      <Icon type={iconType} className="max-sm:text-lg" />
       <span className="sr-only">{children}</span>
     </button>
   );
@@ -95,17 +80,13 @@ const HeaderNavButton = forwardRef<
 
 HeaderNavButton.displayName = "HeaderNavButton";
 
-interface HeaderNavButtonThemeProps {
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the default theme. */
-  userTheme?: Theme | null | undefined;
-}
-
 const HeaderNavButtonTheme = ({
   className,
   userTheme,
-}: HeaderNavButtonThemeProps) => {
+}: {
+  className?: string | undefined;
+  userTheme?: Theme | null | undefined;
+}) => {
   const fetcher = useFetcher<typeof rootAction>();
 
   const id = useId();
@@ -143,73 +124,68 @@ const HeaderNavButtonTheme = ({
   );
 };
 
-interface HeaderProps
-  extends Omit<React.ComponentPropsWithoutRef<"header">, "children">,
-    Pick<HeaderNavButtonThemeProps, "userTheme"> {
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-}
+export const Header = forwardRef<
+  React.ElementRef<"header">,
+  Omit<React.ComponentPropsWithoutRef<"header">, "children"> & {
+    userTheme?: Theme | null | undefined;
+  }
+>(({ className, userTheme, ...props }, ref) => {
+  const location = useLocation();
+  const optionalUser = useOptionalUser();
 
-export const Header = forwardRef<React.ElementRef<"header">, HeaderProps>(
-  ({ className, userTheme, ...props }, forwardedRef) => {
-    const location = useLocation();
-    const optionalUser = useOptionalUser();
+  return (
+    <header
+      {...props}
+      className={cn(
+        "sticky top-0 z-40 bg-cyan-500 text-white shadow dark:bg-cyan-700 sm:px-8 sm:py-3",
+        className,
+      )}
+      ref={ref}
+    >
+      <nav className="flex items-center justify-evenly gap-2 sm:-mx-4 sm:justify-start">
+        <HeaderNavLink to="/" iconType="home">
+          Home
+        </HeaderNavLink>
 
-    return (
-      <header
-        {...props}
-        className={cn(
-          "sticky top-0 z-40 bg-cyan-500 text-white shadow dark:bg-cyan-700 sm:px-8 sm:py-3",
-          className,
+        <HeaderNavLink to="/bookmarks" iconType="bookmarks">
+          Bookmarks
+        </HeaderNavLink>
+
+        <HeaderNavLink to="/tags" iconType="tags" className="sm:mr-auto">
+          Tags
+        </HeaderNavLink>
+
+        {optionalUser ? (
+          <div className="flex items-center gap-2 pr-3 max-sm:sr-only">
+            <Icon type="user" />
+            <span className="sr-only">Logged in as </span>
+            <span className="font-medium text-white" data-testid="username">
+              {optionalUser.username}
+            </span>
+          </div>
+        ) : null}
+
+        {optionalUser ? (
+          <Form
+            method="POST"
+            action={`${USER_LOGOUT_ROUTE}?redirectTo=${location.pathname}`}
+          >
+            <HeaderNavButton type="submit" iconType="log-out">
+              Log out
+            </HeaderNavButton>
+          </Form>
+        ) : (
+          <HeaderNavLink
+            to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}
+            iconType="log-in"
+          >
+            Log in
+          </HeaderNavLink>
         )}
-        ref={forwardedRef}
-      >
-        <nav className="flex items-center justify-evenly gap-2 sm:-mx-4 sm:justify-start">
-          <HeaderNavLink to="/" iconType="home">
-            Home
-          </HeaderNavLink>
 
-          <HeaderNavLink to="/bookmarks" iconType="bookmarks">
-            Bookmarks
-          </HeaderNavLink>
-
-          <HeaderNavLink className="sm:mr-auto" to="/tags" iconType="tags">
-            Tags
-          </HeaderNavLink>
-
-          {optionalUser ? (
-            <div className="flex items-center gap-2 pr-3 max-sm:sr-only">
-              <Icon type="user" />
-              <span className="sr-only">Logged in as </span>
-              <span className="font-medium text-white" data-testid="username">
-                {optionalUser.username}
-              </span>
-            </div>
-          ) : null}
-
-          {optionalUser ? (
-            <Form
-              method="POST"
-              action={`${USER_LOGOUT_ROUTE}?redirectTo=${location.pathname}`}
-            >
-              <HeaderNavButton type="submit" iconType="log-out">
-                Log out
-              </HeaderNavButton>
-            </Form>
-          ) : (
-            <HeaderNavLink
-              to={`${USER_LOGIN_ROUTE}?redirectTo=${location.pathname}`}
-              iconType="log-in"
-            >
-              Log in
-            </HeaderNavLink>
-          )}
-
-          <HeaderNavButtonTheme userTheme={userTheme} />
-        </nav>
-      </header>
-    );
-  },
-);
-
+        <HeaderNavButtonTheme userTheme={userTheme} />
+      </nav>
+    </header>
+  );
+});
 Header.displayName = "Header";

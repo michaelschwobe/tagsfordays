@@ -10,7 +10,7 @@ import { ButtonPrev } from "~/components/button-prev";
 import { FormPaginate } from "~/components/form-paginate";
 import { Main } from "~/components/main";
 import { SearchHelp } from "~/components/search-help";
-import { columnsBookmarksStatus } from "~/components/table-columns";
+import { columnsBookmarksStatus } from "~/components/table-columns-bookmarks-status";
 import { TableSelectable } from "~/components/table-selectable";
 import { Badge } from "~/components/ui/badge";
 import { H1 } from "~/components/ui/h1";

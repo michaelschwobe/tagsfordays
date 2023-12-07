@@ -23,25 +23,17 @@ interface RenderProps {
   idsSelected: string[];
 }
 
-interface TableSelectableProps<TData, TValue>
-  extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
-  /** Sets the tfoot tr content. */
-  children?: React.ReactNode | ((props: RenderProps) => React.ReactNode);
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets table column definitions, display templates, etc. **Required** */
-  columns: ColumnDef<TData, TValue>[];
-  /** Sets table data. **Required** */
-  data: TData[];
-}
-
 export function TableSelectable<TData, TValue>({
   children,
   className,
   columns,
   data,
   ...props
-}: TableSelectableProps<TData, TValue>) {
+}: Omit<React.ComponentPropsWithoutRef<"div">, "children"> & {
+  children?: React.ReactNode | ((props: RenderProps) => React.ReactNode);
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+}) {
   const table = useReactTable({
     data,
     columns,

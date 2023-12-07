@@ -13,26 +13,20 @@ import type { loader as loaderIndex } from "~/routes/_index";
 import { cn } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
-interface CardLatestBookmarksProps
-  extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the "found" content. **Required** */
-  data: Awaited<
-    ReturnType<Awaited<ReturnType<typeof loaderIndex>>["json"]>
-  >["latestBookmarks"];
-}
-
 export const CardLatestBookmarks = forwardRef<
   React.ElementRef<"div">,
-  CardLatestBookmarksProps
->(({ className, data, ...props }, forwardedRef) => {
+  Omit<React.ComponentPropsWithoutRef<"div">, "children"> & {
+    data: Awaited<
+      ReturnType<Awaited<ReturnType<typeof loaderIndex>>["json"]>
+    >["latestBookmarks"];
+  }
+>(({ className, data, ...props }, ref) => {
   return (
     <Card
       {...props}
       className={cn(className)}
       data-testid="card-latest-bookmarks"
-      ref={forwardedRef}
+      ref={ref}
     >
       <CardHeader>
         <H2>Latest Bookmarks</H2>
@@ -45,8 +39,8 @@ export const CardLatestBookmarks = forwardRef<
                 <li key={bookmark.id} className="flex gap-1 p-1">
                   <LinkButton
                     to={`/bookmarks/${bookmark.id}`}
-                    className="w-0 basis-1/3 justify-start overflow-hidden"
                     variant="ghost"
+                    className="w-0 basis-1/3 justify-start overflow-hidden"
                   >
                     <Favicon src={bookmark._meta?.faviconSrc} />{" "}
                     <span className="truncate text-sm">
@@ -61,8 +55,8 @@ export const CardLatestBookmarks = forwardRef<
                     to={bookmark.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-0 grow justify-start overflow-hidden font-normal"
                     variant="ghost"
+                    className="w-0 grow justify-start overflow-hidden font-normal"
                   >
                     <Icon type="external-link" />
                     <span className="truncate text-xs font-normal">
@@ -76,8 +70,8 @@ export const CardLatestBookmarks = forwardRef<
           <CardFooter className="mt-auto">
             <LinkButton
               to="/bookmarks"
-              className="max-sm:w-full"
               variant="filled"
+              className="max-sm:w-full"
             >
               <Icon type="bookmarks" />
               <span>View all bookmarks</span>
@@ -92,8 +86,8 @@ export const CardLatestBookmarks = forwardRef<
           <CardFooter className="mt-auto">
             <LinkButton
               to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/new`}
-              className="max-sm:w-full"
               variant="filled"
+              className="max-sm:w-full"
             >
               <Icon type="plus" />
               <span>Add bookmark</span>
@@ -104,5 +98,4 @@ export const CardLatestBookmarks = forwardRef<
     </Card>
   );
 });
-
 CardLatestBookmarks.displayName = "CardLatestBookmarks";

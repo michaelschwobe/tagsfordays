@@ -19,29 +19,18 @@ const badgeVariants = cva(
   },
 );
 
-type BadgeVariants = VariantProps<typeof badgeVariants>;
-
-interface BadgeProps
-  extends React.ComponentPropsWithoutRef<"span">,
-    BadgeVariants {
-  /** Sets the content. **Required** */
-  children: React.ReactNode;
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-}
-
-export const Badge = forwardRef<React.ElementRef<"span">, BadgeProps>(
-  ({ children, className, variant, ...props }, forwardedRef) => {
-    return (
-      <span
-        {...props}
-        className={cn(badgeVariants({ className, variant }))}
-        ref={forwardedRef}
-      >
-        {children}
-      </span>
-    );
-  },
-);
-
+export const Badge = forwardRef<
+  React.ElementRef<"span">,
+  React.ComponentPropsWithoutRef<"span"> & VariantProps<typeof badgeVariants>
+>(({ children, className, variant, ...props }, ref) => {
+  return (
+    <span
+      {...props}
+      className={cn(badgeVariants({ className, variant }))}
+      ref={ref}
+    >
+      {children}
+    </span>
+  );
+});
 Badge.displayName = "Badge";

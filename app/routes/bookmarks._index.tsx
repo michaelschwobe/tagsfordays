@@ -13,7 +13,7 @@ import { FormPaginate } from "~/components/form-paginate";
 import { Main } from "~/components/main";
 import { SearchForm } from "~/components/search-form";
 import { SearchHelp } from "~/components/search-help";
-import { columnsBookmarks } from "~/components/table-columns";
+import { columnsBookmarks } from "~/components/table-columns-bookmarks";
 import { TableSelectable } from "~/components/table-selectable";
 import { Badge } from "~/components/ui/badge";
 import { H1 } from "~/components/ui/h1";

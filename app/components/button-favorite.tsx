@@ -5,28 +5,21 @@ import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 import { cn } from "~/utils/misc";
 
-interface ButtonFavoriteProps
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof Button>,
-    "children" | "type" | "value"
-  > {
-  /** Sets the form `action` attribute. **Required** */
-  formAction: string;
-  /** Sets the input[hidden] `value` attribute. */
-  idsSelected?: string[];
-  /** Sets the icon type **Required** */
-  isFavorite: boolean;
-  /** Sets the content. */
-  label?: string | undefined;
-}
-
 export const ButtonFavorite = forwardRef<
   React.ElementRef<typeof Button>,
-  ButtonFavoriteProps
+  Omit<
+    React.ComponentPropsWithoutRef<typeof Button>,
+    "children" | "type" | "value"
+  > & {
+    formAction: string;
+    idsSelected?: string[];
+    isFavorite: boolean;
+    label?: string | undefined;
+  }
 >(
   (
     { className, formAction, idsSelected, isFavorite, label, size, ...props },
-    forwardedRef,
+    ref,
   ) => {
     const fetcher = useFetcher();
 
@@ -60,7 +53,7 @@ export const ButtonFavorite = forwardRef<
           disabled={isPending}
           size={size}
           className={cn("disabled:opacity-100", className)}
-          ref={forwardedRef}
+          ref={ref}
         >
           <Icon
             type="heart"
@@ -75,5 +68,4 @@ export const ButtonFavorite = forwardRef<
     );
   },
 );
-
 ButtonFavorite.displayName = "ButtonFavorite";

@@ -11,11 +11,11 @@ const SelectTrigger = forwardRef<
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     {...props}
-    ref={ref}
     className={cn(
       "flex h-10 w-full max-w-md items-center justify-between rounded-md border border-slate-300 bg-white px-4 text-black transition-colors focus-visible:border-pink-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-pink-500 disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:italic data-[placeholder]:text-slate-400 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus-visible:border-pink-500 dark:focus-visible:ring-pink-500 dark:data-[placeholder]:text-slate-500",
       className,
     )}
+    ref={ref}
   >
     <span className="-mr-10 block max-w-[calc(100%-1.5rem)] truncate">
       {children}
@@ -25,7 +25,6 @@ const SelectTrigger = forwardRef<
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
-
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 const SelectValue = SelectPrimitive.Value;
@@ -37,7 +36,6 @@ const SelectContent = forwardRef<
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       {...props}
-      ref={ref}
       position={position}
       className={cn(
         "relative z-50 w-full max-w-md overflow-hidden rounded-md bg-white text-black shadow ring-1 ring-inset ring-slate-300 transition-all dark:bg-slate-800 dark:text-white dark:ring-slate-600",
@@ -47,6 +45,7 @@ const SelectContent = forwardRef<
 
         className,
       )}
+      ref={ref}
     >
       <SelectPrimitive.Viewport
         className={cn(
@@ -61,7 +60,6 @@ const SelectContent = forwardRef<
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
 ));
-
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
 export const SelectItem = forwardRef<
@@ -70,11 +68,11 @@ export const SelectItem = forwardRef<
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
     {...props}
-    ref={ref}
     className={cn(
       "flex cursor-default select-none items-center justify-between rounded py-2 pl-2.5 pr-3 text-sm outline-none focus:bg-slate-100 dark:focus:bg-slate-900",
       className,
     )}
+    ref={ref}
   >
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     <SelectPrimitive.ItemIndicator>
@@ -82,30 +80,21 @@ export const SelectItem = forwardRef<
     </SelectPrimitive.ItemIndicator>
   </SelectPrimitive.Item>
 ));
-
 SelectItem.displayName = SelectPrimitive.Item.displayName;
-
-interface SimpleSelectProps extends SelectPrimitive.SelectProps {
-  /** Sets the content. **Required** */
-  children: SelectPrimitive.SelectContentProps["children"];
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the `id` attribute. */
-  id?: SelectPrimitive.SelectTriggerProps["id"];
-  /** Sets the `name` attribute. **Required** */
-  name: NonNullable<SelectPrimitive.SelectProps["name"]>;
-  /** Sets the "placeholder" content. */
-  placeholder?: SelectPrimitive.SelectValueProps["placeholder"];
-  /** Sets the "trigger" props */
-  triggerProps?: Omit<
-    SelectPrimitive.SelectTriggerProps,
-    "asChild" | "children" | "className" | "id"
-  >;
-}
 
 export const SimpleSelect = forwardRef<
   React.ElementRef<"button">,
-  SimpleSelectProps
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> & {
+    children: SelectPrimitive.SelectContentProps["children"];
+    className?: SelectPrimitive.SelectTriggerProps["className"];
+    id?: SelectPrimitive.SelectTriggerProps["id"];
+    name: NonNullable<SelectPrimitive.SelectProps["name"]>;
+    placeholder?: SelectPrimitive.SelectValueProps["placeholder"];
+    triggerProps?: Omit<
+      SelectPrimitive.SelectTriggerProps,
+      "asChild" | "children" | "className" | "id"
+    >;
+  }
 >(
   (
     {
@@ -117,15 +106,15 @@ export const SimpleSelect = forwardRef<
       triggerProps,
       ...props
     },
-    forwardedRef,
+    ref,
   ) => {
     return (
       <Select {...props} name={name}>
         <SelectTrigger
           {...triggerProps}
-          className={cn(className)}
           id={id}
-          ref={forwardedRef}
+          className={cn(className)}
+          ref={ref}
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
@@ -134,5 +123,4 @@ export const SimpleSelect = forwardRef<
     );
   },
 );
-
 SimpleSelect.displayName = "SimpleSelect";

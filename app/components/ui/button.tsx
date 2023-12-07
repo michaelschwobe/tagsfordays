@@ -70,30 +70,20 @@ export const buttonVariants = cva(
 
 export type ButtonVariants = VariantProps<typeof buttonVariants>;
 
-export interface ButtonProps
-  extends React.ComponentPropsWithoutRef<"button">,
-    ButtonVariants {
-  /** Sets the content. **Required** */
-  children: React.ReactNode;
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the `type` attribute. **Required** */
-  type: "button" | "submit";
-}
-
-export const Button = forwardRef<React.ElementRef<"button">, ButtonProps>(
-  ({ children, className, size, type, variant, ...props }, forwardedRef) => {
-    return (
-      <button
-        {...props}
-        type={type}
-        className={cn(buttonVariants({ className, size, variant }))}
-        ref={forwardedRef}
-      >
-        {children}
-      </button>
-    );
-  },
-);
-
+export const Button = forwardRef<
+  React.ElementRef<"button">,
+  React.ComponentPropsWithoutRef<"button"> &
+    VariantProps<typeof buttonVariants> & { type: "button" | "submit" }
+>(({ children, className, size, type, variant, ...props }, ref) => {
+  return (
+    <button
+      {...props}
+      type={type}
+      className={cn(buttonVariants({ className, size, variant }))}
+      ref={ref}
+    >
+      {children}
+    </button>
+  );
+});
 Button.displayName = "Button";

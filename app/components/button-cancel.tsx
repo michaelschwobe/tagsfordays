@@ -1,26 +1,18 @@
 import { useNavigate } from "@remix-run/react";
 import { forwardRef } from "react";
-import type { ButtonProps } from "~/components/ui/button";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 
-interface ButtonCancelProps
-  extends Omit<
-    ButtonProps,
-    "children" | "onClick" | "size" | "type" | "variant"
-  > {
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the content. */
-  label?: string | undefined;
-  /** Sets `navigate` params. **Required** */
-  to?: string | undefined;
-}
-
 export const ButtonCancel = forwardRef<
   React.ElementRef<"button">,
-  ButtonCancelProps
->(({ label, to, ...props }, forwardedRef) => {
+  Omit<
+    React.ComponentPropsWithoutRef<typeof Button>,
+    "children" | "onClick" | "size" | "type" | "variant"
+  > & {
+    label?: string | undefined;
+    to?: string | undefined;
+  }
+>(({ label, to, ...props }, ref) => {
   const navigate = useNavigate();
 
   return (
@@ -35,12 +27,11 @@ export const ButtonCancel = forwardRef<
         }
       }}
       size="md-icon"
-      ref={forwardedRef}
+      ref={ref}
     >
       <Icon type="x" />
       <span className="sr-only">{label ?? "Cancel"}</span>
     </Button>
   );
 });
-
 ButtonCancel.displayName = "ButtonCancel";

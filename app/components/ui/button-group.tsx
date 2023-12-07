@@ -16,86 +16,44 @@ const buttonGroupItemVariants = cva(
   },
 );
 
-interface ButtonGroupButtonProps
-  extends React.ComponentPropsWithoutRef<"button"> {
-  /** Sets the content. **Required** */
-  children: React.ReactNode;
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the `type` and `aria-pressed` attribute. */
-  "aria-pressed": boolean;
-}
-
 export const ButtonGroupButton = forwardRef<
   React.ElementRef<"button">,
-  ButtonGroupButtonProps
->(
-  (
-    { children, className, "aria-pressed": ariaPressed, ...props },
-    forwardedRef,
-  ) => {
-    return (
-      <button
-        {...props}
-        className={cn(
-          buttonGroupItemVariants({ className, variant: "button" }),
-        )}
-        type={ariaPressed ? "button" : "submit"}
-        aria-pressed={ariaPressed}
-        ref={forwardedRef}
-      >
-        {children}
-      </button>
-    );
-  },
-);
-
+  React.ComponentPropsWithoutRef<"button"> & { "aria-pressed": boolean }
+>(({ children, className, "aria-pressed": ariaPressed, ...props }, ref) => {
+  return (
+    <button
+      {...props}
+      type={ariaPressed ? "button" : "submit"}
+      aria-pressed={ariaPressed}
+      className={cn(buttonGroupItemVariants({ className, variant: "button" }))}
+      ref={ref}
+    >
+      {children}
+    </button>
+  );
+});
 ButtonGroupButton.displayName = "ButtonGroupButton";
-
-interface ButtonGroupInputProps
-  extends React.ComponentPropsWithoutRef<"input"> {
-  /** Sets the content. **Required** */
-  children: React.ReactNode;
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-  /** Sets the `type` attribute. */
-  type: "checkbox" | "radio";
-}
 
 export const ButtonGroupInput = forwardRef<
   React.ElementRef<"input">,
-  ButtonGroupInputProps
->(({ children, className, id, type, ...props }, forwardedRef) => {
+  React.ComponentPropsWithoutRef<"input"> & { type: "checkbox" | "radio" }
+>(({ children, className, id, type, ...props }, ref) => {
   return (
     <label
-      className={cn(buttonGroupItemVariants({ className, variant: "input" }))}
       htmlFor={id}
+      className={cn(buttonGroupItemVariants({ className, variant: "input" }))}
     >
-      <input
-        {...props}
-        type={type}
-        className="sr-only"
-        id={id}
-        ref={forwardedRef}
-      />
+      <input {...props} type={type} className="sr-only" id={id} ref={ref} />
       <span>{children}</span>
     </label>
   );
 });
-
 ButtonGroupInput.displayName = "ButtonGroupInput";
-
-interface ButtonGroupProps extends React.ComponentPropsWithoutRef<"div"> {
-  /** Sets the content. **Required** */
-  children: React.ReactNode;
-  /** Sets the `class` attribute. */
-  className?: string | undefined;
-}
 
 export const ButtonGroup = forwardRef<
   React.ElementRef<"div">,
-  ButtonGroupProps
->(({ children, className, ...props }, forwardedRef) => {
+  React.ComponentPropsWithoutRef<"div">
+>(({ children, className, ...props }, ref) => {
   return (
     <div
       {...props}
@@ -103,11 +61,10 @@ export const ButtonGroup = forwardRef<
         "inline-flex h-10 items-center gap-1 rounded-md bg-slate-200 p-1 dark:bg-slate-700 max-sm:w-full",
         className,
       )}
-      ref={forwardedRef}
+      ref={ref}
     >
       {children}
     </div>
   );
 });
-
 ButtonGroup.displayName = "ButtonGroup";

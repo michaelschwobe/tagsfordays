@@ -23,5 +23,5 @@ export function setThemeCookie(theme: Theme | "system"): string {
     return cookie.serialize(cookieName, "", { path: "/", maxAge: -1 });
   }
 
-  return cookie.serialize(cookieName, theme, { path: "/" });
+  return cookie.serialize(cookieName, theme, { path: "/", maxAge: 31536000 });
 }

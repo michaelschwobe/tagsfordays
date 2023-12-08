@@ -1,36 +1,27 @@
-import type { Password, User } from "@prisma/client";
-import bcrypt from "bcryptjs";
+import type { User } from "@prisma/client";
 import { prisma } from "~/utils/db.server";
 
-export type { User } from "@prisma/client";
-
-export async function getUserById(id: User["id"]) {
-  return prisma.user.findUnique({ where: { id } });
+/**
+ * If changing this, also double-check the same value in:
+ * - `/app/utils/auth.server.ts`
+ */
+export async function getUserById({ id }: { id: User["id"] }) {
+  return await prisma.user.findUnique({
+    where: { id },
+  });
 }
 
-export async function verifyLogin(
-  username: User["username"],
-  password: Password["hash"],
-) {
-  const userWithPassword = await prisma.user.findUnique({
-    where: { username },
+/**
+ * If changing this, also double-check the same value in:
+ * - `/app/utils/auth.server.ts`
+ */
+export async function getUserIncludePassword({
+  username,
+}: {
+  username: User["username"];
+}) {
+  return await prisma.user.findUnique({
     include: { password: true },
+    where: { username },
   });
-
-  if (!userWithPassword || !userWithPassword.password) {
-    return null;
-  }
-
-  const isValid = await bcrypt.compare(
-    password,
-    userWithPassword.password.hash,
-  );
-
-  if (!isValid) {
-    return null;
-  }
-
-  const { password: _password, ...userWithoutPassword } = userWithPassword;
-
-  return userWithoutPassword;
 }

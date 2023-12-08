@@ -1,6 +1,7 @@
+import type { Password, User } from "@prisma/client";
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
-import type { User } from "~/models/user.server";
-import { getUserById } from "~/models/user.server";
+import bcrypt from "bcryptjs";
+import { getUserById, getUserIncludePassword } from "~/models/user.server";
 import { safeRedirect } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
@@ -38,7 +39,7 @@ export async function getUser(request: Request) {
     return null;
   }
 
-  const user = await getUserById(userId);
+  const user = await getUserById({ id: userId });
   if (user) {
     return user;
   }
@@ -56,6 +57,25 @@ export async function requireUserId(
     throw redirect(`${USER_LOGIN_ROUTE}?${searchParams}`);
   }
   return userId;
+}
+
+export async function verifyLogin(
+  username: User["username"],
+  password: Password["hash"],
+) {
+  const userWithPassword = await getUserIncludePassword({ username });
+  if (!userWithPassword || !userWithPassword.password) {
+    return null;
+  }
+  const isValid = await bcrypt.compare(
+    password,
+    userWithPassword.password.hash,
+  );
+  if (!isValid) {
+    return null;
+  }
+  const { password: _password, ...userWithoutPassword } = userWithPassword;
+  return userWithoutPassword;
 }
 
 export async function createUserSession({

@@ -25,8 +25,7 @@ import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { verifyLogin } from "~/models/user.server";
-import { createUserSession, getUserId } from "~/utils/auth.server";
+import { createUserSession, getUserId, verifyLogin } from "~/utils/auth.server";
 import { generateSocialMeta } from "~/utils/meta";
 import { formatMetaTitle, getFieldError, safeRedirect } from "~/utils/misc";
 import { LoginUserFormSchema } from "~/utils/user-validation";
@@ -36,7 +35,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const safeRedirectTo = safeRedirect(url.searchParams.get("redirectTo"));
 
   const userId = await getUserId(request);
-
   if (userId) {
     return redirect(safeRedirectTo);
   }

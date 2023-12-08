@@ -11,18 +11,16 @@ import { H1 } from "~/components/ui/h1";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
-import { getTag } from "~/models/tag.server";
+import { getTagIncludeRelationsCount } from "~/models/tag.server";
 import { generateSocialMeta } from "~/utils/meta";
 import { formatMetaTitle, invariant, invariantResponse } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   invariant(params["tagId"], "tagId not found");
+  const { tagId } = params;
 
-  const { tagId: id } = params;
-
-  const tag = await getTag({ id });
-
+  const tag = await getTagIncludeRelationsCount({ id: tagId });
   invariantResponse(tag, "Not Found", { status: 404 });
 
   return json({ tag });

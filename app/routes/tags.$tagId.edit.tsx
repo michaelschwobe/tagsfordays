@@ -48,10 +48,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   await requireUserId(request);
 
   invariant(params["tagId"], "tagId not found");
-  const { tagId: id } = params;
+  const { tagId } = params;
 
-  const tag = await getTag({ id });
-
+  const tag = await getTag({ id: tagId });
   invariantResponse(tag, "Not Found", { status: 404 });
 
   return json({ tag });
@@ -61,13 +60,13 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
 
   invariant(params["tagId"], "tagId not found");
-  const { tagId: id } = params;
+  const { tagId } = params;
 
   const formData = await request.formData();
   const intent = formData.get(conform.INTENT);
 
   if (intent === "delete") {
-    await deleteTag({ id, userId });
+    await deleteTag({ id: tagId, userId });
     return redirectWithToast("/tags", {
       type: "success",
       description: "Tag deleted.",
@@ -80,7 +79,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
       toUpdateTagFormSchema(intent, {
         async isTagNameUnique(name) {
           const result = await getTagByName({ name });
-          return result === null || result.id === id;
+          return result === null || result.id === tagId;
         },
       }),
   });
@@ -89,7 +88,11 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     return json(submission);
   }
 
-  const tag = await updateTag({ id, name: submission.value.name, userId });
+  const tag = await updateTag({
+    id: tagId,
+    name: submission.value.name,
+    userId,
+  });
 
   return redirect(`/tags/${tag.id}`);
 };

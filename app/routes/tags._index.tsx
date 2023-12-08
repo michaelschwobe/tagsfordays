@@ -15,7 +15,7 @@ import { H1 } from "~/components/ui/h1";
 import { H2 } from "~/components/ui/h2";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
-import { getTags, getTagsOrderedByRelations } from "~/models/tag.server";
+import { getTagsIncludeRelationsCount } from "~/models/tag.server";
 import { generateSocialMeta } from "~/utils/meta";
 import { formatMetaTitle } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
@@ -24,10 +24,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const orderBy = url.searchParams.get("orderBy");
 
-  const tags =
-    orderBy === "relations"
-      ? await getTagsOrderedByRelations()
-      : await getTags();
+  const tags = await getTagsIncludeRelationsCount({ orderBy });
 
   return json({ orderBy, tags });
 }

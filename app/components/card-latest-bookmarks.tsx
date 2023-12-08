@@ -18,7 +18,7 @@ export const CardLatestBookmarks = forwardRef<
   Omit<React.ComponentPropsWithoutRef<"div">, "children"> & {
     data: Awaited<
       ReturnType<Awaited<ReturnType<typeof loaderIndex>>["json"]>
-    >["latestBookmarks"];
+    >["bookmarksLatest"];
   }
 >(({ className, data, ...props }, ref) => {
   return (

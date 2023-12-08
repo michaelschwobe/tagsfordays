@@ -17,7 +17,7 @@ export const CardLatestTags = forwardRef<
   Omit<React.ComponentPropsWithoutRef<"div">, "children"> & {
     data: Awaited<
       ReturnType<Awaited<ReturnType<typeof loaderIndex>>["json"]>
-    >["latestTags"];
+    >["tagsLatest"];
   }
 >(({ className, data, ...props }, ref) => {
   return (

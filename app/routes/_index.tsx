@@ -8,18 +8,18 @@ import { CardQuickTag } from "~/components/card-quick-tag";
 import { Intro } from "~/components/intro";
 import { Main } from "~/components/main";
 import { getBookmarksLatest } from "~/models/bookmark.server";
-import { getLatestTags } from "~/models/tag.server";
+import { getTagsLatest } from "~/models/tag.server";
 import { getFavicons } from "~/utils/favicon.server";
 import { generateSocialMeta } from "~/utils/meta";
 
 export async function loader() {
-  const [latestBookmarksResults, latestTags] = await Promise.all([
+  const [bookmarksLatestResults, tagsLatest] = await Promise.all([
     getBookmarksLatest(),
-    getLatestTags({ take: 9 }),
+    getTagsLatest(),
   ]);
-  const latestBookmarks = await getFavicons(latestBookmarksResults);
+  const bookmarksLatest = await getFavicons(bookmarksLatestResults);
 
-  return json({ latestBookmarks, latestTags });
+  return json({ bookmarksLatest, tagsLatest });
 }
 
 export const meta: MetaFunction<typeof loader> = () => {
@@ -45,9 +45,9 @@ export default function HomePage() {
 
         <CardQuickTag redirectTo="/" />
 
-        <CardLatestBookmarks data={loaderData.latestBookmarks} />
+        <CardLatestBookmarks data={loaderData.bookmarksLatest} />
 
-        <CardLatestTags data={loaderData.latestTags} />
+        <CardLatestTags data={loaderData.tagsLatest} />
       </div>
     </Main>
   );

@@ -21,7 +21,7 @@ import { FormMessage } from "~/components/ui/form-message";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
-import { createTag, getTagByName } from "~/models/tag.server";
+import { createTag, getTagsByNames } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import {
   formatMetaTitle,
@@ -47,12 +47,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     schema: (intent) =>
       toCreateTagFormSchema(intent, {
         async isTagNameUnique(names) {
-          const tagsByNameResults = await Promise.allSettled(
-            names.split(",").map((name) => getTagByName({ name })),
-          );
-          return tagsByNameResults.every(
-            (result) => result.status === "fulfilled" && result.value === null,
-          );
+          const results = await getTagsByNames({ names: names.split(",") });
+          return results.length === 0;
         },
       }),
   });

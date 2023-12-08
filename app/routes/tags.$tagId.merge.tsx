@@ -27,7 +27,13 @@ import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { LinkButton } from "~/components/ui/link-button";
 import { SelectItem, SimpleSelect } from "~/components/ui/select";
-import { getTag, getTagByName, getTags, mergeTag } from "~/models/tag.server";
+import {
+  getTag,
+  getTagByName,
+  getTagIncludeRelationsData,
+  getTags,
+  mergeTag,
+} from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import {
   formatMetaTitle,
@@ -42,9 +48,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   await requireUserId(request);
 
   invariant(params["tagId"], "tagId not found");
-  const { tagId: id } = params;
+  const { tagId } = params;
 
-  const sourceTag = await getTag({ id });
+  const sourceTag = await getTag({ id: tagId });
   invariantResponse(sourceTag, "Source Tag Not Found", { status: 404 });
 
   const tags = await getTags();
@@ -58,9 +64,9 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
 
   invariant(params["tagId"], "tagId not found");
-  const { tagId: id } = params;
+  const { tagId } = params;
 
-  const sourceTag = await getTag({ id });
+  const sourceTag = await getTagIncludeRelationsData({ id: tagId });
   invariantResponse(sourceTag, "Source Tag Not Found", { status: 404 });
 
   const formData = await request.formData();

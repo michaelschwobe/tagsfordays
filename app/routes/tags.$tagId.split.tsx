@@ -27,7 +27,12 @@ import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { LinkButton } from "~/components/ui/link-button";
-import { createAndConnectTag, getTag, getTagByName } from "~/models/tag.server";
+import {
+  createTagAndConnectBookmarkIds,
+  getTag,
+  getTagIncludeRelationsData,
+  getTagsByNames,
+} from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import {
   formatMetaTitle,
@@ -43,9 +48,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   await requireUserId(request);
 
   invariant(params["tagId"], "tagId not found");
-  const { tagId: id } = params;
+  const { tagId } = params;
 
-  const sourceTag = await getTag({ id });
+  const sourceTag = await getTag({ id: tagId });
   invariantResponse(sourceTag, "Source Tag Not Found", { status: 404 });
 
   return json({ sourceTag });
@@ -55,9 +60,9 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
 
   invariant(params["tagId"], "tagId not found");
-  const { tagId: id } = params;
+  const { tagId } = params;
 
-  const sourceTag = await getTag({ id });
+  const sourceTag = await getTagIncludeRelationsData({ id: tagId });
   invariantResponse(sourceTag, "Source Tag Not Found", { status: 404 });
 
   const formData = await request.formData();
@@ -67,12 +72,8 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     schema: (intent) =>
       toCreateTagFormSchema(intent, {
         async isTagNameUnique(names) {
-          const tagsByNameResults = await Promise.allSettled(
-            names.split(",").map((name) => getTagByName({ name })),
-          );
-          return tagsByNameResults.every(
-            (result) => result.status === "fulfilled" && result.value === null,
-          );
+          const results = await getTagsByNames({ names: names.split(",") });
+          return results.length === 0;
         },
       }),
   });
@@ -84,12 +85,9 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   const names = submission.value.name.split(",");
 
   const promises = names.map((name) =>
-    createAndConnectTag({
+    createTagAndConnectBookmarkIds({
+      bookmarkIds: sourceTag.bookmarks.map(({ bookmarkId }) => bookmarkId),
       name,
-      bookmarkIds:
-        sourceTag._count.bookmarks > 0
-          ? sourceTag.bookmarks.map(({ bookmarkId }) => bookmarkId)
-          : undefined,
       userId,
     }),
   );

@@ -35,7 +35,7 @@ import {
   deleteBookmark,
   favoriteBookmark,
   getBookmark,
-  getBookmarkId,
+  getBookmarkByUrl,
   updateBookmark,
 } from "~/models/bookmark.server";
 import { getTags } from "~/models/tag.server";
@@ -56,9 +56,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   await requireUserId(request);
 
   invariant(params["bookmarkId"], "bookmarkId not found");
-  const { bookmarkId: id } = params;
+  const { bookmarkId } = params;
 
-  const bookmark = await getBookmark({ id });
+  const bookmark = await getBookmark({ id: bookmarkId });
 
   invariantResponse(bookmark, "Not Found", { status: 404 });
 
@@ -71,7 +71,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
 
   invariant(params["bookmarkId"], "bookmarkId not found");
-  const { bookmarkId: id } = params;
+  const { bookmarkId } = params;
 
   const formData = await request.formData();
   const intent = formData.get(conform.INTENT);
@@ -81,12 +81,12 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     const submission = FavoriteBookmarkFormSchema.safeParse(formFields);
     if (submission.success) {
       const { favorite = null } = submission.data;
-      await favoriteBookmark({ id, favorite, userId });
+      await favoriteBookmark({ id: bookmarkId, favorite, userId });
     }
   }
 
   if (intent === "delete") {
-    await deleteBookmark({ id, userId });
+    await deleteBookmark({ id: bookmarkId, userId });
     return redirectWithToast("/bookmarks", {
       type: "success",
       description: "Bookmark deleted.",
@@ -98,8 +98,8 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     schema: (intent) =>
       toUpdateBookmarkFormSchema(intent, {
         async isBookmarkUrlUnique(url) {
-          const result = await getBookmarkId({ url });
-          return result === null || result.id === id;
+          const result = await getBookmarkByUrl({ url });
+          return result === null || result.id === bookmarkId;
         },
       }),
   });
@@ -109,7 +109,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   }
 
   const bookmark = await updateBookmark({
-    id,
+    id: bookmarkId,
     url: submission.value.url,
     title: submission.value.title ?? null,
     content: submission.value.content ?? null,

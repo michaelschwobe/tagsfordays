@@ -27,9 +27,9 @@ import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   invariant(params["bookmarkId"], "bookmarkId not found");
-  const { bookmarkId: id } = params;
+  const { bookmarkId } = params;
 
-  const bookmark = await getBookmark({ id });
+  const bookmark = await getBookmark({ id: bookmarkId });
   invariantResponse(bookmark, "Not Found", { status: 404 });
 
   const faviconSrc = await getFavicon(bookmark.url);

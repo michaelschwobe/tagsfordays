@@ -29,7 +29,7 @@ import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
-import { createBookmark, getBookmarkId } from "~/models/bookmark.server";
+import { createBookmark, getBookmarkByUrl } from "~/models/bookmark.server";
 import { getTags } from "~/models/tag.server";
 import { requireUserId } from "~/utils/auth.server";
 import { toCreateBookmarkFormSchema } from "~/utils/bookmark-validation";
@@ -53,7 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     schema: (intent) =>
       toCreateBookmarkFormSchema(intent, {
         async isBookmarkUrlUnique(url) {
-          const result = await getBookmarkId({ url });
+          const result = await getBookmarkByUrl({ url });
           return result === null;
         },
       }),

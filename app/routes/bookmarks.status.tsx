@@ -66,7 +66,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  let dot = "⚪️";
+  let dot = "⚫️";
   if (data) dot = "🟢";
   if (data && data.risk > 0) dot = "🟡";
   if (data && data.risk > 1) dot = "🔴";

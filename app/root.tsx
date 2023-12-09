@@ -17,6 +17,7 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
+import rdtStylesheetUrl from "remix-development-tools/index.css";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
 import { Header } from "~/components/header";
 import { Landmark } from "~/components/ui/landmark";
@@ -118,6 +119,9 @@ export const links: LinksFunction = () => {
 
     /* styles */
     { rel: "stylesheet", href: tailwindStylesheetUrl },
+    ...(process.env.NODE_ENV === "development"
+      ? [{ rel: "stylesheet", href: rdtStylesheetUrl }]
+      : []),
     ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
   ];
 };
@@ -182,7 +186,7 @@ function Document({
   );
 }
 
-export default function App() {
+function App() {
   const loaderData = useLoaderData<typeof loader>();
   const theme = useTheme();
 
@@ -199,6 +203,13 @@ export default function App() {
     </Document>
   );
 }
+
+let AppExport = App;
+if (process.env.NODE_ENV === "development") {
+  const { withDevTools } = await import("remix-development-tools");
+  AppExport = withDevTools(AppExport);
+}
+export default AppExport;
 
 export function ErrorBoundary() {
   return (

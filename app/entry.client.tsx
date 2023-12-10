@@ -9,7 +9,7 @@ import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 
 async function prepareApp() {
-  if (ENV.MOCKS) {
+  if (process.env.NODE_ENV !== "production" && process.env.MOCKS === "true") {
     const { worker } = await import("../tests/mocks/browser");
     return worker.start();
   }

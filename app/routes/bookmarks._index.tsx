@@ -25,7 +25,6 @@ import {
   BOOKMARK_SEARCH_KEYS,
   BOOKMARK_SEARCH_KEYS_LABEL_MAP,
 } from "~/utils/bookmark";
-import { parseBookmarkSearchParams } from "~/utils/bookmark-validation";
 import { getFavicons } from "~/utils/favicon.server";
 import { generateSocialMeta } from "~/utils/meta";
 import { formatItemsFoundByCount, formatMetaTitle } from "~/utils/misc";
@@ -33,12 +32,17 @@ import {
   toPaginationSearchParams,
   toPaginationValues,
 } from "~/utils/pagination";
+import { parsePaginationSearchParams } from "~/utils/pagination-validation";
+import { parseSearchFormSearchParams } from "~/utils/search-form-validation";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { searchParams } = new URL(request.url);
-  const { searchKey, searchValue, skip, take } =
-    parseBookmarkSearchParams(searchParams);
+  const { searchKey, searchValue } = parseSearchFormSearchParams({
+    searchKeys: BOOKMARK_SEARCH_KEYS,
+    searchParams,
+  });
+  const { skip, take } = parsePaginationSearchParams({ searchParams });
 
   const bookmarks = await getBookmarks({ searchKey, searchValue });
   const count = bookmarks.length;

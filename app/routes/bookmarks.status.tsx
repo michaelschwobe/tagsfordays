@@ -17,19 +17,19 @@ import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
 import { getBookmarksStatus } from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
-import { parseBookmarkSearchParams } from "~/utils/bookmark-validation";
 import { cn, formatMetaTitle } from "~/utils/misc";
 import {
   toPaginationSearchParams,
   toPaginationValues,
 } from "~/utils/pagination";
+import { parsePaginationSearchParams } from "~/utils/pagination-validation";
 import { getStatuses } from "~/utils/status.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await requireUserId(request);
 
   const { searchParams } = new URL(request.url);
-  const { skip, take } = parseBookmarkSearchParams(searchParams);
+  const { skip, take } = parsePaginationSearchParams({ searchParams });
 
   const bookmarks = await getBookmarksStatus();
   const count = bookmarks.length;

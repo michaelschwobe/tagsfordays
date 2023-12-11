@@ -1,12 +1,6 @@
 import { refine } from "@conform-to/zod";
 import * as z from "zod";
-import { BOOKMARK_SEARCH_KEYS } from "~/utils/bookmark";
 import { CheckboxSchema, IdSchema, UrlSchema } from "~/utils/misc-validation";
-import {
-  SearchValueSchema,
-  SkipSchema,
-  TakeSchema,
-} from "~/utils/pagination-validation";
 import { TagNameSchema } from "~/utils/tag-validation";
 
 const BookmarkIdSchema = IdSchema;
@@ -95,28 +89,3 @@ export function toUpdateBookmarkFormSchema(
 export const FavoriteBookmarkFormSchema = z.object({
   favorite: BookmarkFavoriteSchema.optional(),
 });
-
-const BookmarkSearchKeySchema = z
-  .enum(BOOKMARK_SEARCH_KEYS)
-  .nullable()
-  .catch(null);
-
-const BookmarkSearchParamsSchema = z.object({
-  searchKey: BookmarkSearchKeySchema,
-  searchValue: SearchValueSchema,
-  skip: SkipSchema,
-  take: TakeSchema,
-});
-
-export function parseBookmarkSearchParams(searchParams: URLSearchParams) {
-  const { searchKey, searchValue, skip, take } =
-    BookmarkSearchParamsSchema.parse(
-      Object.fromEntries(searchParams.entries()),
-    );
-  return {
-    searchKey,
-    searchValue,
-    skip: skip || 0,
-    take: take || 20,
-  };
-}

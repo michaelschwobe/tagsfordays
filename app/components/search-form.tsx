@@ -11,7 +11,7 @@ import { Icon } from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { LinkButton } from "~/components/ui/link-button";
 import { cn, getFieldError } from "~/utils/misc";
-import { toSearchFormSchema } from "~/utils/misc-validation";
+import { toSearchFormSchema } from "~/utils/search-form-validation";
 
 export function SearchForm({
   className,

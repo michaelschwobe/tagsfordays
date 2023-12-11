@@ -6,17 +6,18 @@ export async function getStatus(input: string, timeout: number) {
       method: "HEAD",
       signal: AbortSignal.timeout(timeout),
     });
-    return { ok, status, statusText };
+    const message = statusText.length > 0 ? statusText : undefined;
+    return { ok, status, statusText: message ?? "Unknown" };
   } catch (error) {
     if (error instanceof Error) {
       const name = error.name.length > 0 ? error.name : undefined;
       const message = error.message.length > 0 ? error.message : undefined;
       const status =
         name === "TimeoutError" ? 408 : name === "AbortError" ? 504 : 500;
-      const statusText = name ?? message ?? "Unknown Error";
+      const statusText = name ?? message ?? "Unknown";
       return { ok: false, status, statusText };
     } else {
-      return { ok: false, status: 500, statusText: "Uncaught Error" };
+      return { ok: false, status: 500, statusText: "Uncaught" };
     }
   }
 }

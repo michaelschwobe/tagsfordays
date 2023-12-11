@@ -6,7 +6,14 @@ export const StatusText = forwardRef<
   React.ComponentPropsWithoutRef<"span">
 >(({ children, className, ...props }, ref) => {
   return (
-    <span {...props} className={cn("text-xs", className)} ref={ref}>
+    <span
+      {...props}
+      className={cn(
+        "block max-w-[180px] truncate px-3 text-left text-xs",
+        className,
+      )}
+      ref={ref}
+    >
       {typeof children === "string" ? children : "Pending"}
     </span>
   );

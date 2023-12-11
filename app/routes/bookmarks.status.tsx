@@ -15,7 +15,10 @@ import { TableSelectable } from "~/components/table-selectable";
 import { Badge } from "~/components/ui/badge";
 import { H1 } from "~/components/ui/h1";
 import { Icon } from "~/components/ui/icon";
-import { getBookmarksStatus } from "~/models/bookmark.server";
+import {
+  getBookmarksCount,
+  getBookmarksStatus,
+} from "~/models/bookmark.server";
 import { requireUserId } from "~/utils/auth.server";
 import { cn, formatMetaTitle } from "~/utils/misc";
 import {
@@ -31,13 +34,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { searchParams } = new URL(request.url);
   const { skip, take } = parsePaginationSearchParams({ searchParams });
 
-  const bookmarks = await getBookmarksStatus();
-  const count = bookmarks.length;
-  const data = await getStatuses(bookmarks.slice(skip, skip + take), 60000 * 2);
+  const [bookmarks, count] = await Promise.all([
+    getBookmarksStatus({ skip, take }),
+    getBookmarksCount(),
+  ]);
+  const data = await getStatuses(bookmarks, 5_000);
 
   const countOk = data.filter((el) => el._meta.ok).length;
   const countNotOk = Math.abs(data.length - countOk);
   const risk = countNotOk > 5 ? 2 : countNotOk > 0 ? 1 : 0;
+
+  const hasData = data.length > 0;
+  const hasPagination = count > take;
 
   const paginationSearchParams = toPaginationSearchParams({
     searchParams,
@@ -49,8 +57,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     take,
     total: count,
   });
-  const hasData = data.length > 0;
-  const hasPagination = count > take;
 
   return json({
     count,

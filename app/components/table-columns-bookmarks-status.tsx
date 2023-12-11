@@ -80,8 +80,8 @@ export const columnsBookmarksStatus: ColumnDef<BookmarksStatusItem>[] = [
         to={getValue()}
         target="_blank"
         rel="noopener noreferrer"
-        variant="ghost"
         size="sm"
+        variant="ghost"
         className={cn(
           "flex w-full justify-start overflow-hidden",
           "max-w-[75vw] sm:max-w-[45vw]",
@@ -101,10 +101,33 @@ export const columnsBookmarksStatus: ColumnDef<BookmarksStatusItem>[] = [
     header: () => (
       <>
         <Icon type="info" className="mx-auto" />
-        <span className="sr-only">Cause</span>
+        <span className="sr-only">Status Text</span>
       </>
     ),
     cell: ({ getValue }) => <StatusText>{getValue()}</StatusText>,
+    footer: ({ column }) => column.id,
+  }),
+
+  // @ts-expect-error - see comment above
+  columnHelper.accessor("id", {
+    id: "edit",
+    enableSorting: false,
+    header: () => (
+      <>
+        <Icon type="pencil" className="mx-auto" />
+        <span className="sr-only">Edit</span>
+      </>
+    ),
+    cell: ({ getValue }) => (
+      <LinkButton
+        to={`/bookmarks/${getValue()}/edit`}
+        size="sm-icon"
+        variant="ghost"
+      >
+        <Icon type="pencil" />
+        <span className="sr-only">Edit bookmark</span>
+      </LinkButton>
+    ),
     footer: ({ column }) => column.id,
   }),
 
@@ -122,8 +145,8 @@ export const columnsBookmarksStatus: ColumnDef<BookmarksStatusItem>[] = [
       <ButtonDelete
         formAction={`/bookmarks/${getValue()}/edit`}
         label="bookmark"
-        variant="ghost-danger"
         size="sm-icon"
+        variant="ghost-danger"
       />
     ),
     footer: ({ column }) => column.id,

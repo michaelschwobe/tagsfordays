@@ -48,6 +48,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const count = bookmarks.length;
   const data = await getFavicons(bookmarks.slice(skip, skip + take));
 
+  const hasData = data.length > 0;
+  const hasPagination = count > take;
+
   const paginationSearchParams = toPaginationSearchParams({
     searchParams,
     take,
@@ -58,8 +61,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     take,
     total: count,
   });
-  const hasData = data.length > 0;
-  const hasPagination = count > take;
 
   return json({
     count,
@@ -109,6 +110,7 @@ export default function BookmarksIndexPage() {
         <LinkButton
           to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/status`}
           size="md-icon"
+          reloadDocument
         >
           <Icon type="shield" />
           <span className="sr-only">Bookmarks status</span>

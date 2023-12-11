@@ -71,6 +71,14 @@ export async function getBookmarks({
 
 /**
  * If changing this, also double-check the same value in:
+ * - `/app/routes/bookmarks.status.tsx`
+ */
+export async function getBookmarksCount() {
+  return await prisma.bookmark.count();
+}
+
+/**
+ * If changing this, also double-check the same value in:
  * - `/app/utils/bookmark-exports.server.ts`
  */
 export async function getBookmarksExport() {
@@ -96,10 +104,18 @@ export async function getBookmarksLatest({ take = 3 }: { take?: number } = {}) {
  * If changing this, also double-check the same value in:
  * - `/app/routes/bookmarks.status.tsx`
  */
-export async function getBookmarksStatus() {
+export async function getBookmarksStatus({
+  skip,
+  take,
+}: {
+  skip?: number | null;
+  take?: number | null;
+} = {}) {
   return await prisma.bookmark.findMany({
     select: { id: true, url: true },
     orderBy: [{ createdAt: "desc" }, { url: "asc" }],
+    ...(take ? { take } : {}),
+    ...(skip ? { skip } : {}),
   });
 }
 

@@ -1,7 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ButtonDelete } from "~/components/button-delete";
-import { Badge } from "~/components/ui/badge";
+import { StatusCode } from "~/components/status-code";
+import { StatusText } from "~/components/status-text";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Icon } from "~/components/ui/icon";
 import { LinkButton } from "~/components/ui/link-button";
@@ -67,20 +68,7 @@ export const columnsBookmarksStatus: ColumnDef<BookmarksStatusItem>[] = [
         <span className="sr-only">Status</span>
       </>
     ),
-    cell: ({ row, getValue }) => (
-      <Badge
-        variant={
-          row.original._meta.ok === true
-            ? "success"
-            : getValue() >= 300 && getValue() <= 499
-              ? "warning"
-              : "danger"
-        }
-      >
-        {getValue()}
-        <span className="sr-only">{row.original._meta.statusText}</span>
-      </Badge>
-    ),
+    cell: ({ getValue }) => <StatusCode>{getValue()}</StatusCode>,
     footer: ({ column }) => column.id,
   }),
 
@@ -103,6 +91,20 @@ export const columnsBookmarksStatus: ColumnDef<BookmarksStatusItem>[] = [
         <span className="truncate font-normal">{getValue()}</span>
       </LinkButton>
     ),
+    footer: ({ column }) => column.id,
+  }),
+
+  // @ts-expect-error - see comment above
+  columnHelper.accessor((row) => row._meta.statusText, {
+    id: "statusText",
+    sortingFn: "alphanumeric",
+    header: () => (
+      <>
+        <Icon type="info" className="mx-auto" />
+        <span className="sr-only">Cause</span>
+      </>
+    ),
+    cell: ({ getValue }) => <StatusText>{getValue()}</StatusText>,
     footer: ({ column }) => column.id,
   }),
 

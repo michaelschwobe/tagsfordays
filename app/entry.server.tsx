@@ -17,11 +17,11 @@ init();
 global.ENV = getEnv();
 
 // Enable API mocking.
-if (process.env.NODE_ENV !== "production" && process.env.MOCKS === "true") {
+if (ENV.MODE !== "production" && ENV.MOCKS === true) {
   const { server } = await import("../tests/mocks/node");
   server.listen();
   console.info("[MSW] Mocking enabled.");
-  if (process.env.NODE_ENV === "development") {
+  if (ENV.MODE === "development") {
     // Only log mocked requests in development mode.
     server.events.on("request:start", ({ request }) => {
       console.info(request.method, "[MSW]", request.url);

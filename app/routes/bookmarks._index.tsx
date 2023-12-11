@@ -106,7 +106,7 @@ export default function BookmarksIndexPage() {
           to={`${USER_LOGIN_ROUTE}?redirectTo=/bookmarks/status`}
           size="md-icon"
         >
-          <Icon type="shield-check" />
+          <Icon type="shield" />
           <span className="sr-only">Bookmarks status</span>
         </LinkButton>
         <LinkButton

@@ -89,7 +89,7 @@ export default function BookmarksStatusPage() {
               loaderData.risk > 0 && "text-yellow-500",
               loaderData.risk > 1 && "text-pink-500",
             )}
-            type={loaderData.risk > 0 ? "shield-alert" : "shield-check"}
+            type={loaderData.risk > 0 ? "shield-alert" : "shield"}
           />
           Bookmarks Status <Badge aria-hidden>{loaderData.count}</Badge>
         </H1>

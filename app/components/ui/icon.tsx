@@ -32,7 +32,6 @@ export const ICON_TYPES = [
   "search",
   "share",
   "shield-alert",
-  "shield-check",
   "shield",
   "split",
   "sun",

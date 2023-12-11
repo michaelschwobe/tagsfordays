@@ -111,11 +111,20 @@ function handleBrowserRequest(
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
+
+    /**
+     * Use the abortDelay from the route handle if it's defined,
+     * otherwise use the default.
+     */
+    const abortDelay =
+      remixContext.staticHandlerContext.matches.at(-1)?.route.handle
+        ?.abortDelay ?? ABORT_DELAY;
+
     const { pipe, abort } = renderToPipeableStream(
       <RemixServer
         context={remixContext}
         url={request.url}
-        abortDelay={ABORT_DELAY}
+        abortDelay={abortDelay}
       />,
       {
         onShellReady() {
@@ -149,6 +158,6 @@ function handleBrowserRequest(
       },
     );
 
-    setTimeout(abort, ABORT_DELAY);
+    setTimeout(abort, abortDelay);
   });
 }

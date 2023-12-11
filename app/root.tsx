@@ -16,6 +16,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useMatches,
 } from "@remix-run/react";
 import rdtStylesheetUrl from "remix-development-tools/index.css";
 import { GeneralErrorBoundary } from "~/components/error-boundary";
@@ -26,6 +27,7 @@ import tailwindStylesheetUrl from "~/tailwind.css";
 import { getUser } from "~/utils/auth.server";
 import { ClientHintCheck, getClientHints } from "~/utils/client-hints";
 import { getEnv } from "~/utils/env.server";
+import { MatchesSchema } from "~/utils/matches-validation";
 import {
   cn,
   combineHeaders,
@@ -143,6 +145,12 @@ function Document({
   env?: Record<string, boolean | number | string>;
   theme?: Theme;
 }) {
+  const matches = useMatches();
+  const matchesResults = MatchesSchema.safeParse(matches);
+  const isDehydrated = matchesResults.success
+    ? matchesResults.data?.some((match) => match.handle?.isDehydrated === true)
+    : false;
+
   return (
     <html lang="en" className={cn("h-full overflow-x-hidden", theme)}>
       <head>
@@ -179,7 +187,7 @@ function Document({
           }}
         />
         <ScrollRestoration />
-        <Scripts />
+        {isDehydrated ? null : <Scripts />}
         <LiveReload />
       </body>
     </html>

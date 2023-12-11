@@ -19,8 +19,6 @@ const badgeVariants = cva(
   },
 );
 
-export type BadgeVariants = VariantProps<typeof badgeVariants>;
-
 export const Badge = forwardRef<
   React.ElementRef<"span">,
   React.ComponentPropsWithoutRef<"span"> & VariantProps<typeof badgeVariants>

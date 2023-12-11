@@ -9,19 +9,14 @@ export async function getStatus(input: string, timeout: number) {
     return { ok, status, statusText };
   } catch (error) {
     if (error instanceof Error) {
-      if (error.name === "TimeoutError") {
-        return { ok: false, status: 408, statusText: "Timeout" };
-      } else if (error.name === "AbortError") {
-        return { ok: false, status: 504, statusText: "Aborted" };
-      } else {
-        return {
-          ok: false,
-          status: 500,
-          statusText: error.name ?? error.message?.slice?.(0, 8) ?? "Unknown",
-        };
-      }
+      const name = error.name.length > 0 ? error.name : undefined;
+      const message = error.message.length > 0 ? error.message : undefined;
+      const status =
+        name === "TimeoutError" ? 408 : name === "AbortError" ? 504 : 500;
+      const statusText = name ?? message ?? "Unknown Error";
+      return { ok: false, status, statusText };
     } else {
-      return { ok: false, status: 500, statusText: "Internal" };
+      return { ok: false, status: 500, statusText: "Uncaught Error" };
     }
   }
 }

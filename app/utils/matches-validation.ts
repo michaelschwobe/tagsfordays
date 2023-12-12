@@ -14,5 +14,3 @@ export const MatchesSchema = z.array(
     handle: HandleSchema.optional(),
   }),
 );
-
-export type Matches = z.infer<typeof MatchesSchema>;

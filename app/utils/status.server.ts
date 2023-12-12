@@ -1,5 +1,3 @@
-import { promiseAllSettledUnion } from "~/utils/misc";
-
 export async function getStatus(input: string, timeout: number) {
   try {
     const { ok, status, statusText } = await fetch(input, {
@@ -23,18 +21,3 @@ export async function getStatus(input: string, timeout: number) {
 }
 
 export type GetStatusData = Awaited<ReturnType<typeof getStatus>>;
-
-export async function getStatuses<TData extends { url: string }>(
-  items: TData[],
-  timeout: number,
-): Promise<
-  ReadonlyArray<TData & { _meta: Awaited<ReturnType<typeof getStatus>> }>
-> {
-  const [fulfilled] = await promiseAllSettledUnion(
-    items.map(async (item) => ({
-      ...item,
-      _meta: await getStatus(item.url, timeout),
-    })),
-  );
-  return fulfilled;
-}

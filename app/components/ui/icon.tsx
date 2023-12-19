@@ -30,7 +30,7 @@ export const ICON_TYPES = [
   "pencil",
   "plus",
   "search",
-  "share",
+  "share-2",
   "shield-alert",
   "shield",
   "split",

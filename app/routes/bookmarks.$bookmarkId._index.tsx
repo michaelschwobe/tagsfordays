@@ -3,10 +3,10 @@ import { json } from "@remix-run/node";
 import { useLoaderData, useLocation } from "@remix-run/react";
 import { ButtonDelete } from "~/components/button-delete";
 import { ButtonFavorite } from "~/components/button-favorite";
+import { ButtonShare } from "~/components/button-share";
 import { GeneralErrorBoundary, MainError } from "~/components/error-boundary";
 import { Main } from "~/components/main";
 import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
 import { Favicon } from "~/components/ui/favicon";
 import { FormControl } from "~/components/ui/form-control";
 import { FormItem } from "~/components/ui/form-item";
@@ -17,12 +17,7 @@ import { LinkButton } from "~/components/ui/link-button";
 import { getBookmark } from "~/models/bookmark.server";
 import { getFavicon } from "~/utils/favicon.server";
 import { generateSocialMeta } from "~/utils/meta";
-import {
-  asyncShare,
-  formatMetaTitle,
-  invariant,
-  invariantResponse,
-} from "~/utils/misc";
+import { formatMetaTitle, invariant, invariantResponse } from "~/utils/misc";
 import { USER_LOGIN_ROUTE } from "~/utils/user";
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -88,14 +83,7 @@ export default function BookmarkDetailPage() {
               <Icon type="external-link" />
               <span className="truncate">{loaderData.bookmark.url}</span>
             </LinkButton>{" "}
-            <Button
-              type="button"
-              onClick={async () => await asyncShare()}
-              size="md-icon"
-            >
-              <Icon type="share" />
-              <span className="sr-only">Share</span>
-            </Button>
+            <ButtonShare />
           </FormControl>
         </FormItem>
 

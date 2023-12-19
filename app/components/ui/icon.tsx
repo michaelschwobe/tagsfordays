@@ -3,8 +3,10 @@ import { cn } from "~/utils/misc";
 
 export const ICON_TYPES = [
   "alert-triangle",
+  "book",
   "bookmark",
   "bookmarks",
+  "books",
   "calendar",
   "check",
   "chevron-down",

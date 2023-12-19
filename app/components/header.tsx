@@ -17,13 +17,13 @@ import {
 } from "~/utils/user";
 
 const headerNavLinkVariants = cva(
-  "inline-flex h-14 w-14 items-center justify-center gap-2 whitespace-nowrap border border-transparent font-medium transition-colors focus-visible:border-pink-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-pink-400 dark:focus-visible:border-pink-500 dark:focus-visible:ring-pink-500 sm:rounded-md",
+  "inline-flex h-14 w-14 items-center justify-center gap-2 whitespace-nowrap border border-transparent font-medium transition-colors focus-visible:border-pink-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-pink-400 dark:focus-visible:border-pink-500 dark:focus-visible:ring-pink-500 md:rounded-md",
   {
     variants: {
       variant: {
-        link: "hover:bg-cyan-600/50 active:bg-cyan-600 aria-[current=page]:bg-cyan-600 dark:hover:bg-cyan-800/50 dark:active:bg-cyan-800 dark:aria-[current=page]:bg-cyan-800 sm:h-10 sm:w-auto sm:px-4",
+        link: "hover:bg-cyan-600/50 active:bg-cyan-600 aria-[current=page]:bg-cyan-600 dark:hover:bg-cyan-800/50 dark:active:bg-cyan-800 dark:aria-[current=page]:bg-cyan-800 md:h-10 md:w-auto md:px-4",
         button:
-          "hover:bg-cyan-600/50 focus-visible:bg-transparent active:bg-cyan-600 dark:hover:bg-cyan-800/50 dark:active:bg-cyan-800 sm:h-10 sm:w-10",
+          "hover:bg-cyan-600/50 focus-visible:bg-transparent active:bg-cyan-600 dark:hover:bg-cyan-800/50 dark:active:bg-cyan-800 md:h-10 md:w-10 lg:w-auto lg:px-4",
       },
     },
     defaultVariants: {
@@ -50,12 +50,11 @@ const HeaderNavLink = forwardRef<
       className={cn(headerNavLinkVariants({ className, variant: "link" }))}
       ref={ref}
     >
-      <Icon type={iconType} className="max-sm:text-lg" />
-      <span className="max-sm:sr-only">{children}</span>
+      <Icon type={iconType} className="max-md:text-lg" />
+      <span className="max-md:sr-only">{children}</span>
     </NavLink>
   );
 });
-
 HeaderNavLink.displayName = "HeaderNavLink";
 
 const HeaderNavButton = forwardRef<
@@ -72,12 +71,11 @@ const HeaderNavButton = forwardRef<
       className={cn(headerNavLinkVariants({ className, variant: "button" }))}
       ref={ref}
     >
-      <Icon type={iconType} className="max-sm:text-lg" />
-      <span className="sr-only">{children}</span>
+      <Icon type={iconType} className="max-md:text-lg" />
+      <span className="max-lg:sr-only">{children}</span>
     </button>
   );
 });
-
 HeaderNavButton.displayName = "HeaderNavButton";
 
 const HeaderNavButtonTheme = ({
@@ -118,7 +116,7 @@ const HeaderNavButtonTheme = ({
       <input type="hidden" name={conform.INTENT} value="update-theme" hidden />
       <input type="hidden" name="theme" value={nextTheme} hidden />
       <HeaderNavButton type="submit" iconType={icon}>
-        {text} theme
+        {text} <span className="sr-only">theme</span>
       </HeaderNavButton>
     </fetcher.Form>
   );
@@ -137,26 +135,30 @@ export const Header = forwardRef<
     <header
       {...props}
       className={cn(
-        "sticky top-0 z-40 bg-cyan-500 text-white shadow dark:bg-cyan-700 sm:px-8 sm:py-3",
+        "sticky top-0 z-40 bg-cyan-500 text-white shadow dark:bg-cyan-700 md:px-8 md:py-3",
         className,
       )}
       ref={ref}
     >
-      <nav className="flex items-center justify-evenly gap-2 sm:-mx-4 sm:justify-start">
+      <nav className="flex items-center justify-evenly gap-2 md:-mx-4 md:justify-start">
         <HeaderNavLink to="/" iconType="home">
           Home
+        </HeaderNavLink>
+
+        <HeaderNavLink to="/books" iconType="books">
+          Books
         </HeaderNavLink>
 
         <HeaderNavLink to="/bookmarks" iconType="bookmarks">
           Bookmarks
         </HeaderNavLink>
 
-        <HeaderNavLink to="/tags" iconType="tags" className="sm:mr-auto">
+        <HeaderNavLink to="/tags" iconType="tags" className="md:mr-auto">
           Tags
         </HeaderNavLink>
 
         {optionalUser ? (
-          <div className="flex items-center gap-2 pr-3 max-sm:sr-only">
+          <div className="flex items-center gap-2 pr-3 max-md:sr-only">
             <Icon type="user" />
             <span className="sr-only">Logged in as </span>
             <span className="font-medium text-white" data-testid="username">

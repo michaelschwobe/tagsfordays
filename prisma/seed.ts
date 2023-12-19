@@ -1,6 +1,7 @@
 import { prisma } from "~/utils/db.server";
 import {
   createBookmarks,
+  createBooks,
   createTags,
   createUser,
   deleteData,
@@ -14,8 +15,10 @@ async function seed() {
     createUser: "👤 Created user",
     createTags: "🏷️  Created tags",
     createBookmarks: "🔗 Created bookmarks",
+    createBooks: "📚 Created books",
     createMoreTags: "🔁 Created MORE tags",
     createMoreBookmarks: "🔁 Created MORE bookmarks",
+    createMoreBooks: "🔁 Created MORE books",
   } as const satisfies Record<string, string>;
 
   console.info(["\n", MESSAGES.initialize, "\n"].join(""));
@@ -119,6 +122,41 @@ async function seed() {
   });
   console.timeEnd(MESSAGES.createBookmarks);
 
+  console.time(MESSAGES.createBooks);
+  const books = await createBooks(prisma, {
+    items: [
+      {
+        id: "bkid0",
+        title: "Book 0",
+        content: "Vulgo thymum decet administratio demoror subvenio.",
+        favorite: undefined,
+      },
+      {
+        id: "bkid1",
+        title: "Book 1",
+        content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+        favorite: true,
+      },
+      {
+        id: "bkid2",
+        title: "Book 2",
+        content:
+          "Ipsum voluptas suscipit tempora optio spoliatio calcar thema.",
+        favorite: false,
+      },
+    ] as const satisfies ReadonlyArray<{
+      id: string;
+      title?: string | null | undefined;
+      content?: string | null | undefined;
+      favorite?: boolean | null | undefined;
+      createdAt?: Date | string | undefined;
+    }>,
+    bookmarks: bookmarks,
+    tags: tags,
+    userId: user.id,
+  });
+  console.timeEnd(MESSAGES.createBooks);
+
   if (!process.env["MINIMAL_SEED"]) {
     console.time(MESSAGES.createMoreTags);
     const tagsMore = await createTags(prisma, {
@@ -129,13 +167,23 @@ async function seed() {
     console.timeEnd(MESSAGES.createMoreTags);
 
     console.time(MESSAGES.createMoreBookmarks);
-    await createBookmarks(prisma, {
+    const bookmarksMore = await createBookmarks(prisma, {
       length: 50,
       start: bookmarks.length,
       tags: tagsMore,
       userId: user.id,
     });
     console.timeEnd(MESSAGES.createMoreBookmarks);
+
+    console.time(MESSAGES.createMoreBooks);
+    await createBooks(prisma, {
+      length: 50,
+      start: books.length,
+      bookmarks: bookmarksMore,
+      tags: tagsMore,
+      userId: user.id,
+    });
+    console.timeEnd(MESSAGES.createMoreBooks);
   }
 
   console.timeEnd(MESSAGES.createData);

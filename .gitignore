@@ -25,3 +25,4 @@
 
 # misc
 .DS_Store
+*.db-journal

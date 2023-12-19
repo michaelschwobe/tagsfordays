@@ -3,6 +3,7 @@ import type { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { UniqueEnforcer } from "enforce-unique";
 
+const UniqueEnforcerBookId = new UniqueEnforcer();
 const UniqueEnforcerBookmarkId = new UniqueEnforcer();
 const UniqueEnforcerBookmarkUrl = new UniqueEnforcer();
 const UniqueEnforcerTagId = new UniqueEnforcer();
@@ -127,6 +128,54 @@ function generateBookmarks({
     : generateNumberArray({ length, start }).map(() => generateBookmark());
 }
 
+function generateBook({
+  id,
+  title,
+  content,
+  favorite,
+  createdAt,
+}: {
+  id?: string | undefined;
+  title?: string | null | undefined;
+  content?: string | null | undefined;
+  favorite?: boolean | null | undefined;
+  createdAt?: string | undefined;
+} = {}) {
+  return {
+    id: id ?? UniqueEnforcerBookId.enforce(() => faker.string.uuid()),
+    title: title ?? faker.lorem.sentence({ min: 2, max: 16 }),
+    content: content ?? faker.lorem.paragraphs({ min: 2, max: 16 }),
+    favorite: favorite !== undefined ? favorite : faker.datatype.boolean(),
+    createdAt: createdAt ?? faker.date.past({ years: 5 }),
+  } as const;
+}
+
+function generateBooks({
+  items,
+  length,
+  start,
+}:
+  | {
+      items: ReadonlyArray<{
+        id?: string | undefined;
+        title?: string | null | undefined;
+        content?: string | null | undefined;
+        favorite?: boolean | null | undefined;
+        createdAt?: string | undefined;
+      }>;
+      length?: never;
+      start?: never;
+    }
+  | {
+      items?: never;
+      length: number;
+      start?: number | undefined;
+    }) {
+  return items
+    ? items.map((item) => generateBook(item))
+    : generateNumberArray({ length, start }).map(() => generateBook());
+}
+
 export async function createUser(
   prisma: PrismaClient,
   values: Parameters<typeof generateUser>[0],
@@ -175,6 +224,51 @@ export async function createBookmarks(
             content,
             favorite,
             createdAt,
+            ...(Array.isArray(tags) && tags.length > 0
+              ? {
+                  tags: {
+                    create: tags
+                      .slice(0, idx + 1)
+                      .map((tag) => ({ tag: { connect: { id: tag.id } } })),
+                  },
+                }
+              : {}),
+            userId,
+          },
+        }),
+    ),
+  );
+}
+
+export async function createBooks(
+  prisma: PrismaClient,
+  values: Parameters<typeof generateBooks>[0] & {
+    bookmarks?: ReadonlyArray<{ id: string }> | undefined;
+    tags?: ReadonlyArray<{ id: string }> | undefined;
+  } & {
+    userId: string;
+  },
+) {
+  const { bookmarks, tags, userId, ...params } = values;
+  return await Promise.all(
+    generateBooks(params).map(
+      async ({ id, title, content, favorite, createdAt }, idx) =>
+        await prisma.book.create({
+          data: {
+            id,
+            title,
+            content,
+            favorite,
+            createdAt,
+            ...(Array.isArray(bookmarks) && bookmarks.length > 0
+              ? {
+                  bookmarks: {
+                    create: bookmarks.slice(0, idx + 1).map((bookmark) => ({
+                      bookmark: { connect: { id: bookmark.id } },
+                    })),
+                  },
+                }
+              : {}),
             ...(Array.isArray(tags) && tags.length > 0
               ? {
                   tags: {

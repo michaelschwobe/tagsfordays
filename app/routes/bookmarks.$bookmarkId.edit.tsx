@@ -160,7 +160,7 @@ export default function EditBookmarkPage() {
     .map((t) => ({ ...t, defaultValue: t.defaultValue ?? "" }));
 
   const tagsNotSelected = loaderData.tags
-    .filter((t) => !tagsSelected.map((t) => t.defaultValue).includes(t.name))
+    .filter((t) => !tagsSelected.map((s) => s.defaultValue).includes(t.name))
     .map((t) => ({ ...t, defaultValue: t.name ?? "" }));
 
   const tagsAll = [...tagsSelected, ...tagsNotSelected].sort((a, b) => {

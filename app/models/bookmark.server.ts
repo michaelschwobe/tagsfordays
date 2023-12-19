@@ -245,7 +245,7 @@ export async function favoriteBookmark({
 }) {
   return await prisma.bookmark.update({
     data: { favorite },
-    select: {},
+    select: { id: true },
     where: { id, userId },
   });
 }

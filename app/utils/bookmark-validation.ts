@@ -31,8 +31,8 @@ const BookmarkFilesSchema = z
     "File must be of type text/html",
   )
   .refine(
-    (files) => files.every((file) => file.size < 400_000),
-    "File size must be less than 400kB",
+    (files) => files.every((file) => file.size < 500_000),
+    "File size must be less than 500kB",
   );
 
 export const UploadBookmarkFilesSchema = z.object({

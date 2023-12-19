@@ -171,7 +171,7 @@ export default function BookmarksIndexPage() {
           columns={columnsBookmarks}
           data={loaderData.data}
         >
-          {({ idsSelected, idsNotSelected }) => (
+          {({ idsSelected }) => (
             <>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
                 {BOOKMARK_EXPORT_FILE_EXTENSIONS.map((ext) => (
@@ -179,9 +179,7 @@ export default function BookmarksIndexPage() {
                     key={ext}
                     actionRoute="/bookmarks"
                     fileExtension={ext}
-                    idsSelected={
-                      idsSelected.length > 0 ? idsSelected : idsNotSelected
-                    }
+                    idsSelected={idsSelected}
                     className="w-full"
                   >
                     <ButtonExport

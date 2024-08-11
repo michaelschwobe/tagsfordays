@@ -4,7 +4,7 @@
 # If changing this, match the same values from:
 # - `/.github/workflows/deploy.yml`
 # - `/package.json`
-ARG NODE_VERSION=21.4.0
+ARG NODE_VERSION=22.5.1
 FROM node:${NODE_VERSION}-slim as base
 
 LABEL fly_launch_runtime="Remix/Prisma"
@@ -19,7 +19,7 @@ ENV NODE_ENV="production"
 # If changing this, match the same values from:
 # - `/.github/workflows/deploy.yml`
 # - `/package.json`
-ARG PNPM_VERSION=8.12.1
+ARG PNPM_VERSION=9.7.0
 RUN npm install -g pnpm@$PNPM_VERSION
 
 
